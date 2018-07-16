@@ -10,6 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".FridgeActivity">
+
+        </activity>
+        <activity android:name=".LoadingActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
