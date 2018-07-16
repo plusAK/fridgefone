@@ -63,3 +63,8 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
+# Android Studio project files
+app/src/main/res/values/secrets.xml
+
+
