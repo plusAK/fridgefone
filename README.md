@@ -2,7 +2,6 @@
 
 **fridgefone** is an android app that allows users to carry a virtual fridge in their pockets. Rather than the standard routinue of taking a recipe and buying the ingredients to make the recipe, this app will take the ingredients the user has and generate a list of recipes the user can make with those ingredients. This app utilizes [Recipe - Food - Nutrition API](https://market.mashape.com/spoonacular/recipe-food-nutrition#get-food-information). 
 
-** Test (please delete) **
 
 Time spent: **X** hours spent in total
 ## User Stories
