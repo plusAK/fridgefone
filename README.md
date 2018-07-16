@@ -1,6 +1,6 @@
 # *fridgefone*
 
-**fridgefone** is an android app that allows users to carry a virtual fridge in their pockets. Rather than the standard routinue of taking a recipe and buying the ingredients to make the recipe, this app will take the ingredient the user has and generate a list of recipes the user can make with those ingredients. 
+**fridgefone** is an android app that allows users to carry a virtual fridge in their pockets. Rather than the standard routinue of taking a recipe and buying the ingredients to make the recipe, this app will take the ingredients the user has and generate a list of recipes the user can make with those ingredients. 
 
 Time spent: **X** hours spent in total
 ## User Stories
