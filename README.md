@@ -7,30 +7,30 @@ Time spent: **X** hours spent in total
 
 The following **required** functionality is completed:
 
-* [] Virtual refrigerator with virtual cabinet
-* [] Input Ingredients
-* [] Generate Recipes from list of current ingredients
-* [] Favorite Recipes Secition
-* [] allow select for specific ingredients to generate recipes
+* [ ] Virtual refrigerator with virtual cabinet
+* [ ] Input Ingredients
+* [ ] Generate Recipes from list of current ingredients
+* [ ] Favorite Recipes Secition
+* [ ] allow select for specific ingredients to generate recipes
 
 
 The following **optional** features are implemented:
 
-* [] filters: Type, Time, Difficulty, Cuisine, Calories
-* [] Shopping List page
-* [] Daily Recipes
-* [] Trending Recipes Section
-* [] Shopping Centers near me section
-* [] login for share fridge(multiple people can add to the same fridge)
-* [] animation when user adds item to the fridge
+* [ ] filters: Type, Time, Difficulty, Cuisine, Calories
+* [ ] Shopping List page
+* [ ] Daily Recipes
+* [ ] Trending Recipes Section
+* [ ] Shopping Centers near me section
+* [ ] login for share fridge(multiple people can add to the same fridge)
+* [ ] animation when user adds item to the fridge
 
 
 The following **Stretch** features are implemented:
 
-* [] Notifications for what to buy near you
-* [] Recipe recognition
-* [] Barcode Scan to input ingredients
-* [] Social interaction- looking at two fridges and people picking different ingredients
+* [ ] Notifications for what to buy near you
+* [ ] Recipe recognition
+* [ ] Barcode Scan to input ingredients
+* [ ] Social interaction- looking at two fridges and people picking different ingredients
 
 
 
