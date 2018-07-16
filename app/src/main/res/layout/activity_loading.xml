@@ -7,10 +7,22 @@
     tools:context=".LoadingActivity">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
+        android:id="@+id/imageView2"
+        android:layout_width="259dp"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/closedfridge" />
+
+    <TextView
+        android:id="@+id/tvfridgeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="198dp"
+        android:fontFamily="serif"
+        android:text="fridge fone"
+        android:textColor="@color/colorPrimary"
+        android:textSize="36sp" />
 </RelativeLayout>
