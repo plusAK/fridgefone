@@ -10,7 +10,6 @@ public class FridgeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fridge);
 
-        // TESTING
-        
+
     }
 }

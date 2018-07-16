@@ -8,3 +8,11 @@
 /build
 /captures
 .externalNativeBuild
+
+# Android Studio project files
+*.iml
+.gradle
+.idea
+build
+import-summary.txt
+app/src/main/res/values/secrets.xml
