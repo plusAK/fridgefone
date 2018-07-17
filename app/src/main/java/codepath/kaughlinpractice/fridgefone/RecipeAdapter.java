@@ -112,6 +112,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             if (position != RecyclerView.NO_POSITION) {
                 // get the recipe at the position, this won't work if the class is static
                 Recipe recipe = mRecipes.get(position);
+
+
                 Intent intent = new Intent(context, RecipeDetailsActivity.class);
                 intent.putExtra(Recipe.class.getSimpleName(), Parcels.wrap(recipe));
                 context.startActivity(intent);
