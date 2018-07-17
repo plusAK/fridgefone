@@ -10,4 +10,6 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
     }
+
+    // TODO CHANGE MANIFEST TO LEAD TO FRIDGE
 }

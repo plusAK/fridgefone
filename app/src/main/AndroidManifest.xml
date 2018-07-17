@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FridgeActivity" />
+        <activity android:name=".RecipeListActivity" />
         <activity
             android:name=".LoadingActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecipeListActivity" />
+        <activity android:name=".FridgeActivity" />
         <activity android:name=".RecipeDetailsActivity"></activity>
     </application>
 
