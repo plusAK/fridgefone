@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
+import codepath.kaughlinpractice.fridgefone.model.Recipe;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,5 +49,20 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void generateRecipe() {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.my_fragment, listFrag).commit();
+    }
+
+    public void openDetails(Recipe recipe) {
+        // bundle communication between activity and fradment
+        Bundle args = new Bundle();
+        args.putString("Name", recipe.getName());
+        // TODO -- will have to change to get object ID
+        detailsFrag.setArguments(args);
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.my_fragment, detailsFrag).commit();
     }
 }
