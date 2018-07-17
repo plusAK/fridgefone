@@ -17,7 +17,7 @@ public class Recipe {
     }
 
     // this is for testing purposes
-    public static Recipe fromJSON(String name) {
+    public static Recipe fromString(String name) {
         Recipe recipe = new Recipe();
 
         // recipe.name = jsonObject.getString("title");
