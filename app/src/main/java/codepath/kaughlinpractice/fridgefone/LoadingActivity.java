@@ -1,8 +1,8 @@
 package codepath.kaughlinpractice.fridgefone;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -15,7 +15,7 @@ public class LoadingActivity extends AppCompatActivity {
             public void run() {
                 try {
                     sleep(3000);
-                    Intent i = new Intent(getApplicationContext(), FridgeActivity.class);
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                     finish();// destroys activity after it is used
                 } catch (InterruptedException e) {
