@@ -15,11 +15,24 @@ public class Item extends ParseObject {
         return getString(KEY_NAME);
     }
 
+    public void setName(String name) {
+        put(KEY_NAME, name);
+    }
+
     public ParseFile getImage() {
         return getParseFile(KEY_IMAGE);
     }
+
+    public void setImage(ParseFile image) {
+        put(KEY_IMAGE, image);
+    }
+
     public String getItemId() {
         return getString(KEY_ID);
+    }
+
+    public void setItemId(String itemId) {
+        put(KEY_ID, itemId);
     }
 
     public static class Query extends ParseQuery<Item> {
