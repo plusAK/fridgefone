@@ -24,8 +24,10 @@ public class RecipeListActivity extends AppCompatActivity {
         rvRecipes = (RecyclerView) findViewById(R.id.rvRecipes);
         // init the array list (data source)
         recipes = new ArrayList<>();
+
         recipes.add(Recipe.fromString("Apple pie"));
         recipes.add(Recipe.fromString("Juice"));
+
         // construct the adapter from this data source
         recipeAdapter = new RecipeAdapter(recipes);
 
@@ -34,7 +36,5 @@ public class RecipeListActivity extends AppCompatActivity {
         // set the adapter
         rvRecipes.setAdapter(recipeAdapter);
     }
-
-    // TODO CHANGE MANIFEST TO LEAD TO FRIDGE
 
 }
