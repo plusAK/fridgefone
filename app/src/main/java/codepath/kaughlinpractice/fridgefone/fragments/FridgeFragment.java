@@ -27,11 +27,6 @@ public class FridgeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
-
-
-
         ivGenerateRecipeList = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
         ivGenerateRecipeList.setOnClickListener(new View.OnClickListener() {
             @Override
