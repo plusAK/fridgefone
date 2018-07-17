@@ -22,5 +22,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
         ButterKnife.bind(this);
+
+//  TODO: Add the image url into load() once we get it from API
+//        GlideApp.with(this)
+//                .load()
+//                .into(ivRecipeImage);
+
     }
 }
