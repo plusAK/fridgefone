@@ -31,6 +31,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         recipe = (Recipe) Parcels.unwrap(getIntent().getParcelableExtra(Recipe.class.getSimpleName()));
 
+        tvDishTitle.setText(recipe.getName());
+
 //  TODO: Add the image url into load() once we get it from API
 //        GlideApp.with(this)
 //                .load()

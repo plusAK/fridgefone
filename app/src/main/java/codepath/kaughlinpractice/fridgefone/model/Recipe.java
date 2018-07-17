@@ -2,22 +2,25 @@ package codepath.kaughlinpractice.fridgefone.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel
 public class Recipe {
 
-    private String name;
-    private int id;
-    private String image;
-    private int readyInMinutes;
-    private boolean vegetarian;
-    private boolean vegan;
-    private boolean glutenFree;
-    private boolean dairyFree;
-    private boolean veryHealthy;
-    private boolean cheap;
-    private boolean veryPopular;
-    private int servings;
-    private JSONObject ingredients;
+    String name;
+    int id;
+    String image;
+    int readyInMinutes;
+    boolean vegetarian;
+    boolean vegan;
+    boolean glutenFree;
+    boolean dairyFree;
+    boolean veryHealthy;
+    boolean cheap;
+    boolean veryPopular;
+    int servings;
+    // JSONObject ingredients;
+    // TODO -- figure out how to have ingredients without erroring
 
     public static Recipe fromJSON(JSONObject jsonObject) throws JSONException {
         Recipe recipe = new Recipe();
@@ -35,7 +38,7 @@ public class Recipe {
         recipe.cheap = jsonObject.getBoolean("cheap");
         recipe.veryPopular = jsonObject.getBoolean("veryPopular");
         recipe.servings = jsonObject.getInt("servings");
-        recipe.ingredients = jsonObject.getJSONObject("extendedIngredients");
+        // recipe.ingredients = jsonObject.getJSONObject("extendedIngredients");
 
         return recipe;
     }
@@ -97,7 +100,9 @@ public class Recipe {
         return servings;
     }
 
+    /**
     public JSONObject getIngredients() {
         return ingredients;
     }
+     */
 }
