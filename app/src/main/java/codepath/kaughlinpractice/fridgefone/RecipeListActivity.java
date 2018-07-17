@@ -12,4 +12,5 @@ public class RecipeListActivity extends AppCompatActivity {
     }
 
     // TODO CHANGE MANIFEST TO LEAD TO FRIDGE
+
 }
