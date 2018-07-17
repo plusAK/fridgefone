@@ -60,7 +60,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         holder.recipe_name.setText(recipe.getName());
 
         /**
-
         GlideApp.with(context)
                 .load(recipe.getImage())
                 .into(holder.recipe_image);
