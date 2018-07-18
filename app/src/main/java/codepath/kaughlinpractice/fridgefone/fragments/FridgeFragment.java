@@ -51,4 +51,5 @@ public class FridgeFragment extends Fragment {
 //        Intent i = new Intent(this, RecipeListActivity.class);
 //        startActivity(i);
     }
+    //((MainActivity) context).goToMyFridge();
 }
