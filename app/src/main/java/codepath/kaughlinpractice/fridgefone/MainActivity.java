@@ -33,6 +33,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    public boolean use_api = false;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
@@ -151,42 +152,62 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // get the list of currently playing movies from the API
     public void generateRecipes() {
         // create the url
-        String url = API_BASE_URL + "/recipes/findByIngredients";
-        // set the request parameters
-        RequestParams params = new RequestParams();
-        client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-        client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+        if (use_api) {
+            String url = API_BASE_URL + "/recipes/findByIngredients";
+            // set the request parameters
+            RequestParams params = new RequestParams();
+            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
-        // TODO -- fill ingredients with actual fridge items
-        params.put("ingredients", "apples,flour,sugar");
-        params.put("number", 5);
-        // other parameters we could user later
-        // params.put("fillIngredients", false);
-        // params.put("limitLicense", false);
-        // params.put("ranking", 1);
+            // TODO -- fill ingredients with actual fridge items
+            params.put("ingredients", "apples,flour,sugar");
+            params.put("number", 5);
+            // other parameters we could user later
+            // params.put("fillIngredients", false);
+            // params.put("limitLicense", false);
+            // params.put("ranking", 1);
 
-        // execute a GET request expecting a JSON object response
-        client.get(url, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                String r = response.toString();
-                Log.d("MainActivity", "JSON Object : " + r);
-                try {
-                    for (int i = 0; i < response.length(); i += 1) {
-                        Recipe recipe = Recipe.fromJSON(response.getJSONObject(i));
-                        Log.d("MainActivity", recipe.getName());
-                        recipes.add(recipe);
+            // execute a GET request expecting a JSON object response
+            client.get(url, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    String r = response.toString();
+                    Log.d("MainActivity", "JSON Object : " + r);
+                    try {
+                        for (int i = 0; i < response.length(); i += 1) {
+                            Recipe recipe = Recipe.fromJSON(response.getJSONObject(i));
+                            Log.d("MainActivity", recipe.getName());
+                            recipes.add(recipe);
+                        }
+                    } catch (JSONException e) {
+                        Log.d("MainActivity", e.getMessage());
                     }
-                } catch (JSONException e) {
-                    Log.d("MainActivity", e.getMessage());
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Log.d("MainActivity", "Error: " + throwable);
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    Log.d("MainActivity", "Error: " + throwable);
+                }
+            });
+        }
+        else {
+            String stringResponse = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
+            JSONArray response = null;
+            try {
+                response = new JSONArray(stringResponse);
+            } catch (JSONException e) {
+                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
             }
-        });
+            try {
+                for (int i = 0; i < response.length(); i += 1) {
+                    Recipe recipe = Recipe.fromJSON(response.getJSONObject(i));
+                    Log.d("MainActivity", recipe.getName());
+                    recipes.add(recipe);
+                }
+            } catch (JSONException e) {
+                Log.d("MainActivity", e.getMessage());
+            }
+        }
         // TODO - figure out a way to send our recipes to our ListFragment or Adapter
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, listFrag).commit();
