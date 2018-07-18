@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public void openDetails(Recipe recipe) {
         // bundle communication between activity and fradment
         Bundle args = new Bundle();
-        args.putString("Name", recipe.getName());
+        args.putString("name", recipe.getName());
         // TODO -- will have to change to get object ID
         detailsFrag.setArguments(args);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

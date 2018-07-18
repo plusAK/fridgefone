@@ -1,7 +1,6 @@
 package codepath.kaughlinpractice.fridgefone;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -113,9 +110,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                 Recipe recipe = mRecipes.get(position);
 
 
-                Intent intent = new Intent(context, RecipeDetailsActivity.class);
-                intent.putExtra(Recipe.class.getSimpleName(), Parcels.wrap(recipe));
-                context.startActivity(intent);
+                ((MainActivity) context).openDetails(recipe); // similar to Intent, going through Activity to get to new fragment
+
                 Log.d("RecipeAdapter", String.format("Got this recipe: " + recipe.getName()));
             }
         }
