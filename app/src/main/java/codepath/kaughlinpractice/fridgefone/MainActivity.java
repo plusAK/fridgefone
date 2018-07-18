@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -80,15 +81,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(id == R.id.nav_Fridge){
             Toast.makeText(this, "Welcome Home", Toast.LENGTH_LONG).show();
             goToMyFridge(); // similar to Intent, going through Activity to get to new fragment
-
-
         }
+        else if(id == R.id.nav_Favorites){
+            Toast.makeText(this, "Welcome to Favorites", Toast.LENGTH_LONG).show();
+        }
+        else if(id == R.id.nav_GroceryStores){
+            Toast.makeText(this, "Welcome to Grocery Stores", Toast.LENGTH_LONG).show();
+        }
+        else if(id == R.id.nav_ShoppingList){
+            Toast.makeText(this, "Welcome to Shopping List", Toast.LENGTH_LONG).show();
+        }
+
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
 
     public void goToMyFridge(){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
-
     }
 }
