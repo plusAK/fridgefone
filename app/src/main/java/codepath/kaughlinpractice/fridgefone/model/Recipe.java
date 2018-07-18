@@ -26,18 +26,19 @@ public class Recipe {
         Recipe recipe = new Recipe();
 
         recipe.name = jsonObject.getString("title");
+        // TODO -- figure out how to deal with some objects not having these attributes
         // recipe.name = "FOOD NAME";
-        recipe.id = jsonObject.getInt("id");
-        recipe.image = jsonObject.getString("image");
-        recipe.readyInMinutes = jsonObject.getInt("readyInMinutes");
-        recipe.vegetarian = jsonObject.getBoolean("vegetarian");
-        recipe.vegan = jsonObject.getBoolean("vegan");
-        recipe.glutenFree = jsonObject.getBoolean("glutenFree");
-        recipe.dairyFree = jsonObject.getBoolean("dairyFree");
-        recipe.veryHealthy = jsonObject.getBoolean("veryHealthy");
-        recipe.cheap = jsonObject.getBoolean("cheap");
-        recipe.veryPopular = jsonObject.getBoolean("veryPopular");
-        recipe.servings = jsonObject.getInt("servings");
+//        recipe.id = jsonObject.getInt("id");
+//        recipe.image = jsonObject.getString("image");
+//        recipe.readyInMinutes = jsonObject.getInt("readyInMinutes");
+//        recipe.vegetarian = jsonObject.getBoolean("vegetarian");
+//        recipe.vegan = jsonObject.getBoolean("vegan");
+//        recipe.glutenFree = jsonObject.getBoolean("glutenFree");
+//        recipe.dairyFree = jsonObject.getBoolean("dairyFree");
+//        recipe.veryHealthy = jsonObject.getBoolean("veryHealthy");
+//        recipe.cheap = jsonObject.getBoolean("cheap");
+//        recipe.veryPopular = jsonObject.getBoolean("veryPopular");
+//        recipe.servings = jsonObject.getInt("servings");
         // recipe.ingredients = jsonObject.getJSONObject("extendedIngredients");
 
         return recipe;

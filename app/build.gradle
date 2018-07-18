@@ -38,4 +38,6 @@ dependencies {
     //allows for navigation drawer and custom action bar etc.
     implementation 'org.parceler:parceler-api:1.1.11'
     annotationProcessor 'org.parceler:parceler:1.1.11'
+
+    implementation 'com.loopj.android:android-async-http:1.4.9'
 }

@@ -51,7 +51,7 @@ public class FridgeFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 Log.d("FridgeFragment", "clicked on generate");
-                generateRecipe();
+                generateRecipes();
             }
         });
 
@@ -66,9 +66,9 @@ public class FridgeFragment extends Fragment{
 
 
     // TODO: Change from intent to bundle
-    public void generateRecipe() {
+    public void generateRecipes() {
         Log.d("FridgeFragment", "should move pages");
-        ((MainActivity) context).generateRecipe(); // similar to Intent, going through Activity to get to new fragment
+        ((MainActivity) context).generateRecipes(); // similar to Intent, going through Activity to get to new fragment
     }
 
 }

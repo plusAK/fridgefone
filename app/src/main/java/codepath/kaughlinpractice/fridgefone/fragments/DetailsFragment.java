@@ -53,7 +53,7 @@ public class DetailsFragment extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getContext()).generateRecipe(); //basiacally intent to go back to recipe list screen
+                ((MainActivity) getContext()).generateRecipes(); //basiacally intent to go back to recipe list screen
             }
         });
 

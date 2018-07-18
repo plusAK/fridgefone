@@ -11,18 +11,37 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
-import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
+import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+    // the base URL for the API
+    public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
+    // the parameter name for the API key
+    public final static String API_KEY_PARAM = "X-Mashape-Key";
+    public final static String KEY_ACCEPT_PARAM = "Accept";
+
+    // instance field
+    AsyncHttpClient client;
+
+    ArrayList<Recipe> recipes;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -33,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     final Fragment fridgeFrag = new FridgeFragment();
     final Fragment listFrag = new ListFragment();
     final Fragment detailsFrag = new DetailsFragment();
-    final Fragment addFragment = new AddItemFragment();
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -46,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
 
         fridge_items = new ArrayList<>();
+        recipes = new ArrayList<>();
+
+        // initialize the client
+        client = new AsyncHttpClient();
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
@@ -68,11 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void generateRecipe() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, listFrag).commit();
     }
 
     public void openDetails(Recipe recipe) {
@@ -120,5 +137,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
+    }
+
+    // get the list of currently playing movies from the API
+    public void generateRecipes() {
+        // create the url
+        String url = API_BASE_URL + "/recipes/findByIngredients";
+        // set the request parameters
+        RequestParams params = new RequestParams();
+        client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+        client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+
+        // TODO -- fill ingredients with actual fridge items
+        params.put("ingredients", "apples,flour,sugar");
+        params.put("number", 5);
+        // other parameters we could user later
+        // params.put("fillIngredients", false);
+        // params.put("limitLicense", false);
+        // params.put("ranking", 1);
+
+        // execute a GET request expecting a JSON object response
+        client.get(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                String r = response.toString();
+                Log.d("MainActivity", "JSON Object : " + r);
+                try {
+                    for (int i = 0; i < response.length(); i += 1) {
+                        Recipe recipe = Recipe.fromJSON(response.getJSONObject(i));
+                        Log.d("MainActivity", recipe.getName());
+                        recipes.add(recipe);
+                    }
+                } catch (JSONException e) {
+                    Log.d("MainActivity", e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("MainActivity", "Error: " + throwable);
+            }
+        });
+        // TODO - figure out a way to send our recipes to our ListFragment or Adapter
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.my_fragment, listFrag).commit();
     }
 }
