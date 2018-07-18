@@ -40,7 +40,6 @@ public class DetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //recipe = (Recipe) Parcels.unwrap(getIntent().getParcelableExtra(Recipe.class.getSimpleName()));
         Bundle args = getArguments();
         String name = args.getString("name");
         tvDishTitle.setText(name);

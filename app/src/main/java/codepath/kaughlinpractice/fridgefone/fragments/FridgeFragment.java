@@ -24,14 +24,6 @@ public class FridgeFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /**
-        // create ContextThemeWrapper from the original Activity Context with the custom theme
-        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.PopUpTheme);
-
-        // clone the inflater using the ContextThemeWrapper
-        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
-        // Inflate the layout for this fragment
-         */
         return inflater.inflate(R.layout.fragment_fridge, container, false);
     }
 
@@ -55,10 +47,6 @@ public class FridgeFragment extends Fragment{
         ivAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(MainActivity.this, Pop.class));
-                /*
-                popUpAddItem();
-                */
                 AddItemFragment addItemFragment = new AddItemFragment();
                 addItemFragment.show(getFragmentManager(), "AddItemFragment");
             }
@@ -67,17 +55,9 @@ public class FridgeFragment extends Fragment{
 
 
     // TODO: Change from intent to bundle
-    public void generateRecipe(){
+    public void generateRecipe() {
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) context).generateRecipe(); // similar to Intent, going through Activity to get to new fragment
-//        Intent i = new Intent(this, RecipeListActivity.class);
-//        startActivity(i);
     }
 
-    public void popUpAddItem() {
-        ((MainActivity) context).popUpAddItem();
-    }
-
-
-    //((MainActivity) context).goToMyFridge();
 }
