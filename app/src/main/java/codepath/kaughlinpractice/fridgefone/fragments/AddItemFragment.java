@@ -41,6 +41,7 @@ public class AddItemFragment extends DialogFragment {
                 Log.d("AddItemFragment", "Adding: " + foodItem);
                 Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
                 ((MainActivity) getContext()).addFoodItem(foodItem);
+                dismiss();
             }
         });
 

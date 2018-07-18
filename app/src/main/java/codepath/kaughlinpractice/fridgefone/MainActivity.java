@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // TODO -- do something with foodItem
         goToMyFridge();
+
     }
 
     @Override
