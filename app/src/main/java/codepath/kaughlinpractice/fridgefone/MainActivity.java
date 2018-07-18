@@ -49,8 +49,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView=(NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
+        if(savedInstanceState == null) { // allows to save the fragment you are in when the screen rotates
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
+            navigationView.setCheckedItem(R.id.nav_Fridge);
+        }
     }
 
     // allows for you to click the menu button and pull out the navigation drawer
