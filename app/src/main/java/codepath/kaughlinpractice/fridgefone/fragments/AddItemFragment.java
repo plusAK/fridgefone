@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
@@ -38,6 +39,7 @@ public class AddItemFragment extends DialogFragment {
             public void onClick(View view) {
                 String foodItem = etFoodItem.getText().toString();
                 Log.d("AddItemFragment", "Adding: " + foodItem);
+                Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
                 ((MainActivity) getContext()).addFoodItem(foodItem);
             }
         });
