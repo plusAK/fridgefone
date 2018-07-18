@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 
-public class FridgeFragment extends Fragment implements DialogInterface.OnCancelListener, DialogInterface.OnDismissListener{
+public class FridgeFragment extends Fragment{
 
 
     Context context;
@@ -79,13 +79,6 @@ public class FridgeFragment extends Fragment implements DialogInterface.OnCancel
         ((MainActivity) context).popUpAddItem();
     }
 
-    @Override
-    public void onCancel(DialogInterface dialogInterface) {
 
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialogInterface) {
-
-    }
+    //((MainActivity) context).goToMyFridge();
 }
