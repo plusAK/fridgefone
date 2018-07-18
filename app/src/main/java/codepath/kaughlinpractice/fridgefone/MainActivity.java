@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     Context context;
+
+    private ArrayList<String> fridge_items;
 
     final Fragment fridgeFrag = new FridgeFragment();
     final Fragment listFrag = new ListFragment();
@@ -41,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
 
+        fridge_items = new ArrayList<>();
+
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
@@ -50,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         if(savedInstanceState == null) { // allows to save the fragment you are in when the screen rotates
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
+            goToMyFridge();
             navigationView.setCheckedItem(R.id.nav_Fridge);
         }
     }
@@ -80,21 +85,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.my_fragment, detailsFrag).commit();
     }
 
-    public void popUpAddItem() {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, addFragment).commit();
-    }
-
     public void addFoodItem(String foodItem) {
         // bundle communication between activity and fragment
+        fridge_items.add(foodItem);
         // TODO -- do something with foodItem
-        /*
-        Bundle args = new Bundle();
-        args.putString("food", recipe.getName());
-        detailsFrag.setArguments(args);
-        */
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
+        goToMyFridge();
     }
 
     @Override
@@ -119,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void goToMyFridge() {
+        Bundle args = new Bundle();
+        args.putStringArrayList("fridge_items", fridge_items);
+        fridgeFrag.setArguments(args);
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
     }

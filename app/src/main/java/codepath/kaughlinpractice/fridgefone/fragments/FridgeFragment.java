@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 
@@ -21,6 +23,8 @@ public class FridgeFragment extends Fragment{
     private ImageView ivGenerateRecipeList;
     private ImageView ivAddItem;
 
+    private ArrayList<String> fridge_items;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,6 +34,13 @@ public class FridgeFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle args = getArguments();
+        fridge_items = args.getStringArrayList("fridge_items");
+
+        for (String item: fridge_items) {
+            Log.d("FridgeFragment", "Items in fridge: " + item);
+        }
 
         context = getContext();
 
