@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment fridgeFrag = new FridgeFragment();
     final Fragment listFrag = new ListFragment();
     final Fragment detailsFrag = new DetailsFragment();
+    final Fragment addFragment = new AddItemFragment();
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -57,12 +59,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openDetails(Recipe recipe) {
-        // bundle communication between activity and fradment
+        // bundle communication between activity and fragment
         Bundle args = new Bundle();
         args.putString("name", recipe.getName());
         // TODO -- will have to change to get object ID
         detailsFrag.setArguments(args);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, detailsFrag).commit();
+    }
+
+    public void popUpAddItem() {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.my_fragment, addFragment).commit();
+    }
+
+    public void addFoodItem(String foodItem) {
+        // bundle communication between activity and fragment
+        // TODO -- do something with foodItem
+        /*
+        Bundle args = new Bundle();
+        args.putString("food", recipe.getName());
+        detailsFrag.setArguments(args);
+        */
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
     }
 }
