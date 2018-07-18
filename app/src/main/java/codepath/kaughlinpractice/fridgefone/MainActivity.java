@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -105,6 +106,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void addFoodItem(String foodItem) {
         // bundle communication between activity and fragment
         fridge_items.add(foodItem);
+
+        TextView tvFridgeItems = findViewById(R.id.tvFridgeItems);
+        tvFridgeItems.setText("");
+
+        for (String item: fridge_items) {
+            tvFridgeItems.setText(tvFridgeItems.getText().toString() + ", " + item);
+        }
+
         // TODO -- do something with foodItem
         goToMyFridge();
     }

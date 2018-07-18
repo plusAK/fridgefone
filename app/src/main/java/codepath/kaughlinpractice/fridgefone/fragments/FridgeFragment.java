@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class FridgeFragment extends Fragment{
     Context context;
     private ImageView ivGenerateRecipeList;
     private ImageView ivAddItem;
+    private TextView tvFridgeItems;
 
     private ArrayList<String> fridge_items;
 
@@ -38,14 +40,17 @@ public class FridgeFragment extends Fragment{
         Bundle args = getArguments();
         fridge_items = args.getStringArrayList("fridge_items");
 
-        for (String item: fridge_items) {
-            Log.d("FridgeFragment", "Items in fridge: " + item);
-        }
-
         context = getContext();
 
         ivGenerateRecipeList = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
         ivAddItem = (ImageView) view.findViewById(R.id.ivAddItem);
+        tvFridgeItems = (TextView) view.findViewById(R.id.tvFridgeItems);
+        tvFridgeItems.setText("");
+
+        for (String item: fridge_items) {
+            Log.d("FridgeFragment", "Items in fridge: " + item);
+            tvFridgeItems.setText(tvFridgeItems.getText().toString() + ", " + item);
+        }
 
         ivGenerateRecipeList.setOnClickListener(new View.OnClickListener() {
             @Override
