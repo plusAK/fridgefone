@@ -1,15 +1,23 @@
 package codepath.kaughlinpractice.fridgefone.model;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
-import com.parse.ParseFile;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @ParseClassName("Item")
 public class Item extends ParseObject {
     private static final String KEY_NAME = "name";
-    private static final String KEY_IMAGE ="image";
-    private static final String KEY_ID = "item_id";
+    private static final String KEY_IMAGE_URL = "imageURL";
+    private static final String ingredient_base_URL = "https://spoonacular.com/cdn/ingredients_100x100/";
+
+    public Item() { }
 
     public String getName() {
         return getString(KEY_NAME);
@@ -19,20 +27,12 @@ public class Item extends ParseObject {
         put(KEY_NAME, name);
     }
 
-    public ParseFile getImage() {
-        return getParseFile(KEY_IMAGE);
+    public String getImageURL() {
+        return getString(KEY_IMAGE_URL);
     }
 
-    public void setImage(ParseFile image) {
-        put(KEY_IMAGE, image);
-    }
-
-    public String getItemId() {
-        return getString(KEY_ID);
-    }
-
-    public void setItemId(String itemId) {
-        put(KEY_ID, itemId);
+    public void setImageURL(String image) {
+        put(KEY_IMAGE_URL, image);
     }
 
     public static class Query extends ParseQuery<Item> {
@@ -43,5 +43,26 @@ public class Item extends ParseObject {
         public Query getFridgeItems() {
             return this;
         }
+    }
+
+    public static Item fromJSON(JSONObject jsonObject) throws JSONException {
+        final Item item = new Item();
+
+        item.setName(jsonObject.getString("name"));
+        String imageName = jsonObject.getString("image");
+        String url = ingredient_base_URL + imageName;
+        item.setImageURL(url);
+        item.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("MainActivity", "Create item success");
+                } else {
+                    Log.d("MainActivity", "Item failure");
+                    e.printStackTrace();
+                }
+            }
+        });
+        return item;
     }
 }
