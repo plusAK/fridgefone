@@ -100,7 +100,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // bundle communication between activity and fragment
         Bundle args = new Bundle();
         args.putString("name", recipe.getName());
-        // TODO -- will have to change to get object ID
+        args.putInt("id", recipe.getId());
+        args.putString("image", recipe.getImage());
+
         detailsFrag.setArguments(args);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, detailsFrag).commit();
