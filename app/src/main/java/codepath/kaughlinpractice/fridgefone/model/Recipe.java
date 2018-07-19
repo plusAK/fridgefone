@@ -33,6 +33,10 @@ public class Recipe {
     boolean cheap;
     boolean veryPopular;
     int servings;
+
+    static RecipeAdapter adapter;
+    static AsyncHttpClient client;
+    static ArrayList<Recipe> recipes;
     static boolean use_api = false;
 
     // the base URL for the API
@@ -41,22 +45,10 @@ public class Recipe {
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
 
-
-
-
-
-
-
-
     // JSONObject ingredients;
     // TODO -- figure out how to have ingredients without erroring
 
     public static Recipe fromJSON(JSONObject jsonObject, Context context) throws JSONException {
-
-
-        final RecipeAdapter adapter;
-        final AsyncHttpClient client;
-        final ArrayList<Recipe> recipes;
 
 
         recipes = new ArrayList<>();
@@ -64,16 +56,11 @@ public class Recipe {
         client = new AsyncHttpClient();
         adapter = new RecipeAdapter(recipes);
 
-
         Recipe recipe = new Recipe();
         recipe.name = jsonObject.getString("title");
         recipe.id = jsonObject.getInt("id");
         recipe.image = jsonObject.getString("image");
         Log.d("Recipe", "Have access to basic Recipe Info");
-
-        // TODO -- user recipe.id to GET Recipe Information that gives all additional info that is below
-
-        // create the url
 
         if (use_api) {
             String url = API_BASE_URL +"/recipes/" + recipe.id + "/information";
@@ -81,16 +68,11 @@ public class Recipe {
             RequestParams params = new RequestParams();
            // String x = R.string.api_key;
 
-            client.addHeader(API_KEY_PARAM, context.getString(R.string.api_key));// TODO-- fix this string int situation
+            client.addHeader(API_KEY_PARAM, context.getString(R.string.api_key));
             client.addHeader(KEY_ACCEPT_PARAM, "application/json");
-
-            // TODO -- fill ingredients with actual fridge items
 
             // execute a GET request expecting a JSON object response
             client.get(url, params, new JsonHttpResponseHandler() {
-
-
-
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     String r = response.toString();
@@ -104,7 +86,6 @@ public class Recipe {
             });
         }
         else {
-
             //String stringResponse = context.getString(R.string.api_fake_RecipeInfoData);
             String stringResponse = "{\n" +
                     "  \"vegetarian\": false,\n" +
