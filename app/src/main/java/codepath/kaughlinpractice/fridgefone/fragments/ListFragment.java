@@ -39,7 +39,7 @@ public class ListFragment extends Fragment {
         recipes = new ArrayList<>();
 
         recipes.add(Recipe.fromString("Apple pie"));
-        recipes.add(Recipe.fromString("Juice"));
+        //recipes.add(Recipe.fromString("Juice"));
 
         // construct the adapter from this data source
         recipeAdapter = new RecipeAdapter(recipes);
@@ -48,5 +48,13 @@ public class ListFragment extends Fragment {
         rvRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
         // set the adapter
         rvRecipes.setAdapter(recipeAdapter);
+
+
+
+    }
+
+    public void setRecipes(ArrayList<Recipe> recipes) {
+        this.recipes = recipes;
+        recipeAdapter.notifyDataSetChanged();
     }
 }

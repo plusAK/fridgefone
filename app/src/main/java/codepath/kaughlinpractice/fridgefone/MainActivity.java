@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     Context context;
+    RecipeAdapter adapter;
 
     private ArrayList<String> fridge_items;
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
+        adapter = new RecipeAdapter(recipes);
 
         fridge_items = new ArrayList<>();
         recipes = new ArrayList<>();
@@ -176,9 +178,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.d("MainActivity", "JSON Object : " + r);
                     try {
                         for (int i = 0; i < response.length(); i += 1) {
-                            Recipe recipe = Recipe.fromJSON(response.getJSONObject(i));
+                            Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), MainActivity.this);
                             Log.d("MainActivity", recipe.getName());
                             recipes.add(recipe);
+                            adapter.notifyItemInserted(recipes.size()-1);
                         }
                     } catch (JSONException e) {
                         Log.d("MainActivity", e.getMessage());
@@ -192,7 +195,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         }
         else {
-            String stringResponse = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
+
+           // String stringResponse = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
+            String stringResponse = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
             JSONArray response = null;
             try {
                 response = new JSONArray(stringResponse);
@@ -201,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             try {
                 for (int i = 0; i < response.length(); i += 1) {
-                    Recipe recipe = Recipe.fromJSON(response.getJSONObject(i));
+                    Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), this);
                     Log.d("MainActivity", recipe.getName());
                     recipes.add(recipe);
                 }
@@ -210,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         // TODO - figure out a way to send our recipes to our ListFragment or Adapter
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, listFrag).commit();
     }
