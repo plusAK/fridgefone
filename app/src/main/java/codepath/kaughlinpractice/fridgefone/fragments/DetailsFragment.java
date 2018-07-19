@@ -43,6 +43,15 @@ public class DetailsFragment extends Fragment {
         Bundle args = getArguments();
         String name = args.getString("name");
         tvDishTitle.setText(name);
+
+        /*
+        GlideApp.with(getActivity())
+                .load(recipe.getImage())
+                .circleCrop()
+                .into(ivRecipeImage);
+        */
+
+
 //      TODO change when bundle receives object id
 
 //        TODO: Add the image url into load() once we get it from API
