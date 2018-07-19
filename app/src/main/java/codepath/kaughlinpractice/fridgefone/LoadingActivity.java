@@ -10,11 +10,11 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
-        Thread mythread = new Thread(){
+        Thread thread = new Thread(){
             @Override
             public void run() {
                 try {
-                    sleep(3000);
+                    sleep(2000);
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                     finish();// destroys activity after it is used
@@ -24,6 +24,6 @@ public class LoadingActivity extends AppCompatActivity {
             }
         };
 
-        mythread.start();
+        thread.start();
     }
 }
