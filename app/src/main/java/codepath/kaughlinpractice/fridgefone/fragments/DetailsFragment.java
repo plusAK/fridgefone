@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +50,9 @@ public class DetailsFragment extends Fragment {
     // instance field
     AsyncHttpClient client;
 
+    ArrayList<String> ingredientsList;
+    String instructionsString;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,6 +72,10 @@ public class DetailsFragment extends Fragment {
         Bundle args = getArguments();
         String name = args.getString("name");
         tvDishTitle.setText(name);
+
+        tvInstructions.setText("");
+        instructionsString = "<big><b>Instructions</b></big>";
+        tvIngredients.setText("");
 
         int id = args.getInt("id");
         String image = args.getString("image");
@@ -92,8 +102,9 @@ public class DetailsFragment extends Fragment {
                     Log.d("DetailFragment", "JSON Array : " + responseString);
                     try {
                         for (int i = 0; i < response.length(); i += 1) {
-                            JSONObject step = response.getJSONObject(i);
-                            Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + step.toString());
+                            JSONObject partOfInstructions = response.getJSONObject(i);
+                            beautifyInstructions(partOfInstructions);
+                            Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + partOfInstructions.toString());
                         }
                     } catch (JSONException e) {
                         Log.d("DetailFragment", e.getMessage());
@@ -117,9 +128,12 @@ public class DetailsFragment extends Fragment {
             }
             try {
                 for (int i = 0; i < response.length(); i += 1) {
-                    JSONObject step = response.getJSONObject(i);
-                    Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + step.toString());
+                    JSONObject partOfInstructions = response.getJSONObject(i);
+                    beautifyInstructions(partOfInstructions);
+                    Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + partOfInstructions.toString());
                 }
+
+                tvInstructions.setText(Html.fromHtml(instructionsString));
             } catch (JSONException e) {
                 Log.d("DetailFragment", e.getMessage());
             }
@@ -128,9 +142,35 @@ public class DetailsFragment extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getContext()).generateRecipes(); //basiacally intent to go back to recipe list screen
+                ((MainActivity) getContext()).generateRecipes(); //basically intent to go back to recipe list screen
             }
         });
 
+    }
+
+    public void beautifyInstructions(JSONObject partOfInstructions) {
+        String newText = "";
+        try {
+            String name = partOfInstructions.getString("name");
+            newText = newText + "<u><b>" + name + "</b></u>" +  "<br />";
+            JSONArray steps = partOfInstructions.getJSONArray("steps");
+            for (int i = 0; i < steps.length(); i += 1) {
+                JSONObject step = steps.getJSONObject(i);
+                int stepNum = step.getInt("number");
+                String stepDetails = step.getString("step");
+                newText = newText + "<b>" + stepNum + ".</b> " + stepDetails + "<br /><br />";
+                addToIngredientsList(step.getJSONArray("ingredients"));
+            }
+        } catch (JSONException e) {
+            Log.d("DetailFragment", e.getMessage());
+        }
+
+        instructionsString = instructionsString + newText;
+    }
+
+    public void addToIngredientsList(JSONArray newIngredients) {
+        // check to see if it exists
+        // if it does not, then add item
+        
     }
 }

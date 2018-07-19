@@ -45,29 +45,22 @@ public class ListFragment extends Fragment {
         //get bundle contents
         Bundle args = getArguments();
         String responseForBundle = args.getString("responseForBundle");
-
-
-
         JSONArray response = null;
         try {
+            // change string into JSONArray
             response = new JSONArray(responseForBundle);
         } catch (JSONException e) {
-            Log.d("List Fragment", "Not api_call error: " + e.getMessage());
+            Log.d("ListFragment", "Not api_call error: " + e.getMessage());
         }
         try {
             for (int i = 0; i < response.length(); i += 1) {
                 Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity());
-                Log.d("List Fragment", recipe.getName());
+                Log.d("ListFragment", recipe.getName());
                 recipes.add(recipe);
             }
         } catch (JSONException e) {
-            Log.d("List Fragment", e.getMessage());
+            Log.d("ListFragment", e.getMessage());
         }
-
-
-
-        //recipes.add(Recipe.fromString("Apple pie"));
-        //recipes.add(Recipe.fromString("Juice"));
 
         // construct the adapter from this data source
         recipeAdapter = new RecipeAdapter(recipes);
