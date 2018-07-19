@@ -102,7 +102,7 @@ public class DetailsFragment extends Fragment {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    Log.d("MainActivity", "Error: " + throwable);
+                    Log.d("DetailFragment", "Error: " + throwable);
                 }
             });
         }
@@ -124,12 +124,6 @@ public class DetailsFragment extends Fragment {
                 Log.d("DetailFragment", e.getMessage());
             }
         }
-
-
-//        TODO: Add the image url into load() once we get it from API
-//        GlideApp.with(this)
-//                .load()
-//                .into(ivRecipeImage);
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
