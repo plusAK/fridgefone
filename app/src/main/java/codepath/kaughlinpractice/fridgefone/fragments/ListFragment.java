@@ -6,9 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -38,7 +42,31 @@ public class ListFragment extends Fragment {
         // init the array list (data source)
         recipes = new ArrayList<>();
 
-        recipes.add(Recipe.fromString("Apple pie"));
+        //get bundle contents
+        Bundle args = getArguments();
+        String responseForBundle = args.getString("responseForBundle");
+
+
+
+        JSONArray response = null;
+        try {
+            response = new JSONArray(responseForBundle);
+        } catch (JSONException e) {
+            Log.d("List Fragment", "Not api_call error: " + e.getMessage());
+        }
+        try {
+            for (int i = 0; i < response.length(); i += 1) {
+                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity());
+                Log.d("List Fragment", recipe.getName());
+                recipes.add(recipe);
+            }
+        } catch (JSONException e) {
+            Log.d("List Fragment", e.getMessage());
+        }
+
+
+
+        //recipes.add(Recipe.fromString("Apple pie"));
         //recipes.add(Recipe.fromString("Juice"));
 
         // construct the adapter from this data source

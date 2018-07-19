@@ -21,7 +21,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -45,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     ArrayList<Recipe> recipes;
 
+    String responseForBundle = "";
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     Context context;
@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // get the list of currently playing movies from the API
     public void generateRecipes() {
         // create the url
+
         if (use_api) {
             String url = API_BASE_URL + "/recipes/findByIngredients";
             // set the request parameters
@@ -174,18 +175,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             client.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    String r = response.toString();
-                    Log.d("MainActivity", "JSON Object : " + r);
-                    try {
-                        for (int i = 0; i < response.length(); i += 1) {
-                            Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), MainActivity.this);
-                            Log.d("MainActivity", recipe.getName());
-                            recipes.add(recipe);
-                            adapter.notifyItemInserted(recipes.size()-1);
-                        }
-                    } catch (JSONException e) {
-                        Log.d("MainActivity", e.getMessage());
-                    }
+                    responseForBundle = response.toString();
+//                    Log.d("MainActivity", "JSON Object : " + responseForBundle);
+//                    try {
+//                        for (int i = 0; i < response.length(); i += 1) {
+//                            Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), MainActivity.this);
+//                            Log.d("MainActivity", recipe.getName());
+//                            recipes.add(recipe);
+//                            adapter.notifyItemInserted(recipes.size()-1);
+//                        }
+//                    } catch (JSONException e) {
+//                        Log.d("MainActivity", e.getMessage());
+//                    }
                 }
 
                 @Override
@@ -197,24 +198,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else {
 
            // String stringResponse = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
-            String stringResponse = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
-            JSONArray response = null;
-            try {
-                response = new JSONArray(stringResponse);
-            } catch (JSONException e) {
-                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
-            }
-            try {
-                for (int i = 0; i < response.length(); i += 1) {
-                    Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), this);
-                    Log.d("MainActivity", recipe.getName());
-                    recipes.add(recipe);
-                }
-            } catch (JSONException e) {
-                Log.d("MainActivity", e.getMessage());
-            }
+            responseForBundle = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
+//            JSONArray response = null;
+//            try {
+//                response = new JSONArray(responseForBundle);
+//            } catch (JSONException e) {
+//                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
+//            }
+//            try {
+//                for (int i = 0; i < response.length(); i += 1) {
+//                    Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), this);
+//                    Log.d("MainActivity", recipe.getName());
+//                    recipes.add(recipe);
+//                }
+//            } catch (JSONException e) {
+//                Log.d("MainActivity", e.getMessage());
+//            }
         }
         // TODO - figure out a way to send our recipes to our ListFragment or Adapter
+
+        //bundles recipe arguments 
+        Bundle bundle = new Bundle();
+        bundle.putString("responseForBundle", responseForBundle);
+        listFrag.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, listFrag).commit();
