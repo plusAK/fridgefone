@@ -57,11 +57,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         holder.recipe_name.setText(recipe.getName());
 
 
-        /**
+
+
         GlideApp.with(context)
                 .load(recipe.getImage())
+                .circleCrop()
                 .into(holder.recipe_image);
-         */
+
     }
 
     @Override
