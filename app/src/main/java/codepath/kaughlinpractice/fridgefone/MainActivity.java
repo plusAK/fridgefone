@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         // TODO - figure out a way to send our recipes to our ListFragment or Adapter
 
-        //bundles recipe arguments 
+        //bundles recipe arguments
         Bundle bundle = new Bundle();
         bundle.putString("responseForBundle", responseForBundle);
         listFrag.setArguments(bundle);
