@@ -21,14 +21,18 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
+import codepath.kaughlinpractice.fridgefone.model.Item;
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
 import cz.msebera.android.httpclient.Header;
+
+import static codepath.kaughlinpractice.fridgefone.model.Item.fromJSON;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -154,6 +158,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
     }
 
+    public void getItem(String foodItem) {
+        if (use_api) {
+            String url = API_BASE_URL + "/food/ingredients/autocomplete";
+            RequestParams params = new RequestParams();
+            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+            params.put("query", foodItem);
+            // other parameters we could use later
+            // params.put("intolerances", "eggs");
+            // params.put("metaInformation", false);
+            // params.put("number", 10);
+
+            // execute a GET request expecting a JSON object response
+            client.get(url, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    String r = response.toString();
+                    Log.d("MainActivity", "Ingredient JSON Object : " + r);
+                    try {
+                        Item item = fromJSON(response.getJSONObject(0));
+                        Log.d("MainActivity", "Item: " + item.getName());
+                    } catch (JSONException e) {
+                        Log.d("MainActivity", e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    Log.d("MainActivity", "Error: " + throwable);
+                }
+            });
+        } else {
+                String stringResponse = "[\n" +
+            "  {\n" +
+            "    \"name\": \"apple\",\n" +
+            "    \"image\": \"apple.jpg\"\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"name\": \"apples\",\n" +
+            "    \"image\": \"apple.jpg\"\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"name\": \"applesauce\",\n" +
+            "    \"image\": \"applesauce.jpg\"\n" +
+            "  }\n" +
+             "]";
+            Log.d("MainActivity", "Mock API Works");
+            JSONArray response = null;
+            try {
+                response = new JSONArray(stringResponse);
+                Item item = fromJSON(response.getJSONObject(0));
+                Log.d("MainActivity", "Item: " + item.getName());
+            } catch (JSONException e) {
+                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
+            }
+        }
+    }
+
     // get the list of currently playing movies from the API
     public void generateRecipes() {
         // create the url
@@ -168,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // TODO -- fill ingredients with actual fridge items
             params.put("ingredients", "apples,flour,sugar");
             params.put("number", 5);
-            // other parameters we could user later
+            // other parameters we could use later
             // params.put("fillIngredients", false);
             // params.put("limitLicense", false);
             // params.put("ranking", 1);
