@@ -25,7 +25,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="50dp"
             android:ems="10"
-            android:hint="Name of food item"
+            android:hint="@string/ItemHint"
             android:inputType="textPersonName"
             android:textColorLink="@color/black" />
 
@@ -36,7 +36,7 @@
             android:layout_alignEnd="@+id/actvFoodItem"
             android:layout_below="@+id/actvFoodItem"
             android:layout_marginBottom="30dp"
-            android:text="Add item" />
+            android:text="@string/AddItem" />
     </RelativeLayout>
 
 </FrameLayout>

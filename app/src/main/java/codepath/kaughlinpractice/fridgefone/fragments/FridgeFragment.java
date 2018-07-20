@@ -120,7 +120,7 @@ public class FridgeFragment extends Fragment{
 
     private void loadItems() {
 
-        //get data from parse server 
+        //get data from parse server
         final Item.Query postsQuery = new Item.Query();
 
         postsQuery.findInBackground(new FindCallback<Item>()

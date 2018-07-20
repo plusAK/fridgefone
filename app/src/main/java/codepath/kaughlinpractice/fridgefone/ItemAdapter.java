@@ -38,6 +38,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
         viewHolder.tvFood_Name.setText(mItems.get(i).getName());
 
+        GlideApp.with(mContext)
+                .load(mItems.get(i).getImageURL())
+                .into(viewHolder.ivFood_Image);
+
     }
 
     @Override
@@ -47,8 +51,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvFood_Name;
-        ImageView ivFood_Image;
+        public TextView tvFood_Name;
+        public ImageView ivFood_Image;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
