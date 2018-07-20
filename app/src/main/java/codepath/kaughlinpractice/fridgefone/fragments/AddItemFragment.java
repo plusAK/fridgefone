@@ -32,7 +32,7 @@ public class AddItemFragment extends DialogFragment {
 
     private Button addButton;
     private AutoCompleteTextView actvFoodItem;
-    public boolean use_api = false;
+    public boolean use_api = true;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
@@ -108,7 +108,8 @@ public class AddItemFragment extends DialogFragment {
                         for (int i = 0; i < response.length(); i++) {
                             String name = response.getJSONObject(i).getString("name");
                             autoCompleteItems.add(name);
-                            addItemAdapter.notifyDataSetChanged();
+                            actvFoodItem.setAdapter(new ArrayAdapter<String>(getActivity(),
+                                    android.R.layout.simple_dropdown_item_1line, autoCompleteItems));
                             Log.d("AddItemFragment", "Size of item adapter: " + addItemAdapter.getCount());
                             Log.d("AddItemFragment", "Added " + name + " to list");
                         }
