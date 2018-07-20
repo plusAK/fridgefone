@@ -58,7 +58,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         GlideApp.with(context)
                 .load(recipe.getImage())
-                .circleCrop()
+                .fitCenter()
+                //.circleCrop()
                 .into(holder.recipe_image);
 
     }
