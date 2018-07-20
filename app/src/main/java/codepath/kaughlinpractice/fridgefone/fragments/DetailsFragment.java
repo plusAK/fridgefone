@@ -52,6 +52,7 @@ public class DetailsFragment extends Fragment {
 
     ArrayList<String> ingredientsList;
     String instructionsString;
+    String ingredientsString;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,8 +75,9 @@ public class DetailsFragment extends Fragment {
         tvDishTitle.setText(name);
 
         tvInstructions.setText("");
-        instructionsString = "<big><b>Instructions</b></big>";
         tvIngredients.setText("");
+        instructionsString = "<big><b>Instructions</b></big><br />";
+        ingredientsString = "<big><b>Ingredients</b></big>";
 
         int id = args.getInt("id");
         String image = args.getString("image");
@@ -132,8 +134,8 @@ public class DetailsFragment extends Fragment {
                     beautifyInstructions(partOfInstructions);
                     Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + partOfInstructions.toString());
                 }
-
-                tvInstructions.setText(Html.fromHtml(instructionsString));
+                tvIngredients.setText(Html.fromHtml(ingredientsString));
+                tvInstructions.setText(Html.fromHtml(instructionsString + "< br />< br />"));
             } catch (JSONException e) {
                 Log.d("DetailFragment", e.getMessage());
             }
@@ -161,16 +163,25 @@ public class DetailsFragment extends Fragment {
                 newText = newText + "<b>" + stepNum + ".</b> " + stepDetails + "<br /><br />";
                 addToIngredientsList(step.getJSONArray("ingredients"));
             }
+            instructionsString = instructionsString + newText;
         } catch (JSONException e) {
             Log.d("DetailFragment", e.getMessage());
         }
-
-        instructionsString = instructionsString + newText;
     }
 
     public void addToIngredientsList(JSONArray newIngredients) {
         // check to see if it exists
         // if it does not, then add item
-        
+        String newText = "";
+        try {
+            for (int i = 0; i < newIngredients.length(); i += 1) {
+                JSONObject ingredientItem = newIngredients.getJSONObject(i);
+                String ingredient = ingredientItem.getString("name");
+                newText = newText + "<br/>" + ingredient;
+            }
+            ingredientsString = ingredientsString + newText;
+        } catch (JSONException e) {
+            Log.d("DetailFragment", e.getMessage());
+        }
     }
 }
