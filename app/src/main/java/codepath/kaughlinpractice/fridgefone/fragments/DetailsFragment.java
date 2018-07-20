@@ -135,7 +135,7 @@ public class DetailsFragment extends Fragment {
                     Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + partOfInstructions.toString());
                 }
                 tvIngredients.setText(Html.fromHtml(ingredientsString));
-                tvInstructions.setText(Html.fromHtml(instructionsString + "< br />< br />"));
+                tvInstructions.setText(Html.fromHtml(instructionsString));
             } catch (JSONException e) {
                 Log.d("DetailFragment", e.getMessage());
             }

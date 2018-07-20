@@ -11,7 +11,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#daf0b338"
+        android:background="#7dc6e1"
         tools:context=".MainActivity">
 
         <AutoCompleteTextView
@@ -26,7 +26,8 @@
             android:layout_marginTop="50dp"
             android:ems="10"
             android:hint="Name of food item"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColorLink="@color/black" />
 
         <Button
             android:id="@+id/btnAdd"
