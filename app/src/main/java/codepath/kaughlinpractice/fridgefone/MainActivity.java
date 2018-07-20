@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -52,7 +51,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mToggle;
     Context context;
 
+    RecipeAdapter adapter;
+
     private ArrayList<String> fridge_items;
+
 
     final Fragment fridgeFrag = new FridgeFragment();
     final Fragment listFrag = new ListFragment();
@@ -69,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
 
-        fridge_items = new ArrayList<>();
+//        fridge_items = new ArrayList<>();
+//        lsItem = new ArrayList<>();
         recipes = new ArrayList<>();
 
         // initialize the client
@@ -111,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void addFoodItem(String foodItem) {
+        /*
+
         // bundle communication between activity and fragment
         fridge_items.add(foodItem);
 
@@ -120,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (String item: fridge_items) {
             tvFridgeItems.setText(tvFridgeItems.getText().toString() + ", " + item);
         }
-
+*/
         // TODO -- do something with foodItem
         goToMyFridge();
 
@@ -148,9 +153,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void goToMyFridge() {
-        Bundle args = new Bundle();
-        args.putStringArrayList("fridge_items", fridge_items);
-        fridgeFrag.setArguments(args);
+        //Bundle args = new Bundle();
+        //args.putStringArrayList("fridge_items", fridge_items);
+        //fridgeFrag.setArguments(args);
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
