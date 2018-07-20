@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FridgeFragment">
+    tools:context=".fragments.FridgeFragment"
+    >
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,16 +15,34 @@
         tools:context=".MainActivity"
         >
 
-        <ImageView
-            android:id="@+id/ivGenerateRecipeList"
-            android:layout_width="57dp"
-            android:layout_height="82dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/ivAddItem"
-            android:layout_marginStart="21dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            app:srcCompat="@drawable/chef" />
+        <TextView
+        android:id="@+id/tvFridgeItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="TextView" />
+
+
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="100dp">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvFridgeHomeView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <ImageView
             android:id="@+id/ivAddItem"
@@ -31,31 +50,21 @@
             android:layout_height="82dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="25dp"
             android:layout_marginEnd="14dp"
             android:layout_weight="1"
             android:clickable="true"
             app:srcCompat="@drawable/plus" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/ivGenerateRecipeList"
+            android:layout_width="57dp"
+            android:layout_height="82dp"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textSize="24dp" />
-
-        <TextView
-            android:id="@+id/tvFridgeItems"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="TextView" />
-
+            android:layout_marginStart="22dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            app:srcCompat="@drawable/chef" />
 
     </RelativeLayout>
 
