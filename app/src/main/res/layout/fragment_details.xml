@@ -35,8 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="59dp"
+                android:layout_alignTop="@+id/ivRecipeImage"
                 android:background="#2e000000"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -74,9 +73,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvInstructions"
-                android:layout_marginBottom="@string/margin"
-                android:layout_marginLeft="@string/margin"
-                android:layout_marginTop="@string/margin"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:text="Back" />
         </RelativeLayout>
     </ScrollView>
