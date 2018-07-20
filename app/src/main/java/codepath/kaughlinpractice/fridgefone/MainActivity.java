@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     Context context;
-    RecipeAdapter adapter;
 
     private ArrayList<String> fridge_items;
 
@@ -69,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
-        adapter = new RecipeAdapter(recipes);
 
         fridge_items = new ArrayList<>();
         recipes = new ArrayList<>();
