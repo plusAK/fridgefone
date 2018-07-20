@@ -29,7 +29,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     }
 
      */
-
     // pass in the Tweets array in the constructor
     public RecipeAdapter(List<Recipe> recipes) {
         mRecipes = recipes;

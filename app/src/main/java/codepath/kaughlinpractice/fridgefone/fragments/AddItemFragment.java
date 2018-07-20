@@ -108,7 +108,8 @@ public class AddItemFragment extends DialogFragment {
                         for (int i = 0; i < response.length(); i++) {
                             String name = response.getJSONObject(i).getString("name");
                             autoCompleteItems.add(name);
-                            addItemAdapter.notifyDataSetChanged();
+                            actvFoodItem.setAdapter(new ArrayAdapter<String>(getActivity(),
+                                    android.R.layout.simple_dropdown_item_1line, autoCompleteItems));
                             Log.d("AddItemFragment", "Size of item adapter: " + addItemAdapter.getCount());
                             Log.d("AddItemFragment", "Added " + name + " to list");
                         }
