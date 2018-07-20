@@ -24,14 +24,13 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
 import codepath.kaughlinpractice.fridgefone.model.Item;
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
 import cz.msebera.android.httpclient.Header;
-
-import static codepath.kaughlinpractice.fridgefone.model.Item.fromJSON;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -51,16 +50,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     Context context;
+
     RecipeAdapter adapter;
-//    ItemAdapter itemAdapter;
-//    RecyclerView itemRecyclerView;
-//
-//    private ArrayList<String> fridge_items;
-//    private ArrayList<Item> lsItem;
+
+    private ArrayList<String> fridge_items;
+
 
     final Fragment fridgeFrag = new FridgeFragment();
     final Fragment listFrag = new ListFragment();
     final Fragment detailsFrag = new DetailsFragment();
+    final Fragment addItemFrag =  new AddItemFragment();
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
-        adapter = new RecipeAdapter(recipes);
 
 //        fridge_items = new ArrayList<>();
 //        lsItem = new ArrayList<>();
@@ -175,10 +173,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             client.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    String r = response.toString();
-                    Log.d("MainActivity", "Ingredient JSON Object : " + r);
                     try {
-                        Item item = fromJSON(response.getJSONObject(0));
+                        Item item = Item.fromJSON(response.getJSONObject(0));
                         Log.d("MainActivity", "Item: " + item.getName());
                     } catch (JSONException e) {
                         Log.d("MainActivity", e.getMessage());
@@ -208,8 +204,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d("MainActivity", "Mock API Works");
             JSONArray response = null;
             try {
+                // Creating items to send to parse server
                 response = new JSONArray(stringResponse);
-                Item item = fromJSON(response.getJSONObject(0));
+                Item item = Item.fromJSON(response.getJSONObject(0));
                 Log.d("MainActivity", "Item: " + item.getName());
             } catch (JSONException e) {
                 Log.d("MainActivity", "Not api_call error: " + e.getMessage());

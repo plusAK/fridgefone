@@ -21,7 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,7 +51,7 @@ public class DetailsFragment extends Fragment {
     // instance field
     AsyncHttpClient client;
 
-    ArrayList<String> ingredientsList;
+    Collection<String> neededIngredients;
     String instructionsString;
     String ingredientsString;
 
@@ -69,6 +70,7 @@ public class DetailsFragment extends Fragment {
 
         // initialize the client
         client = new AsyncHttpClient();
+        neededIngredients = new HashSet<>();
 
         Bundle args = getArguments();
         String name = args.getString("name");
@@ -165,7 +167,7 @@ public class DetailsFragment extends Fragment {
             }
             instructionsString = instructionsString + newText;
         } catch (JSONException e) {
-            Log.d("DetailFragment", e.getMessage());
+            Log.d("DetailFragment", "Error in beautifyInstructions " + e.getMessage());
         }
     }
 
@@ -176,12 +178,16 @@ public class DetailsFragment extends Fragment {
         try {
             for (int i = 0; i < newIngredients.length(); i += 1) {
                 JSONObject ingredientItem = newIngredients.getJSONObject(i);
-                String ingredient = ingredientItem.getString("name");
-                newText = newText + "<br/>" + ingredient;
+                String ingredientName = ingredientItem.getString("name");
+                if (!neededIngredients.contains(ingredientName)) {
+                    newText = newText + "<br/>" + ingredientName;
+                    Log.d("DetailFragment", "Found new ingredient " + ingredientName);
+                    neededIngredients.add(ingredientName);
+                }
             }
             ingredientsString = ingredientsString + newText;
         } catch (JSONException e) {
-            Log.d("DetailFragment", e.getMessage());
+            Log.d("DetailFragment", "Error in addIngredients: " + e.getMessage());
         }
     }
 }

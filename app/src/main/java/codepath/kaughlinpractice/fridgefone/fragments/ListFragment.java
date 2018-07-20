@@ -69,9 +69,6 @@ public class ListFragment extends Fragment {
         rvRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
         // set the adapter
         rvRecipes.setAdapter(recipeAdapter);
-
-
-
     }
 
     public void setRecipes(ArrayList<Recipe> recipes) {
