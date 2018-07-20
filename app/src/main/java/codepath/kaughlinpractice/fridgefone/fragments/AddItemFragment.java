@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +15,32 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
+
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
+import cz.msebera.android.httpclient.Header;
 
 public class AddItemFragment extends DialogFragment {
 
     private Button addButton;
     private AutoCompleteTextView actvFoodItem;
+    public boolean use_api = false;
+    // the base URL for the API
+    public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
+    // the parameter name for the API key
+    public final static String API_KEY_PARAM = "X-Mashape-Key";
+    public final static String KEY_ACCEPT_PARAM = "Accept";
+    AsyncHttpClient client;
+    ArrayList<String> autoCompleteItems;
+    public ArrayAdapter<String> addItemAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,12 +52,14 @@ public class AddItemFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, items);
+        client = new AsyncHttpClient();
+        autoCompleteItems = new ArrayList<String>();
+        addItemAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_dropdown_item_1line, autoCompleteItems);
 
         addButton = (Button) view.findViewById(R.id.btnAdd);
         actvFoodItem = (AutoCompleteTextView) view.findViewById(R.id.actvFoodItem);
-        actvFoodItem.setAdapter(adapter);
+        actvFoodItem.setAdapter(addItemAdapter);
         actvFoodItem.setThreshold(1);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +73,83 @@ public class AddItemFragment extends DialogFragment {
                 dismiss();
             }
         });
+
+        actvFoodItem.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                getItem(editable.toString());
+            }
+        });
     }
-    private static final String[] items = new String[]{"Apple", "Banana"};
+
+    public void getItem(String foodItem) {
+        if (use_api) {
+            String url = API_BASE_URL + "/food/ingredients/autocomplete";
+            RequestParams params = new RequestParams();
+            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+            params.put("query", foodItem);
+
+            // execute a GET request expecting a JSON object response
+            client.get(url, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            String name = response.getJSONObject(i).getString("name");
+                            autoCompleteItems.add(name);
+                            addItemAdapter.notifyDataSetChanged();
+                            Log.d("AddItemFragment", "Added " + name + " to list");
+                        }
+                    } catch (JSONException e) {
+                        Log.d("MainActivity", e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    Log.d("MainActivity", "Error: " + throwable);
+                }
+            });
+        } else {
+            String stringResponse = "[\n" +
+                    "  {\n" +
+                    "    \"name\": \"apple\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"apples\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"applesauce\",\n" +
+                    "    \"image\": \"applesauce.jpg\"\n" +
+                    "  }\n" +
+                    "]";
+            Log.d("MainActivity", "Mock API Works");
+            JSONArray response = null;
+            try {
+                response = new JSONArray(stringResponse);
+                // Sending to the Auto Complete List
+                for (int i = 0; i < response.length(); i++) {
+                    String name = response.getJSONObject(i).getString("name");
+                    autoCompleteItems.add(name);
+                    addItemAdapter.notifyDataSetChanged();
+                    Log.d("AddItemFragment", "Added " + name + " to list");
+                }
+            } catch (JSONException e) {
+                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
+            }
+        }
+    }
 }
