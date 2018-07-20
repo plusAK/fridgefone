@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="match_parent"
-        android:layout_height="148dp"
+        android:layout_width="232dp"
+        android:layout_height="188dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:paddingBottom="15dp"
@@ -25,12 +25,12 @@
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="wrap_content"
+        android:layout_width="142dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="36dp"
-        android:background="#2e000000"
+        android:layout_marginTop="40dp"
+        android:layout_toEndOf="@+id/ivImage"
+        android:background="#4e000000"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:text="TextView"
