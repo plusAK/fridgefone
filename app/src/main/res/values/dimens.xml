@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="margin">15</string>
+    <string name="margin">15dp</string>
 </resources>
