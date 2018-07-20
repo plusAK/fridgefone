@@ -14,8 +14,8 @@
         android:background="#daf0b338"
         tools:context=".MainActivity">
 
-        <EditText
-            android:id="@+id/etFoodItem"
+        <AutoCompleteTextView
+            android:id="@+id/actvFoodItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -32,8 +32,8 @@
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/etFoodItem"
-            android:layout_below="@+id/etFoodItem"
+            android:layout_alignEnd="@+id/actvFoodItem"
+            android:layout_below="@+id/actvFoodItem"
             android:layout_marginBottom="30dp"
             android:text="Add item" />
     </RelativeLayout>
