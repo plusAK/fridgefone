@@ -39,7 +39,7 @@ public class AddItemFragment extends DialogFragment {
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
     AsyncHttpClient client;
-    ArrayList<String> autoCompleteItems;
+    ArrayList<String> autoCompleteItems = new ArrayList<String>();
     public ArrayAdapter<String> addItemAdapter;
 
     @Override
@@ -53,7 +53,6 @@ public class AddItemFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         client = new AsyncHttpClient();
-        autoCompleteItems = new ArrayList<String>();
         addItemAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, autoCompleteItems);
 
@@ -61,6 +60,7 @@ public class AddItemFragment extends DialogFragment {
         actvFoodItem = (AutoCompleteTextView) view.findViewById(R.id.actvFoodItem);
         actvFoodItem.setAdapter(addItemAdapter);
         actvFoodItem.setThreshold(1);
+        //actvFoodItem.setDropDownHeight(3);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +109,7 @@ public class AddItemFragment extends DialogFragment {
                             String name = response.getJSONObject(i).getString("name");
                             autoCompleteItems.add(name);
                             addItemAdapter.notifyDataSetChanged();
+                            Log.d("AddItemFragment", "Size of item adapter: " + addItemAdapter.getCount());
                             Log.d("AddItemFragment", "Added " + name + " to list");
                         }
                     } catch (JSONException e) {
