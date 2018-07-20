@@ -75,7 +75,7 @@ public class FridgeFragment extends Fragment{
         itemRecyclerView.setAdapter(itemAdapter);
 
         //lsItem.add(new Item());
-        loadTopItems();
+        loadItems();
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -93,34 +93,6 @@ public class FridgeFragment extends Fragment{
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-
-
-
-        /*
-
-                // bundle communication between activity and fragment
-        fridge_items.add(foodItem);
-
-        TextView tvFridgeItems = findViewById(R.id.tvFridgeItems);
-        tvFridgeItems.setText("");
-
-        for (String item: fridge_items) {
-            tvFridgeItems.setText(tvFridgeItems.getText().toString() + ", " + item);
-        }
-         */
-
-
-
-        /*
-        for (String item: fridge_items) {
-
-            Log.d("FridgeFragment", "Items in fridge: " + item);
-            lsItem.add(new Item());
-
-            //tvFridgeItems.setText(tvFridgeItems.getText().toString() + ", " + item);
-        }
-        */
 
         ivGenerateRecipeList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,10 +118,10 @@ public class FridgeFragment extends Fragment{
         ((MainActivity) context).generateRecipes(); // similar to Intent, going through Activity to get to new fragment
     }
 
-    private void loadTopItems() {
+    private void loadItems() {
 
+        //get data from parse server 
         final Item.Query postsQuery = new Item.Query();
-
 
         postsQuery.findInBackground(new FindCallback<Item>()
 
@@ -158,9 +130,8 @@ public class FridgeFragment extends Fragment{
             public void done(List<Item> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        Log.d("FridgeFragment", "item[" + i + "]= " + objects.get(i).getName()
-                                + "\nImageurl =" + objects.get(i).getImageURL());
-                        lsItem.add(0 , objects.get(i));
+                        Log.d("FridgeFragment", "item[" + i + "]= " + objects.get(i).getName() + "\nImageurl =" + objects.get(i).getImageURL());
+                        lsItem.add(0 , objects.get(i)); // add item to zero index
                         itemAdapter.notifyItemInserted(lsItem.size()-1);
                     }
 
@@ -173,7 +144,7 @@ public class FridgeFragment extends Fragment{
 
     public void fetchTimelineAsync(int page) {
         itemAdapter.clear();
-        loadTopItems();
+        loadItems();
         swipeContainer.setRefreshing(false);
     }
 

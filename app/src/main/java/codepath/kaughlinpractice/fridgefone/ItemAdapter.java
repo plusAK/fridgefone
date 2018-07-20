@@ -37,7 +37,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder viewHolder, int i) {
 
         viewHolder.tvFood_Name.setText(mItems.get(i).getName());
-        viewHolder.tvFood_Name.setText(mItems.get(i).getImageURL());
+
     }
 
     @Override
