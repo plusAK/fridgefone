@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DetailsFragment">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fillViewport="true">
@@ -20,13 +19,14 @@
 
             <ImageView
                 android:id="@+id/ivRecipeImage"
-                android:layout_width="142dp"
-                android:layout_height="149dp"
+                android:layout_width="match_parent"
+                android:layout_height="253dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="15dp"
                 app:srcCompat="@android:color/holo_orange_light" />
 
@@ -34,13 +34,13 @@
                 android:id="@+id/tvDishTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_toEndOf="@+id/ivRecipeImage"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/ivRecipeImage"
+                android:background="#2e000000"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:text="Dish Title"
-                android:textColor="@color/black"
+                android:textColor="@android:color/background_light"
                 android:textSize="45sp"
                 android:textStyle="bold|italic" />
 

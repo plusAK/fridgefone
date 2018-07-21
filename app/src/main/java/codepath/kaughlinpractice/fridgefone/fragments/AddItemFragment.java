@@ -109,6 +109,7 @@ public class AddItemFragment extends DialogFragment {
                             autoCompleteItems.add(name);
                             actvFoodItem.setAdapter(new ArrayAdapter<String>(getActivity(),
                                     android.R.layout.simple_dropdown_item_1line, autoCompleteItems));
+                            actvFoodItem.showDropDown();
                             Log.d("AddItemFragment", "Size of item adapter: " + addItemAdapter.getCount());
                             Log.d("AddItemFragment", "Added " + name + " to list");
                         }
@@ -146,6 +147,7 @@ public class AddItemFragment extends DialogFragment {
                     String name = response.getJSONObject(i).getString("name");
                     autoCompleteItems.add(name);
                     addItemAdapter.notifyDataSetChanged();
+                    actvFoodItem.showDropDown();
                     Log.d("AddItemFragment", "Added " + name + " to list");
                 }
             } catch (JSONException e) {
