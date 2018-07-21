@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -28,22 +27,17 @@ import codepath.kaughlinpractice.fridgefone.model.Item;
 
 public class FridgeFragment extends Fragment{
 
-    private SwipeRefreshLayout swipeContainer;
 
-    Context context;
-    private ImageView ivGenerateRecipeList;
-    private ImageView ivAddItem;
-    private TextView tvFridgeItems;
 
-    ItemAdapter itemAdapter;
-    RecyclerView itemRecyclerView;
+    private Context mcontext;
+    private ImageView mGenerateRecipeListImageView;
+    private ImageView mAddItemImageView;
+    private ArrayList<Item> mItemList;
+    private SwipeRefreshLayout mSwipeContainer;
+    private ItemAdapter mItemAdapter;
+    private RecyclerView mItemRecyclerView;
 
-    private ArrayList<String> fridge_items;
-    private ArrayList<Item> lsItem;
 
-    //private ArrayList<String> fridge_items;
-
-    //List<Item> lsItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,32 +48,27 @@ public class FridgeFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fridge_items = new ArrayList<>();
-        lsItem = new ArrayList<>();
 
-        //Bundle args = getArguments();
-        //fridge_items = args.getStringArrayList("fridge_items");
+        mcontext = getContext();
+        mItemList = new ArrayList<>();
 
-        context = getContext();
-
-        ivGenerateRecipeList = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
-        ivAddItem = (ImageView) view.findViewById(R.id.ivAddItem);
-        tvFridgeItems = (TextView) view.findViewById(R.id.tvFridgeItems);
-        tvFridgeItems.setText("");
+        mGenerateRecipeListImageView = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
+        mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddItem);
 
 
-        itemRecyclerView = (RecyclerView) view.findViewById(R.id.rvFridgeHomeView);
-        itemAdapter =  new ItemAdapter( lsItem, getActivity());
-        itemRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        mItemRecyclerView = (RecyclerView) view.findViewById(R.id.rvFridgeHomeView);
+        mItemAdapter =  new ItemAdapter( mItemList, getActivity());
+        mItemRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+
         //construct adapter from data source
-        itemRecyclerView.setAdapter(itemAdapter);
+        mItemRecyclerView.setAdapter(mItemAdapter);
 
-        //lsItem.add(new Item());
-        loadItems();
+        loadItems(); //load items to fridge
 
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+
+        mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Your code to refresh the list here.
@@ -89,12 +78,12 @@ public class FridgeFragment extends Fragment{
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        mSwipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        ivGenerateRecipeList.setOnClickListener(new View.OnClickListener() {
+        mGenerateRecipeListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("FridgeFragment", "clicked on generate");
@@ -102,7 +91,7 @@ public class FridgeFragment extends Fragment{
             }
         });
 
-        ivAddItem.setOnClickListener(new View.OnClickListener() {
+        mAddItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AddItemFragment addItemFragment = new AddItemFragment();
@@ -111,11 +100,9 @@ public class FridgeFragment extends Fragment{
         });
     }
 
-
-    // TODO: Change from intent to bundle
     public void generateRecipes() {
         Log.d("FridgeFragment", "should move pages");
-        ((MainActivity) context).generateRecipes(); // similar to Intent, going through Activity to get to new fragment
+        ((MainActivity) mcontext).generateRecipes(); // similar to Intent, going through Activity to get to new fragment
     }
 
     private void loadItems() {
@@ -131,8 +118,8 @@ public class FridgeFragment extends Fragment{
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
                         Log.d("FridgeFragment", "item[" + i + "]= " + objects.get(i).getName() + "\nImageurl =" + objects.get(i).getImageURL());
-                        lsItem.add(0 , objects.get(i)); // add item to zero index
-                        itemAdapter.notifyItemInserted(lsItem.size()-1);
+                        mItemList.add(0 , objects.get(i)); // add item to zero index
+                        mItemAdapter.notifyItemInserted(mItemList.size()-1);
                     }
 
                 } else {
@@ -143,9 +130,8 @@ public class FridgeFragment extends Fragment{
     }
 
     public void fetchTimelineAsync(int page) {
-        itemAdapter.clear();
+        mItemAdapter.clear();
         loadItems();
-        swipeContainer.setRefreshing(false);
+        mSwipeContainer.setRefreshing(false);
     }
-
 }

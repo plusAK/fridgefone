@@ -36,11 +36,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder viewHolder, int i) {
 
-        viewHolder.tvFood_Name.setText(mItems.get(i).getName());
+        viewHolder.mFoodNameTextView.setText(mItems.get(i).getName());
 
         GlideApp.with(mContext)
                 .load(mItems.get(i).getImageURL())
-                .into(viewHolder.ivFood_Image);
+                .into(viewHolder.mFoodImageView);
 
     }
 
@@ -51,13 +51,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvFood_Name;
-        public ImageView ivFood_Image;
+        public TextView mFoodNameTextView;
+        public ImageView mFoodImageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvFood_Name = (TextView) itemView.findViewById(R.id.tvFood_Name);
-            ivFood_Image = (ImageView) itemView.findViewById(R.id.ivFood_Image);
+            mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
+            mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
         }
     }
     // Clean all elements of the recycler

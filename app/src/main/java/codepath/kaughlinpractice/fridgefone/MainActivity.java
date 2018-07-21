@@ -1,6 +1,5 @@
 package codepath.kaughlinpractice.fridgefone;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,9 +21,6 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
-import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
@@ -42,26 +38,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public final static String KEY_ACCEPT_PARAM = "Accept";
 
     // instance field
-    AsyncHttpClient client;
-
-    ArrayList<Recipe> recipes;
+    AsyncHttpClient mClient;
 
     String responseForBundle = "";
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    Context context;
-
-    RecipeAdapter adapter;
-
-    private ArrayList<String> fridge_items;
 
 
-    final Fragment fridgeFrag = new FridgeFragment();
-    final Fragment listFrag = new ListFragment();
-    final Fragment detailsFrag = new DetailsFragment();
-    final Fragment addItemFrag =  new AddItemFragment();
 
-    final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +55,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
 
-//        fridge_items = new ArrayList<>();
-//        lsItem = new ArrayList<>();
-        recipes = new ArrayList<>();
-
         // initialize the client
-        client = new AsyncHttpClient();
+        mClient = new AsyncHttpClient();
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
@@ -102,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void openDetails(Recipe recipe) {
+        Fragment detailsFrag = new DetailsFragment();
+
         // bundle communication between activity and fragment
         Bundle args = new Bundle();
         args.putString("name", recipe.getName());
@@ -109,27 +91,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         args.putString("image", recipe.getImage());
 
         detailsFrag.setArguments(args);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, detailsFrag).commit();
+        fragmentTransition(detailsFrag);
     }
 
-    public void addFoodItem(String foodItem) {
-        /*
 
-        // bundle communication between activity and fragment
-        fridge_items.add(foodItem);
-
-        TextView tvFridgeItems = findViewById(R.id.tvFridgeItems);
-        tvFridgeItems.setText("");
-
-        for (String item: fridge_items) {
-            tvFridgeItems.setText(tvFridgeItems.getText().toString() + ", " + item);
-        }
-*/
-        // TODO -- do something with foodItem
-        goToMyFridge();
-
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -153,24 +118,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void goToMyFridge() {
-        //Bundle args = new Bundle();
-        //args.putStringArrayList("fridge_items", fridge_items);
-        //fridgeFrag.setArguments(args);
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
+        Fragment fridgeFrag = new FridgeFragment();
+        fragmentTransition(fridgeFrag);
     }
 
     public void getItem(String foodItem) {
+
         if (use_api) {
+
             String url = API_BASE_URL + "/food/ingredients/autocomplete";
             RequestParams params = new RequestParams();
-            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+            mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+            mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
             params.put("query", foodItem);
 
             // execute a GET request expecting a JSON object response
-            client.get(url, params, new JsonHttpResponseHandler() {
+            mClient.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
@@ -212,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d("MainActivity", "Not api_call error: " + e.getMessage());
             }
         }
+        goToMyFridge();
     }
 
     // get the list of currently playing movies from the API
@@ -222,8 +186,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String url = API_BASE_URL + "/recipes/findByIngredients";
             // set the request parameters
             RequestParams params = new RequestParams();
-            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+            mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+            mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
             // TODO -- fill ingredients with actual fridge items
             params.put("ingredients", "apples,flour,sugar");
@@ -234,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // params.put("ranking", 1);
 
             // execute a GET request expecting a JSON object response
-            client.get(url, params, new JsonHttpResponseHandler() {
+            mClient.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     responseForBundle = response.toString();
@@ -252,12 +216,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             responseForBundle = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
         }
 
+        Fragment listFrag = new ListFragment();
+
         //bundles recipe arguments
         Bundle bundle = new Bundle();
         bundle.putString("responseForBundle", responseForBundle);
         listFrag.setArguments(bundle);
 
+        fragmentTransition(listFrag);
+    }
+
+    public void fragmentTransition(Fragment nextFrag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, listFrag).commit();
+        fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
 }
