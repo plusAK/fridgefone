@@ -4,22 +4,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.FilterFragment"
-    style="PopUpTheme">
+    style="PopUpTheme"
+    android:padding="10dp">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#C8C8C8"
+        android:background="@color/white"
         tools:context=".MainActivity">
 
-        <TextView
-            android:id="@+id/mFilterTextView"
+        <CheckBox
+            android:id="@+id/VegetarianCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Filter" />
+            android:text="Vegetarian" />
+
+        <CheckBox
+            android:id="@+id/VeganCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/VegetarianCheck"
+            android:layout_toEndOf="@+id/VegetarianCheck"
+            android:text="Vegan" />
+
+        <CheckBox
+            android:id="@+id/GlutenFreeCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/VegetarianCheck"
+            android:layout_below="@+id/VegetarianCheck"
+            android:text="Gluten Free" />
+
+        <CheckBox
+            android:id="@+id/DairyFreeCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/VegetarianCheck"
+            android:layout_toEndOf="@+id/VegetarianCheck"
+            android:text="Dairy Free" />
+
+        <CheckBox
+            android:id="@+id/VeryHealthyCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/VegetarianCheck"
+            android:layout_below="@+id/GlutenFreeCheck"
+            android:text="Very Healthy" />
+
+        <CheckBox
+            android:id="@+id/CheapCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/VeryHealthyCheck"
+            android:text="Cheap" />
+
+        <CheckBox
+            android:id="@+id/VeryPopularCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/GlutenFreeCheck"
+            android:layout_toEndOf="@+id/VegetarianCheck"
+            android:text="Very Popular" />
+
+        <CheckBox
+            android:id="@+id/FastCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/VeryHealthyCheck"
+            android:layout_toEndOf="@+id/VegetarianCheck"
+            android:text="Fast" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/FastCheck"
+            android:layout_below="@+id/CheapCheck"
+            android:text="Save" />
     </RelativeLayout>
 
 </FrameLayout>
