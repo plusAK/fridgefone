@@ -1,5 +1,6 @@
 package codepath.kaughlinpractice.fridgefone;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
@@ -30,7 +32,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    public boolean use_api = true;
+    public boolean use_api = false;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String responseForBundle = "";
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private Context mContext;
 
 
 
@@ -182,17 +185,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // there should be a pop up asking whether the user wants to delete THIS item
         Bundle args = new Bundle();
         args.putParcelable("Item", item);
-        /*
-        TODO - see if you can set OnClick listener here, so you have access to item
+
+        // OnClick listener here, so you have access to item
         DeleteItemFragment deleteItemFragment = new DeleteItemFragment();
-        deleteItemFragment.show(mContext.getPackageManager(), "DeleteItemFragment");
-        */
+        deleteItemFragment.setArguments(args);// connects bundle to fragment
+        deleteItemFragment.show(getSupportFragmentManager(), "DeleteItemFragment");
+
+
+
         // in DeleteItemFragment, there should be an on ClickListener than calls MainActivity.delete item
         // if yes, then item is deleted from Parse Server and removed from the fridge
         Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
-        item.deleteInBackground();
+        //item.deleteInBackground();
         // if no, then nothing changes and user is taken back to the fridge
     }
+
+
 
     // get the list of currently playing movies from the API
     public void generateRecipes() {
