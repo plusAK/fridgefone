@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,7 @@ public class ListFragment extends Fragment {
     RecipeAdapter recipeAdapter;
     ArrayList<Recipe> recipes;
     RecyclerView rvRecipes;
+    private ImageView mFilterImageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +43,8 @@ public class ListFragment extends Fragment {
         rvRecipes = (RecyclerView) view.findViewById(R.id.rvRecipes);
         // init the array list (data source)
         recipes = new ArrayList<>();
+
+        mFilterImageView = (ImageView) view.findViewById(R.id.mFilterImageView);
 
         //get bundle contents
         Bundle args = getArguments();
@@ -69,6 +73,14 @@ public class ListFragment extends Fragment {
         rvRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
         // set the adapter
         rvRecipes.setAdapter(recipeAdapter);
+
+        mFilterImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FilterFragment filterFragment = new FilterFragment();
+                filterFragment.show(getFragmentManager(), "FilterFragment");
+            }
+        });
     }
 
     public void setRecipes(ArrayList<Recipe> recipes) {
