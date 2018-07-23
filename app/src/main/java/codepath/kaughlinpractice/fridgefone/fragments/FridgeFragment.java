@@ -38,12 +38,8 @@ public class FridgeFragment extends Fragment{
     ItemAdapter itemAdapter;
     RecyclerView itemRecyclerView;
 
-    private ArrayList<String> fridge_items;
+    private String fridge_items = "";
     private ArrayList<Item> lsItem;
-
-    //private ArrayList<String> fridge_items;
-
-    //List<Item> lsItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,11 +50,7 @@ public class FridgeFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fridge_items = new ArrayList<>();
         lsItem = new ArrayList<>();
-
-        //Bundle args = getArguments();
-        //fridge_items = args.getStringArrayList("fridge_items");
 
         context = getContext();
 
@@ -148,11 +140,9 @@ public class FridgeFragment extends Fragment{
 
     private void loadTopItems() {
 
-        final Item.Query postsQuery = new Item.Query();
+        final Item.Query itemsQuery = new Item.Query();
 
-
-        postsQuery.findInBackground(new FindCallback<Item>()
-
+        itemsQuery.findInBackground(new FindCallback<Item>()
         {
             @Override
             public void done(List<Item> objects, ParseException e) {
@@ -161,14 +151,21 @@ public class FridgeFragment extends Fragment{
                         Log.d("FridgeFragment", "item[" + i + "]= " + objects.get(i).getName()
                                 + "\nImageurl =" + objects.get(i).getImageURL());
                         lsItem.add(0 , objects.get(i));
+                        fridge_items = fridge_items + objects.get(i).getName();
+                        if (i != objects.size()-1) {
+                            fridge_items = fridge_items + ",";
+                        }
                         itemAdapter.notifyItemInserted(lsItem.size()-1);
                     }
-
                 } else {
                     e.printStackTrace();
                 }
             }
         });
+
+        // You need to refresh page for item names to load from Parse
+        Log.d("FridgeFragment", "Items in Fridge: " + fridge_items);
+        ((MainActivity) getContext()).setFridgeItems(fridge_items);
     }
 
     public void fetchTimelineAsync(int page) {
