@@ -29,15 +29,14 @@ public class FridgeFragment extends Fragment{
 
 
 
-    private Context mcontext;
+    private Context mContext;
     private ImageView mGenerateRecipeListImageView;
     private ImageView mAddItemImageView;
     private ArrayList<Item> mItemList;
     private SwipeRefreshLayout mSwipeContainer;
     private ItemAdapter mItemAdapter;
     private RecyclerView mItemRecyclerView;
-
-
+    private String fridge_items = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,12 +48,11 @@ public class FridgeFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mcontext = getContext();
+        mContext = getContext();
         mItemList = new ArrayList<>();
 
         mGenerateRecipeListImageView = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
         mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddItem);
-
 
         mItemRecyclerView = (RecyclerView) view.findViewById(R.id.rvFridgeHomeView);
         mItemAdapter =  new ItemAdapter( mItemList, getActivity());
@@ -64,7 +62,6 @@ public class FridgeFragment extends Fragment{
         mItemRecyclerView.setAdapter(mItemAdapter);
 
         loadItems(); //load items to fridge
-
 
         mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -102,31 +99,37 @@ public class FridgeFragment extends Fragment{
 
     public void generateRecipes() {
         Log.d("FridgeFragment", "should move pages");
-        ((MainActivity) mcontext).generateRecipes(); // similar to Intent, going through Activity to get to new fragment
+        ((MainActivity) mContext).generateRecipes(); // similar to Intent, going through Activity to get to new fragment
     }
 
     private void loadItems() {
 
-        //get data from parse server
-        final Item.Query postsQuery = new Item.Query();
+        final Item.Query itemsQuery = new Item.Query();
 
-        postsQuery.findInBackground(new FindCallback<Item>()
-
+        itemsQuery.findInBackground(new FindCallback<Item>()
         {
             @Override
             public void done(List<Item> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        Log.d("FridgeFragment", "item[" + i + "]= " + objects.get(i).getName() + "\nImageurl =" + objects.get(i).getImageURL());
+                        Log.d("FridgeFragment", "item[" + i + "]= " + objects.get(i).getName()
+                                + "\nImageurl =" + objects.get(i).getImageURL());
+                        fridge_items = fridge_items + objects.get(i).getName();
+                        if (i != objects.size()-1) {
+                            fridge_items = fridge_items + ",";
+                        }
                         mItemList.add(0 , objects.get(i)); // add item to zero index
                         mItemAdapter.notifyItemInserted(mItemList.size()-1);
                     }
-
                 } else {
                     e.printStackTrace();
                 }
             }
         });
+
+        // You need to refresh page for item names to load from Parse
+        Log.d("FridgeFragment", "Items in Fridge: " + fridge_items);
+        ((MainActivity) getContext()).setFridgeItems(fridge_items);
     }
 
     public void fetchTimelineAsync(int page) {

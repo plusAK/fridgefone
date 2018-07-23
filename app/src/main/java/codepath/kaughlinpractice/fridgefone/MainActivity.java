@@ -22,7 +22,9 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+
 import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
+import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
+    public String fridgeItems;
 
     // instance field
     AsyncHttpClient mClient;
@@ -47,7 +50,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mToggle;
     private Context mContext;
 
+    RecipeAdapter adapter;
 
+    final Fragment fridgeFrag = new FridgeFragment();
+    final Fragment listFrag = new ListFragment();
+    final Fragment detailsFrag = new DetailsFragment();
+    final Fragment addItemFrag =  new AddItemFragment();
 
 
     @Override
@@ -140,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
+                        //String r = response.toString();
+                        //Log.d("MainActivity", "Response: " + r);
                         Item item = Item.fromJSON(response.getJSONObject(0));
                         Log.d("MainActivity", "Item: " + item.getName());
                     } catch (JSONException e) {
@@ -214,8 +224,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
             mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
-            // TODO -- fill ingredients with actual fridge items
-            params.put("ingredients", "apples,flour,sugar");
+            Log.d("MainActivity", "Fridge Items: " + fridgeItems);
+            params.put("ingredients", fridgeItems);
             params.put("number", 5);
             // other parameters we could use later
             // params.put("fillIngredients", false);
@@ -253,5 +263,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
+    }
+
+    public void setFridgeItems(String fridge_items) {
+        fridgeItems = fridge_items;
     }
 }
