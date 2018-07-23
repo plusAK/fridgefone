@@ -1,6 +1,5 @@
 package codepath.kaughlinpractice.fridgefone;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,8 +21,6 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
 import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
@@ -43,14 +40,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public String fridgeItems;
 
     // instance field
-    AsyncHttpClient client;
-
-    ArrayList<Recipe> recipes;
+    AsyncHttpClient mClient;
 
     String responseForBundle = "";
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    Context context;
 
     RecipeAdapter adapter;
 
@@ -59,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     final Fragment detailsFrag = new DetailsFragment();
     final Fragment addItemFrag =  new AddItemFragment();
 
-    final FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
 
-        recipes = new ArrayList<>();
-
         // initialize the client
-        client = new AsyncHttpClient();
+        mClient = new AsyncHttpClient();
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
@@ -98,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void openDetails(Recipe recipe) {
+        Fragment detailsFrag = new DetailsFragment();
+
         // bundle communication between activity and fragment
         Bundle args = new Bundle();
         args.putString("name", recipe.getName());
@@ -105,27 +98,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         args.putString("image", recipe.getImage());
 
         detailsFrag.setArguments(args);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, detailsFrag).commit();
+        fragmentTransition(detailsFrag);
     }
 
-    public void addFoodItem(String foodItem) {
-        /*
 
-        // bundle communication between activity and fragment
-        fridge_items.add(foodItem);
-
-        TextView tvFridgeItems = findViewById(R.id.tvFridgeItems);
-        tvFridgeItems.setText("");
-
-        for (String item: fridge_items) {
-            tvFridgeItems.setText(tvFridgeItems.getText().toString() + ", " + item);
-        }
-*/
-        // TODO -- do something with foodItem
-        goToMyFridge();
-
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -149,24 +125,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void goToMyFridge() {
-        //Bundle args = new Bundle();
-        //args.putStringArrayList("fridge_items", fridge_items);
-        //fridgeFrag.setArguments(args);
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, fridgeFrag).commit();
+        Fragment fridgeFrag = new FridgeFragment();
+        fragmentTransition(fridgeFrag);
     }
 
     public void getItem(String foodItem) {
+
         if (use_api) {
+
             String url = API_BASE_URL + "/food/ingredients/autocomplete";
             RequestParams params = new RequestParams();
-            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+            mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+            mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
             params.put("query", foodItem);
 
             // execute a GET request expecting a JSON object response
-            client.get(url, params, new JsonHttpResponseHandler() {
+            mClient.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
@@ -207,9 +181,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Item item = Item.fromJSON(response.getJSONObject(0));
                 Log.d("MainActivity", "Item: " + item.getName());
             } catch (JSONException e) {
-                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
+                Log.d("MainActivity", "Error after API call: " + e.getMessage());
             }
         }
+        goToMyFridge();
+    }
+
+    public void deleteItem(Item item) {
+        // there should be a pop up asking whether the user wants to delete THIS item
+        Bundle args = new Bundle();
+        args.putParcelable("Item", item);
+        /*
+        TODO - see if you can set OnClick listener here, so you have access to item
+        DeleteItemFragment deleteItemFragment = new DeleteItemFragment();
+        deleteItemFragment.show(mContext.getPackageManager(), "DeleteItemFragment");
+        */
+        // in DeleteItemFragment, there should be an on ClickListener than calls MainActivity.delete item
+        // if yes, then item is deleted from Parse Server and removed from the fridge
+        Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
+        item.deleteInBackground();
+        // if no, then nothing changes and user is taken back to the fridge
     }
 
     // get the list of currently playing movies from the API
@@ -217,11 +208,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // create the url
 
         if (use_api) {
+            Log.d("MainActivity", "In API zone");
             String url = API_BASE_URL + "/recipes/findByIngredients";
             // set the request parameters
             RequestParams params = new RequestParams();
-            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+            mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+            mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
             Log.d("MainActivity", "Fridge Items: " + fridgeItems);
             params.put("ingredients", fridgeItems);
@@ -231,18 +223,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // params.put("limitLicense", false);
             // params.put("ranking", 1);
 
+            Log.d("MainActivity", "Before client xall");
             // execute a GET request expecting a JSON object response
-            client.get(url, params, new JsonHttpResponseHandler() {
+            mClient.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    Log.d("MainActivity", "Got into On Success");
-                    Log.d("MainActivity", "Response" + response.toString());
+                    Log.d("MainActivity", "Before response to string");
                     responseForBundle = response.toString();
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    Log.d("MainActivity", "Error: " + throwable);
+                    Log.d("MainActivity", "ResponseForBundle: " + responseForBundle);
                 }
             });
         }
@@ -252,13 +240,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             responseForBundle = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
         }
 
+        Fragment listFrag = new ListFragment();
+
         //bundles recipe arguments
         Bundle bundle = new Bundle();
         bundle.putString("responseForBundle", responseForBundle);
         listFrag.setArguments(bundle);
 
+        fragmentTransition(listFrag);
+    }
+
+    public void fragmentTransition(Fragment nextFrag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, listFrag).commit();
+        fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
 
     public void setFridgeItems(String fridge_items) {

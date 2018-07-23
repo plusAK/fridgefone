@@ -68,7 +68,6 @@ public class AddItemFragment extends DialogFragment {
                 String foodItem = actvFoodItem.getText().toString();
                 Log.d("AddItemFragment", "Adding: " + foodItem);
                 Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
-                ((MainActivity) getContext()).addFoodItem(foodItem);
                 ((MainActivity) getContext()).getItem(foodItem);
                 dismiss();
             }
@@ -87,12 +86,12 @@ public class AddItemFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                getItem(editable.toString());
+                getItemForAutoComplete(editable.toString());
             }
         });
     }
 
-    public void getItem(String foodItem) {
+    public void getItemForAutoComplete(String foodItem) {
         if (use_api) {
             String url = API_BASE_URL + "/food/ingredients/autocomplete";
             RequestParams params = new RequestParams();

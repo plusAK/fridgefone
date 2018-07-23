@@ -36,10 +36,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder viewHolder, int i) {
 
-        viewHolder.tvFood_Name.setText(mItems.get(i).getName());
+        viewHolder.mFoodNameTextView.setText(mItems.get(i).getName());
+
         GlideApp.with(mContext)
                 .load(mItems.get(i).getImageURL())
-                .into(viewHolder.ivFood_Image);
+                .into(viewHolder.mFoodImageView);
+
     }
 
     @Override
@@ -47,15 +49,36 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         return mItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener{
 
-        public TextView tvFood_Name;
-        public ImageView ivFood_Image;
+        public TextView mFoodNameTextView;
+        public ImageView mFoodImageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvFood_Name = (TextView) itemView.findViewById(R.id.tvFood_Name);
-            ivFood_Image = (ImageView) itemView.findViewById(R.id.ivFood_Image);
+            mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
+            mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
+
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
+            int position = getAdapterPosition();
+            // make sure the position is valid, i.e. actually exists in the view
+            if (position != RecyclerView.NO_POSITION) {
+                // get the recipe at the position, this won't work if the class is static
+                Item item = mItems.get(position);
+                // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
+                ((MainActivity) mContext).deleteItem(item);
+            }
+            return true;
+        }
+
+        @Override
+        public void onClick(View view) {
+
         }
     }
     // Clean all elements of the recycler
