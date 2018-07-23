@@ -49,7 +49,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         return mItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener{
 
         public TextView mFoodNameTextView;
         public ImageView mFoodImageView;
@@ -58,6 +58,27 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             super(itemView);
             mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
             mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
+
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
+            int position = getAdapterPosition();
+            // make sure the position is valid, i.e. actually exists in the view
+            if (position != RecyclerView.NO_POSITION) {
+                // get the recipe at the position, this won't work if the class is static
+                Item item = mItems.get(position);
+                // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
+                ((MainActivity) mContext).deleteItem(item);
+            }
+            return true;
+        }
+
+        @Override
+        public void onClick(View view) {
+
         }
     }
     // Clean all elements of the recycler

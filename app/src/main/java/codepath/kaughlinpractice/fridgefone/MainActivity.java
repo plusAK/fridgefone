@@ -30,7 +30,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    public boolean use_api = false;
+    public boolean use_api = true;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
@@ -172,10 +172,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Item item = Item.fromJSON(response.getJSONObject(0));
                 Log.d("MainActivity", "Item: " + item.getName());
             } catch (JSONException e) {
-                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
+                Log.d("MainActivity", "Error after API call: " + e.getMessage());
             }
         }
         goToMyFridge();
+    }
+
+    public void deleteItem(Item item) {
+        // there should be a pop up asking whether the user wants to delete THIS item
+        Bundle args = new Bundle();
+        args.putParcelable("Item", item);
+        /*
+        TODO - see if you can set OnClick listener here, so you have access to item
+        DeleteItemFragment deleteItemFragment = new DeleteItemFragment();
+        deleteItemFragment.show(mContext.getPackageManager(), "DeleteItemFragment");
+        */
+        // in DeleteItemFragment, there should be an on ClickListener than calls MainActivity.delete item
+        // if yes, then item is deleted from Parse Server and removed from the fridge
+        Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
+        item.deleteInBackground();
+        // if no, then nothing changes and user is taken back to the fridge
     }
 
     // get the list of currently playing movies from the API
@@ -183,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // create the url
 
         if (use_api) {
+            Log.d("MainActivity", "In API zone");
             String url = API_BASE_URL + "/recipes/findByIngredients";
             // set the request parameters
             RequestParams params = new RequestParams();
@@ -197,16 +214,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // params.put("limitLicense", false);
             // params.put("ranking", 1);
 
+            Log.d("MainActivity", "Before client xall");
             // execute a GET request expecting a JSON object response
             mClient.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    Log.d("MainActivity", "Before response to string");
                     responseForBundle = response.toString();
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    Log.d("MainActivity", "Error: " + throwable);
+                    Log.d("MainActivity", "ResponseForBundle: " + responseForBundle);
                 }
             });
         }
