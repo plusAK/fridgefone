@@ -1,5 +1,6 @@
 package codepath.kaughlinpractice.fridgefone;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,8 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+
+import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
@@ -42,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // instance field
     AsyncHttpClient mClient;
 
-    String responseForBundle = "";
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private Context mContext;
 
     RecipeAdapter adapter;
 
@@ -191,22 +194,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // there should be a pop up asking whether the user wants to delete THIS item
         Bundle args = new Bundle();
         args.putParcelable("Item", item);
-        /*
-        TODO - see if you can set OnClick listener here, so you have access to item
+
+        // OnClick listener here, so you have access to item
         DeleteItemFragment deleteItemFragment = new DeleteItemFragment();
-        deleteItemFragment.show(mContext.getPackageManager(), "DeleteItemFragment");
-        */
+        deleteItemFragment.setArguments(args);// connects bundle to fragment
+        deleteItemFragment.show(getSupportFragmentManager(), "DeleteItemFragment");
+
+
+
         // in DeleteItemFragment, there should be an on ClickListener than calls MainActivity.delete item
         // if yes, then item is deleted from Parse Server and removed from the fridge
         Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
-        item.deleteInBackground();
+        //item.deleteInBackground();
         // if no, then nothing changes and user is taken back to the fridge
     }
+
+
 
     // get the list of currently playing movies from the API
     public void generateRecipes() {
         // create the url
-
         if (use_api) {
             Log.d("MainActivity", "In API zone");
             String url = API_BASE_URL + "/recipes/findByIngredients";
@@ -223,32 +230,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // params.put("limitLicense", false);
             // params.put("ranking", 1);
 
-            Log.d("MainActivity", "Before client xall");
             // execute a GET request expecting a JSON object response
             mClient.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     Log.d("MainActivity", "Before response to string");
-                    responseForBundle = response.toString();
+                    String responseForBundle = response.toString();
                     Log.d("MainActivity", "ResponseForBundle: " + responseForBundle);
+
+                    Fragment listFrag = new ListFragment();
+
+                    //bundles recipe arguments
+                    Bundle bundle = new Bundle();
+                    bundle.putString("responseForBundle", responseForBundle);
+                    listFrag.setArguments(bundle);
+
+                    fragmentTransition(listFrag);
                 }
             });
         }
         else {
 
            // String stringResponse = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
-            responseForBundle = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
+            String responseForBundle =
+                    //"[{"id":556470,"title":"Apple fritters","image":"https:\/\/spoonacular.com\/recipeImages\/556470-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":243},{"id":47950,"title":"Cinnamon Apple Crisp","image":"https:\/\/spoonacular.com\/recipeImages\/47950-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":35},{"id":534573,"title":"Brown Butter Apple Crumble","image":"https:\/\/spoonacular.com\/recipeImages\/534573-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":7},{"id":47732,"title":"Apple Tart","image":"https:\/\/spoonacular.com\/recipeImages\/47732-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":0},{"id":47891,"title":"Apple Tart","image":"https:\/\/spoonacular.com\/recipeImages\/47891-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":0}]";
+                    //"[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
+                    "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
+
+            Fragment listFrag = new ListFragment();
+
+            //bundles recipe arguments
+            Bundle bundle = new Bundle();
+            bundle.putString("responseForBundle", responseForBundle);
+            listFrag.setArguments(bundle);
+
+            fragmentTransition(listFrag);
         }
 
-        Fragment listFrag = new ListFragment();
-
-        //bundles recipe arguments
-        Bundle bundle = new Bundle();
-        bundle.putString("responseForBundle", responseForBundle);
-        listFrag.setArguments(bundle);
-
-        fragmentTransition(listFrag);
     }
+
 
     public void fragmentTransition(Fragment nextFrag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
