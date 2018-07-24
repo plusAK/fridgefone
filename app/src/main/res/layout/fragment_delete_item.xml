@@ -27,7 +27,7 @@
             android:layout_marginEnd="110dp"
             android:background="#ff7474"
             android:elevation="10dp"
-            android:text="@string/DeleteItem"
+            android:text="@string/delete_item"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -40,7 +40,7 @@
             android:layout_alignStart="@+id/tvDeleteQuestion"
             android:layout_marginTop="92dp"
             android:elevation="10dp"
-            android:text="@string/Cancel"
+            android:text="@string/cancel"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="@string/DeleteItemQuestion"
+            android:text="@string/delete_item_question"
             android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold" />

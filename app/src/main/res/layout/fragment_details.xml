@@ -39,7 +39,7 @@
                 android:layout_centerHorizontal="true"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:text="Dish Title"
+                android:text="@string/dish_title"
                 android:textColor="@color/black"
                 android:textSize="45sp"
                 android:textStyle="italic" />
@@ -53,7 +53,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:text="Ingredients"
+                android:text="@string/ingredients"
                 android:textColor="@color/black" />
 
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_below="@+id/tvIngredients"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:text="Instructions"
+                android:text="@string/instructions"
                 android:textColor="@color/black" />
 
             <Button
@@ -76,7 +76,7 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
-                android:text="Back" />
+                android:text="@string/back" />
         </RelativeLayout>
     </ScrollView>
 

@@ -44,7 +44,7 @@ public class ListFragment extends Fragment {
         // init the array list (data source)
         recipes = new ArrayList<>();
 
-        mFilterImageView = (ImageView) view.findViewById(R.id.mFilterImageView);
+        mFilterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 
         //get bundle contents
         Bundle args = getArguments();

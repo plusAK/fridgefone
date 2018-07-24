@@ -2,12 +2,27 @@
     <string name="app_name">fridgefone</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="Hello">Hey</string>
-    <string name="ItemHint">Name of Food Item</string>
-    <string name="AddItem">Add Item</string>
-    <string name="DeleteItem">Delete</string>
-    <string name="Cancel">Cancel</string>
-    <string name="DeleteItemQuestion">Are you sure you want to delete</string>
+    <string name="hello">Hey</string>
+    <string name="item_hint">Name of Food Item</string>
+    <string name="add_item">Add Item</string>
+    <string name="delete_item">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_item_question">Are you sure you want to delete</string>
+    <string name="food_name">Food Name</string>
+    <string name="dish_title">Dish Title</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="instructions">Instructions</string>
+    <string name="back">Back</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="vegan">Vegan</string>
+    <string name="gluten_free">Gluten Free</string>
+    <string name="dairy_free">Dairy Free</string>
+    <string name="very_healthy">Very Healthy</string>
+    <string name="cheap">Cheap</string>
+    <string name="very_popular">Very Popular</string>
+    <string name="fast">Fast</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
