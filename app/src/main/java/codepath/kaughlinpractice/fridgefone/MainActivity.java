@@ -22,9 +22,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-
 import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
-import codepath.kaughlinpractice.fridgefone.fragments.AddItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
@@ -48,13 +46,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private Context mContext;
-
-    RecipeAdapter adapter;
-
-    final Fragment fridgeFrag = new FridgeFragment();
-    final Fragment listFrag = new ListFragment();
-    final Fragment detailsFrag = new DetailsFragment();
-    final Fragment addItemFrag =  new AddItemFragment();
 
 
     @Override
@@ -199,14 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DeleteItemFragment deleteItemFragment = new DeleteItemFragment();
         deleteItemFragment.setArguments(args);// connects bundle to fragment
         deleteItemFragment.show(getSupportFragmentManager(), "DeleteItemFragment");
-
-
-
-        // in DeleteItemFragment, there should be an on ClickListener than calls MainActivity.delete item
-        // if yes, then item is deleted from Parse Server and removed from the fridge
         Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
-        //item.deleteInBackground();
-        // if no, then nothing changes and user is taken back to the fridge
     }
 
 
@@ -250,8 +234,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         }
         else {
-
-           // String stringResponse = "[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
             String responseForBundle =
                     //"[{"id":556470,"title":"Apple fritters","image":"https:\/\/spoonacular.com\/recipeImages\/556470-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":243},{"id":47950,"title":"Cinnamon Apple Crisp","image":"https:\/\/spoonacular.com\/recipeImages\/47950-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":35},{"id":534573,"title":"Brown Butter Apple Crumble","image":"https:\/\/spoonacular.com\/recipeImages\/534573-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":7},{"id":47732,"title":"Apple Tart","image":"https:\/\/spoonacular.com\/recipeImages\/47732-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":0},{"id":47891,"title":"Apple Tart","image":"https:\/\/spoonacular.com\/recipeImages\/47891-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":0}]";
                     //"[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
