@@ -19,7 +19,7 @@
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Food Name"
+            android:text="@string/food_name"
             android:textColor="#2d2d2d"
             android:textSize="10dp" />
 

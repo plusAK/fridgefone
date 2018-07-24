@@ -22,7 +22,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:ems="10"
-            android:hint="@string/ItemHint"
+            android:hint="@string/item_hint"
             android:inputType="textPersonName"
             android:textColorLink="@color/black" />
 
@@ -33,7 +33,7 @@
             android:layout_alignStart="@+id/actvFoodItem"
             android:layout_below="@+id/actvFoodItem"
             android:background="@color/muted_green"
-            android:text="@string/AddItem"
+            android:text="@string/add_item"
             android:textColor="@color/white" />
 
         <Button
@@ -43,7 +43,7 @@
             android:layout_alignEnd="@+id/actvFoodItem"
             android:layout_below="@+id/actvFoodItem"
             android:background="@color/gray_button"
-            android:text="@string/Cancel" />
+            android:text="@string/cancel" />
     </RelativeLayout>
 
 </FrameLayout>
