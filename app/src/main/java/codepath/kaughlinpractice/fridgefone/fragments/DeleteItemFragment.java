@@ -36,7 +36,7 @@ public class DeleteItemFragment extends DialogFragment {
         Bundle args = getArguments(); // getting the bundle response
         mItem = args.getParcelable("Item");
         TextView deleteQuestionTextView = view.findViewById(R.id.tvDeleteQuestion);
-        deleteQuestionTextView.setText(deleteQuestionTextView.getText().toString() + " " + mItem.getName() + "?");
+        deleteQuestionTextView.setText("Are you sure you want to remove this " + mItem.getName() + " from your fridge?");
 
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

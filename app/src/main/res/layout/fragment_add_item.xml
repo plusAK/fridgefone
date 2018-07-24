@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:padding="@dimen/outside_padding_pop_ups"
     tools:context=".fragments.AddItemFragment"
     style="PopUpTheme">
 
@@ -17,33 +17,40 @@
 
         <AutoCompleteTextView
             android:id="@+id/actvFoodItem"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:ems="10"
             android:hint="@string/item_hint"
+            android:textStyle="bold"
             android:inputType="textPersonName"
-            android:textColorLink="@color/black" />
+            android:textColorLink="@color/black"
+            android:textSize="@dimen/pop_up_text_size" />
 
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignStart="@+id/actvFoodItem"
+            android:layout_height="@dimen/button_height"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/actvFoodItem"
+            android:layout_marginTop="@dimen/margin_above_button"
             android:background="@color/muted_green"
             android:text="@string/add_item"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/pop_up_button_text_size"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignEnd="@+id/actvFoodItem"
+            android:layout_height="@dimen/button_height"
+            android:layout_alignParentEnd="true"
             android:layout_below="@+id/actvFoodItem"
+            android:layout_marginTop="@dimen/margin_above_button"
             android:background="@color/gray_button"
-            android:text="@string/cancel" />
+            android:text="@string/cancel"
+            android:textSize="@dimen/pop_up_button_text_size"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </FrameLayout>

@@ -5,7 +5,7 @@
     <string name="hello">Hey</string>
     <string name="item_hint">Name of Food Item</string>
     <string name="add_item">Add Item</string>
-    <string name="delete_item">Delete</string>
+    <string name="delete_item">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="delete_item_question">Are you sure you want to delete</string>
     <string name="food_name">Food Name</string>

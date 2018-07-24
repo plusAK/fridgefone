@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin">15dp</dimen>
+    <dimen name="no_margin">0dp</dimen>
+    <dimen name="outside_padding_pop_ups">10dp</dimen>
+    <dimen name="pop_up_button_text_size">14sp</dimen>
+    <dimen name="pop_up_text_size">16sp</dimen>
+    <dimen name="button_height">40dp</dimen>
+    <dimen name="fridge_item_square_len">120dp</dimen>
+    <dimen name="fridge_item_text_size">10dp</dimen>
+    <dimen name="fridge_item_image_height">80dp</dimen>
+    <dimen name="fridge_item_image_width">100dp</dimen>
+    <dimen name="fridge_item_text_height">20dp</dimen>
+    <dimen name="fridge_item_text_width">80dp</dimen>
+    <dimen name="shelf_height">20dp</dimen>
+    <dimen name="margin_above_button">40dp</dimen>
 </resources>
