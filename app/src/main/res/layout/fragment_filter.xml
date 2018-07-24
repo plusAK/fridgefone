@@ -83,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/FastCheck"
             android:layout_below="@+id/CheapCheck"
+            android:background="@color/gray_button"
             android:text="Save" />
     </RelativeLayout>
 

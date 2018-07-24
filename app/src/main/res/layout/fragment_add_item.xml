@@ -32,9 +32,9 @@
             android:layout_height="40dp"
             android:layout_alignStart="@+id/actvFoodItem"
             android:layout_below="@+id/actvFoodItem"
-            android:background="#8a9d4f"
+            android:background="@color/muted_green"
             android:text="@string/AddItem"
-            android:textColor="#fff" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btnCancel"
@@ -42,7 +42,7 @@
             android:layout_height="40dp"
             android:layout_alignEnd="@+id/actvFoodItem"
             android:layout_below="@+id/actvFoodItem"
-            android:background="@color/light_grey"
+            android:background="@color/gray_button"
             android:text="@string/Cancel" />
     </RelativeLayout>
 

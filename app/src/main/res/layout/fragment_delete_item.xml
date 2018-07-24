@@ -14,7 +14,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
+        android:background="@color/white"
         tools:context=".MainActivity">
 
 
@@ -25,7 +25,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/btnCancel"
             android:layout_marginEnd="110dp"
-            android:background="#ff7474"
+            android:background="@color/muted_red"
             android:elevation="10dp"
             android:text="@string/DeleteItem"
             android:textColor="@color/white"
@@ -39,6 +39,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/tvDeleteQuestion"
             android:layout_marginTop="92dp"
+            android:background="@color/gray_button"
             android:elevation="10dp"
             android:text="@string/Cancel"
             android:textSize="14sp"
