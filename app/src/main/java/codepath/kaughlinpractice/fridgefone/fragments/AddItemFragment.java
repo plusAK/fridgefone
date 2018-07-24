@@ -57,6 +57,7 @@ public class AddItemFragment extends DialogFragment {
                 android.R.layout.simple_dropdown_item_1line, autoCompleteItems);
 
         addButton = (Button) view.findViewById(R.id.btnAdd);
+        Button cancelButton = (Button) view.findViewById(R.id.btnCancel);
         actvFoodItem = (AutoCompleteTextView) view.findViewById(R.id.actvFoodItem);
         actvFoodItem.setAdapter(addItemAdapter);
         actvFoodItem.setThreshold(1);
@@ -69,6 +70,13 @@ public class AddItemFragment extends DialogFragment {
                 Log.d("AddItemFragment", "Adding: " + foodItem);
                 Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
                 ((MainActivity) getContext()).getItem(foodItem);
+                dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 dismiss();
             }
         });

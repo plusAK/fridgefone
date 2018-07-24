@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context=".fragments.AddItemFragment"
     style="PopUpTheme">
 
@@ -20,10 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="50dp"
             android:ems="10"
             android:hint="@string/ItemHint"
             android:inputType="textPersonName"
@@ -32,11 +29,21 @@
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignStart="@+id/actvFoodItem"
+            android:layout_below="@+id/actvFoodItem"
+            android:background="#8a9d4f"
+            android:text="@string/AddItem"
+            android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignEnd="@+id/actvFoodItem"
             android:layout_below="@+id/actvFoodItem"
-            android:layout_marginBottom="30dp"
-            android:text="@string/AddItem" />
+            android:background="@color/light_grey"
+            android:text="@string/Cancel" />
     </RelativeLayout>
 
 </FrameLayout>
