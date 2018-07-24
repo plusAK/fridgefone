@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import codepath.kaughlinpractice.fridgefone.R;
@@ -34,6 +35,8 @@ public class DeleteItemFragment extends DialogFragment {
         mDeleteItemButton = (Button) view.findViewById(R.id.btnDeleteItem);
         Bundle args = getArguments(); // getting the bundle response
         mItem = args.getParcelable("Item");
+        TextView deleteQuestionTextView = view.findViewById(R.id.tvDeleteQuestion);
+        deleteQuestionTextView.setText(deleteQuestionTextView.getText().toString() + " " + mItem.getName() + "?");
 
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +50,7 @@ public class DeleteItemFragment extends DialogFragment {
             public void onClick(View view) {
 
                 mItem.deleteInBackground();
+
                 dismiss();
                 Toast.makeText(getActivity(), "Deleted: " + mItem.getName(), Toast.LENGTH_LONG).show();
 
