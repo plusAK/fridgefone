@@ -32,8 +32,6 @@
             android:background="@color/white"
             />
 
-
-
         <ImageView
 
             android:id="@+id/ivShelf"
