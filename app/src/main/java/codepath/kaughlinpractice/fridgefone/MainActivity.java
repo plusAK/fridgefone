@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
     public String fridgeItems;
+
+    public ItemAdapter mItemAdapter;
+    public ArrayList<Item> mItemsList;
 
     // instance field
     AsyncHttpClient mClient;
@@ -183,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         goToMyFridge();
     }
 
-    public void deleteItem(Item item) {
+    public void askToDeleteItem(Item item) {
         // there should be a pop up asking whether the user wants to delete THIS item
         Bundle args = new Bundle();
         args.putParcelable("Item", item);
@@ -195,6 +199,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
     }
 
+    public void deleteItemFromFridge(Item item) {
+        item.deleteInBackground();
+        mItemsList.remove(item);
+        mItemAdapter.notifyDataSetChanged();
+        Toast.makeText(this, "Deleted: " + item.getName(), Toast.LENGTH_LONG).show();
+    }
 
 
     // get the list of currently playing movies from the API
@@ -272,5 +282,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void setFridgeItems(String fridge_items) {
         fridgeItems = fridge_items;
+    }
+
+    public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {
+        mItemAdapter = setter;
+        mItemsList = itemArrayList;
     }
 }

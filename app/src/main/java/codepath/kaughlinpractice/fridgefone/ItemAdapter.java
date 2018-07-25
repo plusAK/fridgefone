@@ -71,7 +71,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                 // get the recipe at the position, this won't work if the class is static
                 Item item = mItems.get(position);
                 // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
-                ((MainActivity) mContext).deleteItem(item);
+                ((MainActivity) mContext).askToDeleteItem(item);
             }
             return true;
         }

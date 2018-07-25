@@ -28,6 +28,7 @@ import codepath.kaughlinpractice.fridgefone.model.Item;
 
 public class FridgeFragment extends Fragment{
 
+    private final static int mNumVisibleShelfs = 12;
     private Context mContext;
     private ImageView mGenerateRecipeListImageView;
     private ImageView mAddItemImageView;
@@ -48,6 +49,7 @@ public class FridgeFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         mContext = getContext();
         mItemList = new ArrayList<>();
 
@@ -60,6 +62,8 @@ public class FridgeFragment extends Fragment{
 
         //construct adapter from data source
         mItemRecyclerView.setAdapter(mItemAdapter);
+        // give access to MainActivity to adapter
+        ((MainActivity) mContext).setItemsAccess(mItemAdapter, mItemList);
 
         loadItems(); //load items to fridge
 
@@ -120,6 +124,17 @@ public class FridgeFragment extends Fragment{
                         }
                         mItemList.add(0 , objects.get(i)); // add item to zero index
                         mItemAdapter.notifyItemInserted(mItemList.size()-1);
+                    }
+                    if(mItemList.size() < mNumVisibleShelfs){
+
+                        for(int i = mItemList.size();i < mNumVisibleShelfs; i ++){
+                            mItemList.add(new Item());
+                        }
+                    }
+                    else{
+                        while(mItemList.size() % 3 != 0){
+                            mItemList.add(new Item());
+                        }
                     }
                 } else {
                     e.printStackTrace();
