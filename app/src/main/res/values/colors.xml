@@ -8,7 +8,7 @@
     <color name="grey">#949494</color>
     <color name="light_grey">#ededed</color>
     <color name="muted_green">#8a9d4f</color>
-    <color name="muted_red">#ff7474</color>
+    <color name="muted_red">#be5858</color>
     <color name="gray_button">#FFEDEDED</color>
     <color name="food_text_background">#2d2d2d</color>
 </resources>

@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="5dp"
+    android:layout_margin="@dimen/very_small_padding"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="136dp"
-        android:layout_height="92dp"
+        android:layout_width="@dimen/list_image_width"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        app:srcCompat="@android:color/holo_orange_light" />
+        android:layout_margin="@dimen/very_small_padding"
+        app:srcCompat="@drawable/ic_launcher_background" />
 
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/extremely_small_height"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:background="@color/grey" />
@@ -25,13 +26,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/very_small_padding"
         android:layout_toEndOf="@+id/ivImage"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:padding="@dimen/very_small_padding"
         android:text="@string/title"
         android:textAlignment="textStart"
         android:textColor="@color/black"
-        android:textSize="25dp"
+        android:textSize="@dimen/list_dish_text_size"
         android:textStyle="italic" />
 
 </RelativeLayout>
