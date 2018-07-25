@@ -60,7 +60,9 @@ public class ListFragment extends Fragment {
             for (int i = 0; i < response.length(); i += 1) {
                 Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity());
                 Log.d("ListFragment", recipe.getName());
-                recipes.add(recipe);
+                if (recipe.isValid(args)) {
+                    recipes.add(recipe);
+                }
             }
         } catch (JSONException e) {
             Log.d("ListFragment", e.getMessage());

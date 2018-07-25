@@ -22,6 +22,8 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.HashMap;
+
 import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
@@ -196,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     // get the list of currently playing movies from the API
-    public void generateRecipes() {
+    public void generateRecipes(final HashMap<String, Boolean> user_dict) {
         // create the url
         if (use_api) {
             Log.d("MainActivity", "In API zone");
@@ -225,9 +227,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Fragment listFrag = new ListFragment();
 
                     //bundles recipe arguments
-                    Bundle bundle = new Bundle();
-                    bundle.putString("responseForBundle", responseForBundle);
-                    listFrag.setArguments(bundle);
+                    Bundle args = new Bundle();
+                    if (user_dict != null) {
+                        for (String trait : Recipe.recipe_traits) {
+                            args.putBoolean(trait, user_dict.get(trait));
+                        }
+                    }
+                    args.putString("responseForBundle", responseForBundle);
+                    listFrag.setArguments(args);
 
                     fragmentTransition(listFrag);
                 }
@@ -242,9 +249,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Fragment listFrag = new ListFragment();
 
             //bundles recipe arguments
-            Bundle bundle = new Bundle();
-            bundle.putString("responseForBundle", responseForBundle);
-            listFrag.setArguments(bundle);
+            Bundle args = new Bundle();
+            if (user_dict != null) {
+                for (String trait : Recipe.recipe_traits) {
+                    args.putBoolean(trait, user_dict.get(trait));
+                }
+            }
+            args.putString("responseForBundle", responseForBundle);
+            listFrag.setArguments(args);
 
             fragmentTransition(listFrag);
         }

@@ -19,7 +19,7 @@
             android:id="@+id/VegetarianCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/vegetarian" />
+            android:text="@string/Vegetarian" />
 
         <CheckBox
             android:id="@+id/VeganCheck"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/VegetarianCheck"
             android:layout_toEndOf="@+id/VegetarianCheck"
-            android:text="@string/vegan" />
+            android:text="@string/Vegan" />
 
         <CheckBox
             android:id="@+id/GlutenFreeCheck"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/VegetarianCheck"
             android:layout_below="@+id/VegetarianCheck"
-            android:text="@string/gluten_free" />
+            android:text="@string/Gluten_Free" />
 
         <CheckBox
             android:id="@+id/DairyFreeCheck"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/VegetarianCheck"
             android:layout_toEndOf="@+id/VegetarianCheck"
-            android:text="@string/dairy_free" />
+            android:text="@string/Dairy_Free" />
 
         <CheckBox
             android:id="@+id/VeryHealthyCheck"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/VegetarianCheck"
             android:layout_below="@+id/GlutenFreeCheck"
-            android:text="@string/very_healthy" />
+            android:text="@string/Very_Healthy" />
 
         <CheckBox
             android:id="@+id/CheapCheck"
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/VeryHealthyCheck"
-            android:text="@string/cheap" />
+            android:text="@string/Cheap" />
 
         <CheckBox
             android:id="@+id/VeryPopularCheck"
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/GlutenFreeCheck"
             android:layout_toEndOf="@+id/VegetarianCheck"
-            android:text="@string/very_popular" />
+            android:text="@string/Very_Popular" />
 
         <CheckBox
             android:id="@+id/FastCheck"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/VeryHealthyCheck"
             android:layout_toEndOf="@+id/VegetarianCheck"
-            android:text="@string/fast" />
+            android:text="@string/Fast" />
 
         <Button
             android:id="@+id/saveButton"
