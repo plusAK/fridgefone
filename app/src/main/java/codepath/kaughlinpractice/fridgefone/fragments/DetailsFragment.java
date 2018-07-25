@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import butterknife.BindView;
@@ -50,6 +51,7 @@ public class DetailsFragment extends Fragment {
     public final static String KEY_ACCEPT_PARAM = "Accept";
     // instance field
     AsyncHttpClient client;
+    private HashMap<String, Boolean> user_dict = null;
 
     Collection<String> neededIngredients;
     String instructionsString;
@@ -147,7 +149,7 @@ public class DetailsFragment extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getContext()).generateRecipes(); //basically intent to go back to recipe list screen
+                ((MainActivity) getContext()).generateRecipes(user_dict); //basically intent to go back to recipe list screen
             }
         });
 

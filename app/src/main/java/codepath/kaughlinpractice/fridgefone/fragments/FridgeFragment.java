@@ -20,6 +20,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.ItemAdapter;
@@ -28,8 +29,6 @@ import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.model.Item;
 
 public class FridgeFragment extends Fragment{
-
-
 
     private final static int mNumVisibleShelfs = 12;
     private Context mContext;
@@ -44,6 +43,8 @@ public class FridgeFragment extends Fragment{
     public Button mCancelSelectButton;
     public boolean mSelectItemsBoolean = false;
     public ArrayList<View> mSelectedViews;
+    private HashMap<String, Boolean> user_dict = null;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,9 +70,14 @@ public class FridgeFragment extends Fragment{
 
         //construct adapter from data source
         mItemRecyclerView.setAdapter(mItemAdapter);
+
         mSelectItemsImageView = (ImageView) view.findViewById(R.id.ivSelectItems);
         mCancelSelectButton = (Button) view.findViewById(R.id.btnCancelSelect);
         mCancelSelectButton.setVisibility(View.INVISIBLE);
+
+        // give access to MainActivity to adapter
+        ((MainActivity) mContext).setItemsAccess(mItemAdapter, mItemList);
+
 
         loadItems(); //load items to fridge
 
@@ -139,7 +145,7 @@ public class FridgeFragment extends Fragment{
 
     public void generateRecipes() {
         Log.d("FridgeFragment", "should move pages");
-        ((MainActivity) mContext).generateRecipes(); // similar to Intent, going through Activity to get to new fragment
+        ((MainActivity) mContext).generateRecipes(user_dict);
     }
 
     private void loadItems() {

@@ -1,6 +1,7 @@
 package codepath.kaughlinpractice.fridgefone.model;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
@@ -20,7 +22,7 @@ import cz.msebera.android.httpclient.Header;
 @Parcel
 public class Recipe {
 
-
+    public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
     String name;
     int id;
     String image;
@@ -33,6 +35,7 @@ public class Recipe {
     boolean cheap;
     boolean veryPopular;
     int servings;
+    public HashMap<String, Boolean> recipe_dict;
 
     static RecipeAdapter adapter;
     static AsyncHttpClient client;
@@ -48,19 +51,20 @@ public class Recipe {
     // JSONObject ingredients;
     // TODO -- figure out how to have ingredients without erroring
 
-    public static Recipe fromJSON(JSONObject jsonObject, Context context) throws JSONException {
+    public static Recipe fromJSON(JSONObject jsonObject, final Context context) throws JSONException {
 
-
-        recipes = new ArrayList<>();
         // initialize the client
         client = new AsyncHttpClient();
         adapter = new RecipeAdapter(recipes);
 
-        Recipe recipe = new Recipe();
+        final Recipe recipe = new Recipe();
         recipe.name = jsonObject.getString("title");
         recipe.id = jsonObject.getInt("id");
         recipe.image = jsonObject.getString("image");
         Log.d("Recipe", "Have access to basic Recipe Info");
+
+        recipes = new ArrayList<>();
+        recipe.recipe_dict = new HashMap<>();
 
         if (use_api) {
             String url = API_BASE_URL +"/recipes/" + recipe.id + "/information";
@@ -77,6 +81,20 @@ public class Recipe {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     String r = response.toString();
                     Log.d("Recipe", "JSONObject : " + r);
+
+                    try {
+                        makeDict(context.getString(R.string.vegetarian), response, recipe);
+                        makeDict(context.getString(R.string.vegan), response, recipe);
+                        makeDict(context.getString(R.string.gluten_free), response, recipe);
+                        makeDict(context.getString(R.string.dairy_free), response, recipe);
+                        makeDict(context.getString(R.string.very_healthy), response, recipe);
+                        makeDict(context.getString(R.string.very_popular), response, recipe);
+                        makeDict(context.getString(R.string.cheap), response, recipe);
+                        recipe.readyInMinutes = response.getInt("readyInMinutes");
+                        recipe.servings = response.getInt("servings");
+                    } catch (JSONException e) {
+                        Log.d("MainActivity", "Not api_call error: " + e.getMessage());
+                    }
                 }
 
                 @Override
@@ -86,10 +104,9 @@ public class Recipe {
             });
         }
         else {
-            //String stringResponse = context.getString(R.string.api_fake_RecipeInfoData);
             String stringResponse = "{\n" +
-                    "  \"vegetarian\": false,\n" +
-                    "  \"vegan\": false,\n" +
+                    "  \"vegetarian\": true,\n" +
+                    "  \"vegan\": true,\n" +
                     "  \"glutenFree\": true,\n" +
                     "  \"dairyFree\": true,\n" +
                     "  \"veryHealthy\": false,\n" +
@@ -376,19 +393,15 @@ public class Recipe {
 
             JSONObject response = null;
             try {
-
                 response = new JSONObject(stringResponse);
-
-                Log.d("Recipe", "Does vegan exist: " + response.has("vegan"));
-
+                makeDict(context.getString(R.string.vegetarian), response, recipe);
+                makeDict(context.getString(R.string.vegan), response, recipe);
+                makeDict(context.getString(R.string.gluten_free), response, recipe);
+                makeDict(context.getString(R.string.dairy_free), response, recipe);
+                makeDict(context.getString(R.string.very_healthy), response, recipe);
+                makeDict(context.getString(R.string.very_popular), response, recipe);
+                makeDict(context.getString(R.string.cheap), response, recipe);
                 recipe.readyInMinutes = response.getInt("readyInMinutes");
-                recipe.vegetarian = response.getBoolean("vegetarian");
-                recipe.vegan = response.getBoolean("vegan");
-                recipe.glutenFree = response.getBoolean("glutenFree");
-                recipe.dairyFree = response.getBoolean("dairyFree");
-                recipe.veryHealthy = response.getBoolean("veryHealthy");
-                recipe.cheap = response.getBoolean("cheap");
-                recipe.veryPopular = response.getBoolean("veryPopular");
                 recipe.servings = response.getInt("servings");
             } catch (JSONException e) {
                 Log.d("MainActivity", "Not api_call error: " + e.getMessage());
@@ -407,6 +420,13 @@ public class Recipe {
         return recipe;
     }
 
+    private static void makeDict(String trait, JSONObject response, Recipe recipe) {
+        try {
+            recipe.recipe_dict.put(trait, response.getBoolean(trait));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public String getName() {
         return name;
@@ -425,40 +445,53 @@ public class Recipe {
     }
 
     public boolean isVegetarian() {
-        return vegetarian;
+        return recipe_dict.get("vegetarian");
     }
 
     public boolean isVegan() {
-        return vegan;
+        return recipe_dict.get("vegan");
     }
 
     public boolean isGlutenFree() {
-        return glutenFree;
+        return recipe_dict.get("gluten_free");
     }
 
     public boolean isDairyFree() {
-        return dairyFree;
+        return recipe_dict.get("dairy_free");
     }
 
     public boolean isVeryHealthy() {
-        return veryHealthy;
+        return recipe_dict.get("very_healthy");
     }
 
     public boolean isCheap() {
-        return cheap;
+        return recipe_dict.get("cheap");
     }
 
     public boolean isVeryPopular() {
-        return veryPopular;
+        return recipe_dict.get("very_popular");
+    }
+
+    public boolean isFast() {
+        if (getReadyInMinutes() < 30) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public int getServings() {
         return servings;
     }
 
-    /**
-    public JSONObject getIngredients() {
-        return ingredients;
+    public boolean isValid(Bundle args) {
+        for (String trait: recipe_traits) {
+            if(args != null) {
+                if (args.getBoolean(trait) && !recipe_dict.get(trait)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
-     */
 }
