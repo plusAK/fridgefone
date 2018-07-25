@@ -62,6 +62,8 @@ public class FridgeFragment extends Fragment{
 
         //construct adapter from data source
         mItemRecyclerView.setAdapter(mItemAdapter);
+        // give access to MainActivity to adapter
+        ((MainActivity) mContext).setItemsAccess(mItemAdapter, mItemList);
 
         loadItems(); //load items to fridge
 

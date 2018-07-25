@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.model.Item;
 
@@ -48,12 +48,8 @@ public class DeleteItemFragment extends DialogFragment {
         mDeleteItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                mItem.deleteInBackground();
-
+                ((MainActivity) getContext()).deleteItemFromFridge(mItem);
                 dismiss();
-                Toast.makeText(getActivity(), "Deleted: " + mItem.getName(), Toast.LENGTH_LONG).show();
-
             }
         });
     }
