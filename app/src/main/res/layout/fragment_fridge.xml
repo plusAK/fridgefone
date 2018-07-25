@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.FridgeFragment"
-    android:padding="@dimen/very_small_padding"
+    android:padding="8dp"
     android:background="@color/white"
     >
 

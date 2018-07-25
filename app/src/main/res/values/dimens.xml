@@ -16,7 +16,7 @@
     <dimen name="list_dish_text_size">25sp</dimen>
     <dimen name="details_dish_text_size">45sp</dimen>
     <dimen name="details_image_height">200dp</dimen>
-    <dimen name="fridge_bottom_padding">60dp</dimen>
+    <dimen name="fridge_bottom_padding">68dp</dimen>
     <dimen name="fridge_button_size">45dp</dimen>
     <dimen name="select_button_size">50dp</dimen>
     <dimen name="list_image_width">150dp</dimen>
