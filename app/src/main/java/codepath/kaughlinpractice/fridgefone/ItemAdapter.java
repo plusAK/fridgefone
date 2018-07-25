@@ -11,15 +11,18 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.model.Item;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private List<Item> mItems;
     private Context mContext;
+    private FridgeFragment mfridgeFragment;
 
-    public ItemAdapter(List<Item> mItems, Context mContext) {
+    public ItemAdapter(List<Item> mItems, Context mContext, FridgeFragment mfridgeFragment) {
         this.mItems = mItems;
         this.mContext = mContext;
+        this.mfridgeFragment = mfridgeFragment;
     }
 
 
@@ -53,13 +56,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
         public TextView mFoodNameTextView;
         public ImageView mFoodImageView;
+        public ImageView mSelectCheckImageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
             mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
+            mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
+            mSelectCheckImageView.setVisibility(View.INVISIBLE);
 
             itemView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -78,6 +85,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
         @Override
         public void onClick(View view) {
+            // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
+            int position = getAdapterPosition();
+            // make sure the position is valid, i.e. actually exists in the view
+            if (position != RecyclerView.NO_POSITION) {
+                // get the recipe at the position, this won't work if the class is static
+                Item item = mItems.get(position);
+                // check if select item bool is true and show check when item is clicked
+                if(mfridgeFragment.mSelectItemsBoolean != false){
+                    mSelectCheckImageView.setVisibility(View.VISIBLE);
+                    mfridgeFragment.mSelectedViews.add(view); // adds selected view to array list
+                }
+
+            }
 
         }
     }

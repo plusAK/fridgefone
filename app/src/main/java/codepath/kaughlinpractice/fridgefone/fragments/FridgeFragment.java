@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -38,6 +40,10 @@ public class FridgeFragment extends Fragment{
     private ItemAdapter mItemAdapter;
     private RecyclerView mItemRecyclerView;
     private String fridge_items = "";
+    public ImageView mSelectItemsImageView;
+    public Button mCancelSelectButton;
+    public boolean mSelectItemsBoolean = false;
+    public ArrayList<View> mSelectedViews;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,16 +58,20 @@ public class FridgeFragment extends Fragment{
 
         mContext = getContext();
         mItemList = new ArrayList<>();
+        mSelectedViews = new ArrayList<>();
 
         mGenerateRecipeListImageView = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
         mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddItem);
 
         mItemRecyclerView = (RecyclerView) view.findViewById(R.id.rvFridgeHomeView);
-        mItemAdapter =  new ItemAdapter( mItemList, getActivity());
+        mItemAdapter =  new ItemAdapter( mItemList, getActivity(),this);
         mItemRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
         //construct adapter from data source
         mItemRecyclerView.setAdapter(mItemAdapter);
+        mSelectItemsImageView = (ImageView) view.findViewById(R.id.ivSelectItems);
+        mCancelSelectButton = (Button) view.findViewById(R.id.btnCancelSelect);
+        mCancelSelectButton.setVisibility(View.INVISIBLE);
 
         loadItems(); //load items to fridge
 
@@ -97,6 +107,34 @@ public class FridgeFragment extends Fragment{
                 addItemFragment.show(getFragmentManager(), "AddItemFragment");
             }
         });
+
+        mSelectItemsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSelectItemsBoolean = true;
+                //((MainActivity) getContext()).setSelectTrue();
+                mCancelSelectButton.setVisibility(View.VISIBLE);
+                mSelectItemsImageView.setVisibility(View.INVISIBLE);
+                Toast.makeText(getActivity(), "Select your items", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        mCancelSelectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSelectItemsBoolean = false;
+                mCancelSelectButton.setVisibility(View.INVISIBLE);
+                mSelectItemsImageView.setVisibility(View.VISIBLE);
+                //make check box invisible for every item in mSelectedViews array
+                for(int i = 0; i < mSelectedViews.size(); i ++){
+                    View itemView = mSelectedViews.get(i);
+                    ImageView mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
+                    mSelectCheckImageView.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+
     }
 
     public void generateRecipes() {
