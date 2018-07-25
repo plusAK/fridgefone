@@ -22,8 +22,8 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
     public String fridgeItems;
+    public String mSelectedItemsString;
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private Context mContext;
+    //public FridgeFragment mFridgeFragment;
 
 
     @Override
@@ -203,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.deleteInBackground();
         mItemsList.remove(item);
         mItemAdapter.notifyDataSetChanged();
+        //mFridgeFragment.loadItems();
         Toast.makeText(this, "Deleted: " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
@@ -219,7 +222,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
             Log.d("MainActivity", "Fridge Items: " + fridgeItems);
-            params.put("ingredients", fridgeItems);
+            Log.d("MainActivity", "Selected Fridge Items String: " + mSelectedItemsString);
+            //params.put("ingredients", fridgeItems); // TODO -- add if statements so if select all is true use all fridgeItems as param
+            params.put("ingredients", mSelectedItemsString);
             params.put("number", 5);
             // other parameters we could use later
             // params.put("fillIngredients", false);
@@ -280,8 +285,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
 
-    public void setFridgeItems(String fridge_items) {
+
+    public void setFridgeItems(String fridge_items, String SelectedItemsString) {
         fridgeItems = fridge_items;
+        mSelectedItemsString = SelectedItemsString;
     }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {

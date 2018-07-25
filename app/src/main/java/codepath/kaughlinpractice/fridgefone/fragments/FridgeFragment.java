@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -42,7 +43,8 @@ public class FridgeFragment extends Fragment{
     public ImageView mSelectItemsImageView;
     public Button mCancelSelectButton;
     public boolean mSelectItemsBoolean = false;
-    public ArrayList<View> mSelectedViews;
+    public ArrayList<View> mSelectedViewsArray;
+    public String mSelectedItemsString = "";
     private HashMap<String, Boolean> user_dict = null;
 
 
@@ -59,7 +61,7 @@ public class FridgeFragment extends Fragment{
 
         mContext = getContext();
         mItemList = new ArrayList<>();
-        mSelectedViews = new ArrayList<>();
+        mSelectedViewsArray = new ArrayList<>();
 
         mGenerateRecipeListImageView = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
         mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddItem);
@@ -132,8 +134,8 @@ public class FridgeFragment extends Fragment{
                 mCancelSelectButton.setVisibility(View.INVISIBLE);
                 mSelectItemsImageView.setVisibility(View.VISIBLE);
                 //make check box invisible for every item in mSelectedViews array
-                for(int i = 0; i < mSelectedViews.size(); i ++){
-                    View itemView = mSelectedViews.get(i);
+                for(int i = 0; i < mSelectedViewsArray.size(); i ++){
+                    View itemView = mSelectedViewsArray.get(i);
                     ImageView mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
                     mSelectCheckImageView.setVisibility(View.INVISIBLE);
                 }
@@ -144,11 +146,29 @@ public class FridgeFragment extends Fragment{
     }
 
     public void generateRecipes() {
+
+        for(int i = 0; i < mSelectedViewsArray.size();i++){
+            View view = mSelectedViewsArray.get(i);
+            TextView item_name = view.findViewById(R.id.tvFood_Name);
+
+            if(i == mSelectedViewsArray.size() -1){
+                mSelectedItemsString += item_name.getText().toString();
+            }
+            else{
+                mSelectedItemsString += item_name.getText().toString() + ",";
+            }
+            Log.d("FridgeFragment", "Selected Items in Fridge: " + mSelectedItemsString);
+        }
+
+        // You need to refresh page for item names to load from Parse
+        Log.d("FridgeFragment", "Selected Items in Fridge: " + mSelectedItemsString);
+        ((MainActivity) getContext()).setFridgeItems(fridge_items, mSelectedItemsString); // TODO -- change to selected fridge items
+
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) mContext).generateRecipes(user_dict);
     }
 
-    private void loadItems() {
+    public void loadItems() {
 
         final Item.Query itemsQuery = new Item.Query();
 
@@ -183,10 +203,6 @@ public class FridgeFragment extends Fragment{
                 }
             }
         });
-
-        // You need to refresh page for item names to load from Parse
-        Log.d("FridgeFragment", "Items in Fridge: " + fridge_items);
-        ((MainActivity) getContext()).setFridgeItems(fridge_items);
     }
 
     public void fetchTimelineAsync(int page) {
