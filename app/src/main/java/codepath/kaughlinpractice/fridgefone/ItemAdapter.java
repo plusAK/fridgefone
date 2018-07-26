@@ -64,10 +64,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
             mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
             mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
-            if(mfridgeFragment.mAllSelected){
+            if (mfridgeFragment.mAllSelected) {
                 mSelectCheckImageView.setVisibility(View.VISIBLE);
             }
-            else{
+            else {
                 mSelectCheckImageView.setVisibility(View.INVISIBLE);
             }
 

@@ -14,7 +14,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_grey"
+        android:background="@drawable/round_corner_lightgrey"
         android:padding="@dimen/small_padding"
         tools:context=".MainActivity">
 
@@ -29,8 +29,8 @@
                 android:id="@+id/rvFridgeHomeView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey"
-                android:padding="@dimen/small_padding">
+                android:background="@drawable/round_corner_grey"
+                android:padding="@dimen/less_medium_padding">
 
             </android.support.v7.widget.RecyclerView>
 
