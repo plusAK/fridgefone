@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public String fridgeItems;
     public String mSelectedItemsString;
     public boolean mAllSelected;
+    public boolean mNoneSelected;
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
@@ -223,12 +224,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
             mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
-            if(!mAllSelected){
-                Log.d("MainActivity", " other Selected Fridge Items String: " + mSelectedItemsString);
-                params.put("ingredients", mSelectedItemsString);
+            if (mAllSelected == false && mNoneSelected == false){
+                Log.d("MainActivity", " Other Selected Fridge Items String: " + mSelectedItemsString);
+                params.put("ingredients",mSelectedItemsString);
             }
-            else{
-                Log.d("MainActivity", "In all selected Fridge Items: " + fridgeItems);
+            else {
+                Log.d("MainActivity", "In All Selected Fridge Items: " + fridgeItems);
                 params.put("ingredients", fridgeItems);
             }
 
@@ -264,9 +265,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             String responseForBundle =
-                    //"[{"id":556470,"title":"Apple fritters","image":"https:\/\/spoonacular.com\/recipeImages\/556470-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":243},{"id":47950,"title":"Cinnamon Apple Crisp","image":"https:\/\/spoonacular.com\/recipeImages\/47950-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":35},{"id":534573,"title":"Brown Butter Apple Crumble","image":"https:\/\/spoonacular.com\/recipeImages\/534573-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":7},{"id":47732,"title":"Apple Tart","image":"https:\/\/spoonacular.com\/recipeImages\/47732-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":0},{"id":47891,"title":"Apple Tart","image":"https:\/\/spoonacular.com\/recipeImages\/47891-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":0}]";
-                    //"[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
-                    "[{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
+                    "[{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}," +
+                            "{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
+                            "{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
+                            "{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
 
             Fragment listFrag = new ListFragment();
 
@@ -294,10 +296,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean allSelected) {
+    public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean allSelected, Boolean noneSelected) {
         fridgeItems = fridge_items;
         mSelectedItemsString = selectedItemsString;
         mAllSelected = allSelected;
+        mNoneSelected = noneSelected;
     }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {

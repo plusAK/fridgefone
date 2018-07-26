@@ -49,6 +49,7 @@ public class FridgeFragment extends Fragment{
     public String mSelectedItemsString = "";
     public boolean mAllSelected = false;
     private String currentFilters = null;
+    public boolean mNoneSelected = true;
 
 
     @Override
@@ -126,6 +127,7 @@ public class FridgeFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 mSelectItemsBoolean = true;
+                mNoneSelected = false;
                 //((MainActivity) getContext()).setSelectTrue();
                 mCancelSelectButton.setVisibility(View.VISIBLE);
                 mSelectAllButton.setVisibility(View.VISIBLE);
@@ -140,6 +142,7 @@ public class FridgeFragment extends Fragment{
             public void onClick(View view) {
                 mSelectItemsBoolean = false;
                 mAllSelected = false;
+                mNoneSelected = true;
                 mItemAdapter.notifyDataSetChanged(); // notify the adapter if select all is changed
                 mCancelSelectButton.setVisibility(View.INVISIBLE);
                 mSelectAllButton.setVisibility(View.INVISIBLE);
@@ -156,8 +159,8 @@ public class FridgeFragment extends Fragment{
         mSelectAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mAllSelected = true;
+                mNoneSelected = false;
                 mItemAdapter.notifyDataSetChanged();// notify the adapter if select all is changed
                 Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_LONG).show();
                 //mSelectCheckImageView.setVisibility(View.VISIBLE);
@@ -184,7 +187,9 @@ public class FridgeFragment extends Fragment{
 
         // You need to refresh page for item names to load from Parse
         Log.d("FridgeFragment", "Selected Items in Fridge: " + mSelectedItemsString);
-        ((MainActivity) getContext()).setFridgeItems(fridge_items, mSelectedItemsString, mAllSelected); // TODO -- change to selected fridge items
+        Log.d("FridgeFragment", "All Items in Fridge: " + fridge_items);
+
+        ((MainActivity) getContext()).setFridgeItems(fridge_items, mSelectedItemsString, mAllSelected, mNoneSelected);
 
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
