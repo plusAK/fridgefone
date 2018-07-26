@@ -100,11 +100,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                 // check if select item bool is true and show check when item is clicked
                 if (OnSelectSwitch) {
                     mSelectCheckImageView.setVisibility(View.VISIBLE);
+                    view.setAlpha(.85f); // changes opacity of image once clicked
                     mfridgeFragment.mSelectedViewsArray.add(view); // adds selected view to array list
                     OnSelectSwitch = false;
                 }
                 else {
                     mSelectCheckImageView.setVisibility(View.INVISIBLE);
+                    view.setAlpha(1f); // changes opacity of image once clicked
                     mfridgeFragment.mSelectedViewsArray.remove(view); // adds selected view to array list
                     OnSelectSwitch = true;
 
