@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     // get the list of currently playing movies from the API
-    public void generateRecipes(final HashMap<String, Boolean> user_dict) {
+    public void generateRecipes(final HashMap<String, Boolean> user_dict, String currentFilters) {
         // create the url
         if (use_api) {
             Log.d("MainActivity", "In API zone");
@@ -277,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     args.putBoolean(trait, user_dict.get(trait));
                 }
             }
+                args.putString("currentFilters", currentFilters);
             args.putString("responseForBundle", responseForBundle);
             listFrag.setArguments(args);
 

@@ -48,6 +48,7 @@ public class FridgeFragment extends Fragment{
     public ArrayList<View> mSelectedViewsArray;
     public String mSelectedItemsString = "";
     public boolean mAllSelected = false;
+    private String currentFilters = null;
 
 
     @Override
@@ -186,7 +187,7 @@ public class FridgeFragment extends Fragment{
         ((MainActivity) getContext()).setFridgeItems(fridge_items, mSelectedItemsString, mAllSelected); // TODO -- change to selected fridge items
 
         Log.d("FridgeFragment", "should move pages");
-        ((MainActivity) mContext).generateRecipes(user_dict);
+        ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
     }
 
     public void loadItems() {
