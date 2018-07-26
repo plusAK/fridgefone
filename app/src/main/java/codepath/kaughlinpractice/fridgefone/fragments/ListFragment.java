@@ -46,6 +46,14 @@ public class ListFragment extends Fragment {
 
         mFilterImageView = (ImageView) view.findViewById(R.id.filterImageView);
 
+        // construct the adapter from this data source
+        recipeAdapter = new RecipeAdapter(recipes);
+
+        // RecyclerView setup (layout manager, user adapter)
+        rvRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
+        // set the adapter
+        rvRecipes.setAdapter(recipeAdapter);
+
         //get bundle contents
         Bundle args = getArguments();
         String responseForBundle = args.getString("responseForBundle");
@@ -58,23 +66,14 @@ public class ListFragment extends Fragment {
         }
         try {
             for (int i = 0; i < response.length(); i += 1) {
-                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity());
+                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity(), args, recipes, recipeAdapter);
                 Log.d("ListFragment", recipe.getName());
-                if (recipe.isValid(args)) {
-                    recipes.add(recipe);
-                }
             }
         } catch (JSONException e) {
             Log.d("ListFragment", e.getMessage());
         }
 
-        // construct the adapter from this data source
-        recipeAdapter = new RecipeAdapter(recipes);
 
-        // RecyclerView setup (layout manager, user adapter)
-        rvRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // set the adapter
-        rvRecipes.setAdapter(recipeAdapter);
 
         mFilterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
