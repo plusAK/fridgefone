@@ -57,6 +57,7 @@ public class DetailsFragment extends Fragment {
     Collection<String> neededIngredients;
     String instructionsString;
     String ingredientsString;
+    private String currentFilters = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -150,7 +151,7 @@ public class DetailsFragment extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getContext()).generateRecipes(user_dict); //basically intent to go back to recipe list screen
+                ((MainActivity) getContext()).generateRecipes(user_dict, currentFilters); //basically intent to go back to recipe list screen
             }
         });
 

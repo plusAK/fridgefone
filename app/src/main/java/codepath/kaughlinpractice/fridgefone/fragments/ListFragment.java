@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,7 @@ public class ListFragment extends Fragment {
     ArrayList<Recipe> recipes;
     RecyclerView rvRecipes;
     private ImageView mFilterImageView;
+    private TextView mCurrentFilters;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +41,7 @@ public class ListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mCurrentFilters = (TextView) view.findViewById(R.id.currentFilters);
         // find RecyclerView
         rvRecipes = (RecyclerView) view.findViewById(R.id.rvRecipes);
         // init the array list (data source)
@@ -73,7 +76,10 @@ public class ListFragment extends Fragment {
             Log.d("ListFragment", e.getMessage());
         }
 
-
+        String currentFilters = args.getString("currentFilters");
+        if (currentFilters != null) {
+            mCurrentFilters.setText(currentFilters);
+        }
 
         mFilterImageView.setOnClickListener(new View.OnClickListener() {
             @Override

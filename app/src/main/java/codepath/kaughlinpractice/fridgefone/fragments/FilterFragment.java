@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ public class FilterFragment extends DialogFragment {
     private Button mSaveButton;
     private HashMap<String, Boolean> user_dict;
     private Context mContext;
+    private String currentFilters = "";
 
     private CheckBox VegetarianCheck;
     private CheckBox VeganCheck;
@@ -68,9 +68,16 @@ public class FilterFragment extends DialogFragment {
                 for(int i = 0; i < checkBoxes.size() - 1; i++) {
                     user_dict.put(Recipe.recipe_traits[i], checkBoxes.get(i).isChecked());
                 }
+
+                for(int i = 0; i < checkBoxes.size(); i++) {
+                    if (checkBoxes.get(i).isChecked()) {
+                        currentFilters += checkBoxes.get(i).getText().toString() + ", ";
+                    }
+                }
+                currentFilters = currentFilters.substring(0, currentFilters.length() - 2);
+
                 dismiss();
-                Log.d("FilterFragment", "Finished checkboxes");
-                ((MainActivity) mContext).generateRecipes(user_dict);
+                ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
             }
         });
     }
