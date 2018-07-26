@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.FridgeFragment"
     android:padding="@dimen/framelayout_padding"
-    android:background="@color/white"
+    android:background="@color/black"
     >
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
