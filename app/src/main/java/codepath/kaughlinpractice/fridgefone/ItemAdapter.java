@@ -57,13 +57,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         public TextView mFoodNameTextView;
         public ImageView mFoodImageView;
         public ImageView mSelectCheckImageView;
+        public boolean OnSelectSwitch = true;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
             mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
             mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
-            mSelectCheckImageView.setVisibility(View.INVISIBLE);
+            if (mfridgeFragment.mAllSelected) {
+                mSelectCheckImageView.setVisibility(View.VISIBLE);
+            }
+            else {
+                mSelectCheckImageView.setVisibility(View.INVISIBLE);
+            }
+
 
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);
@@ -88,17 +95,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
             int position = getAdapterPosition();
             // make sure the position is valid, i.e. actually exists in the view
-            if (position != RecyclerView.NO_POSITION) {
+            if (position != RecyclerView.NO_POSITION && mfridgeFragment.mSelectItemsBoolean) {
                 // get the recipe at the position, this won't work if the class is static
-                Item item = mItems.get(position);
                 // check if select item bool is true and show check when item is clicked
-                if(mfridgeFragment.mSelectItemsBoolean != false){
+                if (OnSelectSwitch) {
                     mSelectCheckImageView.setVisibility(View.VISIBLE);
-                    mfridgeFragment.mSelectedViews.add(view); // adds selected view to array list
+                    view.setAlpha(.85f); // changes opacity of image once clicked
+                    mfridgeFragment.mSelectedViewsArray.add(view); // adds selected view to array list
+                    OnSelectSwitch = false;
                 }
+                else {
+                    mSelectCheckImageView.setVisibility(View.INVISIBLE);
+                    view.setAlpha(1f); // changes opacity of image once clicked
+                    mfridgeFragment.mSelectedViewsArray.remove(view); // adds selected view to array list
+                    OnSelectSwitch = true;
 
+                }
             }
-
         }
     }
     // Clean all elements of the recycler

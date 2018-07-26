@@ -1,6 +1,5 @@
 package codepath.kaughlinpractice.fridgefone;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,8 +21,8 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
@@ -36,23 +35,23 @@ import cz.msebera.android.httpclient.Header;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public boolean use_api = false;
+
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
     public String fridgeItems;
+    public String mSelectedItemsString;
+    public boolean mAllSelected;
+    public boolean mNoneSelected;
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
-
-    // instance field
-    AsyncHttpClient mClient;
+    public AsyncHttpClient mClient;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private Context mContext;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         detailsFrag.setArguments(args);
         fragmentTransition(detailsFrag);
     }
-
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -203,12 +200,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.deleteInBackground();
         mItemsList.remove(item);
         mItemAdapter.notifyDataSetChanged();
+        //mFridgeFragment.loadItems();
         Toast.makeText(this, "Deleted: " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
-
     // get the list of currently playing movies from the API
-    public void generateRecipes(final HashMap<String, Boolean> user_dict) {
+    public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
         // create the url
         if (use_api) {
             Log.d("MainActivity", "In API zone");
@@ -218,8 +215,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
             mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
-            Log.d("MainActivity", "Fridge Items: " + fridgeItems);
-            params.put("ingredients", fridgeItems);
+            if (mAllSelected == false && mNoneSelected == false){
+                Log.d("MainActivity", " Other Selected Fridge Items String: " + mSelectedItemsString);
+                params.put("ingredients",mSelectedItemsString);
+            }
+            else {
+                Log.d("MainActivity", "In All Selected Fridge Items: " + fridgeItems);
+                params.put("ingredients", fridgeItems);
+            }
+
             params.put("number", 5);
             // other parameters we could use later
             // params.put("fillIngredients", false);
@@ -243,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             args.putBoolean(trait, user_dict.get(trait));
                         }
                     }
+                    args.putString("currentFilters", currentFilters);
                     args.putString("responseForBundle", responseForBundle);
                     listFrag.setArguments(args);
 
@@ -252,9 +257,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             String responseForBundle =
-                    //"[{"id":556470,"title":"Apple fritters","image":"https:\/\/spoonacular.com\/recipeImages\/556470-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":243},{"id":47950,"title":"Cinnamon Apple Crisp","image":"https:\/\/spoonacular.com\/recipeImages\/47950-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":35},{"id":534573,"title":"Brown Butter Apple Crumble","image":"https:\/\/spoonacular.com\/recipeImages\/534573-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":7},{"id":47732,"title":"Apple Tart","image":"https:\/\/spoonacular.com\/recipeImages\/47732-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":0},{"id":47891,"title":"Apple Tart","image":"https:\/\/spoonacular.com\/recipeImages\/47891-312x231.jpg","imageType":"jpg","usedIngredientCount":3,"missedIngredientCount":0,"likes":0}]";
-                    //"[{\"id\":556470,\"title\":\"Apple fritters\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/556470-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243},{\"id\":47950,\"title\":\"Cinnamon Apple Crisp\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47950-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":35},{\"id\":534573,\"title\":\"Brown Butter Apple Crumble\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/534573-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":7},{\"id\":47732,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47732-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0},{\"id\":47891,\"title\":\"Apple Tart\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/47891-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":0}]";
-                    "[{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
+                    "[{\"id\":556470,\"title\":\"Veggie & Chicken Kebab\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/544976-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}," +
+                            "{\"id\":556470,\"title\":\"Curried Chicken Pitas\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/421176-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
+                            "{\"id\":556470,\"title\":\"Curry Chicken and Grape Salad\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/1010550-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
+                            "{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
+                            "{\"id\":556470,\"title\":\"King Cake with Pecan Praline Filling\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/855114-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
 
             Fragment listFrag = new ListFragment();
 
@@ -265,14 +272,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     args.putBoolean(trait, user_dict.get(trait));
                 }
             }
+            args.putString("currentFilters", currentFilters);
             args.putString("responseForBundle", responseForBundle);
             listFrag.setArguments(args);
 
             fragmentTransition(listFrag);
         }
-
     }
-
 
     public void fragmentTransition(Fragment nextFrag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -280,8 +286,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
 
-    public void setFridgeItems(String fridge_items) {
+    public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean allSelected, Boolean noneSelected) {
         fridgeItems = fridge_items;
+        mSelectedItemsString = selectedItemsString;
+        mAllSelected = allSelected;
+        mNoneSelected = noneSelected;
     }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {

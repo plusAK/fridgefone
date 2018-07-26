@@ -30,16 +30,17 @@ import cz.msebera.android.httpclient.Header;
 
 public class AddItemFragment extends DialogFragment {
 
+    public boolean use_api = false;
+
     private Button addButton;
     private AutoCompleteTextView actvFoodItem;
-    public boolean use_api = false;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
-    AsyncHttpClient client;
-    ArrayList<String> autoCompleteItems = new ArrayList<String>();
+    public AsyncHttpClient client;
+    public ArrayList<String> autoCompleteItems = new ArrayList<String>();
     public ArrayAdapter<String> addItemAdapter;
 
     @Override

@@ -39,6 +39,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class DetailsFragment extends Fragment {
 
+    private boolean use_api = false;
+
     public Recipe recipe;
     @BindView(R.id.ivRecipeImage) public ImageView ivRecipeImage;
     @BindView(R.id.tvDishTitle) public TextView tvDishTitle;
@@ -47,7 +49,6 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.buttonBack) public Button buttonBack;
     @BindView(R.id.lvIngredients) public ListView lvIngredients;
 
-    private boolean use_api = false;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
@@ -60,6 +61,7 @@ public class DetailsFragment extends Fragment {
     Collection<String> neededIngredients;
     String instructionsString;
     String ingredientsString;
+    private String currentFilters = null;
 
     ArrayList<String> ingredients;
 
@@ -165,7 +167,7 @@ public class DetailsFragment extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getContext()).generateRecipes(user_dict); //basically intent to go back to recipe list screen
+                ((MainActivity) getContext()).generateRecipes(user_dict, currentFilters); //basically intent to go back to recipe list screen
             }
         });
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,7 @@ public class ListFragment extends Fragment {
     ArrayList<Recipe> recipes;
     RecyclerView rvRecipes;
     private ImageView mFilterImageView;
+    private TextView mCurrentFilters;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,12 +41,21 @@ public class ListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mCurrentFilters = (TextView) view.findViewById(R.id.currentFilters);
         // find RecyclerView
         rvRecipes = (RecyclerView) view.findViewById(R.id.rvRecipes);
         // init the array list (data source)
         recipes = new ArrayList<>();
 
         mFilterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+
+        // construct the adapter from this data source
+        recipeAdapter = new RecipeAdapter(recipes);
+
+        // RecyclerView setup (layout manager, user adapter)
+        rvRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
+        // set the adapter
+        rvRecipes.setAdapter(recipeAdapter);
 
         //get bundle contents
         Bundle args = getArguments();
@@ -58,23 +69,17 @@ public class ListFragment extends Fragment {
         }
         try {
             for (int i = 0; i < response.length(); i += 1) {
-                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity());
+                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity(), args, recipes, recipeAdapter);
                 Log.d("ListFragment", recipe.getName());
-                if (recipe.isValid(args)) {
-                    recipes.add(recipe);
-                }
             }
         } catch (JSONException e) {
             Log.d("ListFragment", e.getMessage());
         }
 
-        // construct the adapter from this data source
-        recipeAdapter = new RecipeAdapter(recipes);
-
-        // RecyclerView setup (layout manager, user adapter)
-        rvRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // set the adapter
-        rvRecipes.setAdapter(recipeAdapter);
+        String currentFilters = args.getString("currentFilters");
+        if (currentFilters != null) {
+            mCurrentFilters.setText(currentFilters);
+        }
 
         mFilterImageView.setOnClickListener(new View.OnClickListener() {
             @Override

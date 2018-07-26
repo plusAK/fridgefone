@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.FridgeFragment"
-    android:padding="8dp"
-    android:background="@color/white"
+    android:padding="@dimen/framelayout_padding"
+    android:background="@color/black"
     >
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_grey"
+        android:background="@drawable/round_corner_lightgrey"
         android:padding="@dimen/small_padding"
         tools:context=".MainActivity">
 
@@ -29,8 +29,8 @@
                 android:id="@+id/rvFridgeHomeView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey"
-                android:padding="@dimen/small_padding">
+                android:background="@drawable/round_corner_grey"
+                android:padding="@dimen/less_medium_padding">
 
             </android.support.v7.widget.RecyclerView>
 
@@ -77,6 +77,18 @@
             android:background="@color/gray_button"
             android:elevation="@dimen/small_padding"
             android:text="@string/cancel"
+            android:textSize="@dimen/pop_up_button_text_size"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/swipeContainer"
+            android:layout_alignStart="@+id/ivAddItem"
+            android:background="@color/gray_button"
+            android:elevation="@dimen/small_padding"
+            android:text="@string/selectall"
             android:textSize="@dimen/pop_up_button_text_size"
             android:textStyle="bold" />
 

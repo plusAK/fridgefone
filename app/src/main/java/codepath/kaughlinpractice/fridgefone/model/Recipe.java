@@ -22,6 +22,8 @@ import cz.msebera.android.httpclient.Header;
 @Parcel
 public class Recipe {
 
+    static boolean use_api = false;
+
     public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
     String name;
     int id;
@@ -35,12 +37,12 @@ public class Recipe {
     boolean cheap;
     boolean veryPopular;
     int servings;
+    public boolean validity;
     public HashMap<String, Boolean> recipe_dict;
 
     static RecipeAdapter adapter;
     static AsyncHttpClient client;
     static ArrayList<Recipe> recipes;
-    static boolean use_api = false;
 
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
@@ -51,7 +53,7 @@ public class Recipe {
     // JSONObject ingredients;
     // TODO -- figure out how to have ingredients without erroring
 
-    public static Recipe fromJSON(JSONObject jsonObject, final Context context) throws JSONException {
+    public static Recipe fromJSON(JSONObject jsonObject, final Context context, final Bundle args, final ArrayList<Recipe> rec, final RecipeAdapter recipeAdapter) throws JSONException {
 
         // initialize the client
         client = new AsyncHttpClient();
@@ -63,6 +65,7 @@ public class Recipe {
         recipe.image = jsonObject.getString("image");
         Log.d("Recipe", "Have access to basic Recipe Info");
 
+        recipe.validity = false;
         recipes = new ArrayList<>();
         recipe.recipe_dict = new HashMap<>();
 
@@ -74,15 +77,14 @@ public class Recipe {
 
             client.addHeader(API_KEY_PARAM, context.getString(R.string.api_key));
             client.addHeader(KEY_ACCEPT_PARAM, "application/json");
-
             // execute a GET request expecting a JSON object response
-            client.get(url, params, new JsonHttpResponseHandler() {
+            client.get(url, params,
+                    new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     String r = response.toString();
-                    Log.d("Recipe", "JSONObject : " + r);
-
                     try {
+                        Log.d("Recipe", "JSONObject : " + r);
                         makeDict(context.getString(R.string.vegetarian), response, recipe);
                         makeDict(context.getString(R.string.vegan), response, recipe);
                         makeDict(context.getString(R.string.gluten_free), response, recipe);
@@ -92,6 +94,12 @@ public class Recipe {
                         makeDict(context.getString(R.string.cheap), response, recipe);
                         recipe.readyInMinutes = response.getInt("readyInMinutes");
                         recipe.servings = response.getInt("servings");
+
+                        if (recipe.isValid(args)) {
+                            rec.add(recipe);
+                            recipeAdapter.notifyItemInserted(rec.size() - 1);
+                        }
+
                     } catch (JSONException e) {
                         Log.d("MainActivity", "Not api_call error: " + e.getMessage());
                     }
@@ -403,6 +411,11 @@ public class Recipe {
                 makeDict(context.getString(R.string.cheap), response, recipe);
                 recipe.readyInMinutes = response.getInt("readyInMinutes");
                 recipe.servings = response.getInt("servings");
+
+                if (recipe.isValid(args)) {
+                    rec.add(recipe);
+                    recipeAdapter.notifyItemInserted(rec.size() - 1);
+                }
             } catch (JSONException e) {
                 Log.d("MainActivity", "Not api_call error: " + e.getMessage());
             }
@@ -486,10 +499,8 @@ public class Recipe {
 
     public boolean isValid(Bundle args) {
         for (String trait: recipe_traits) {
-            if(args != null) {
-                if (args.getBoolean(trait) && !recipe_dict.get(trait)) {
-                    return false;
-                }
+            if (args.containsKey(trait) && args.getBoolean(trait) && !this.recipe_dict.get(trait)) {
+                return false;
             }
         }
         return true;

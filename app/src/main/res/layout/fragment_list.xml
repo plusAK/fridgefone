@@ -15,7 +15,7 @@
 
         <ImageView
             android:id="@+id/filterImageView"
-            android:layout_width="wrap_content"
+            android:layout_width="92dp"
             android:layout_height="@dimen/filter_button_height"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -26,7 +26,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/filterImageView" />
+            android:layout_below="@+id/currentFilters" />
+
+        <TextView
+            android:id="@+id/currentFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/filterImageView"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
