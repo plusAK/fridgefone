@@ -157,7 +157,7 @@ public class FridgeFragment extends Fragment{
             public void onClick(View view) {
 
                 mAllSelected = true;
-                mItemAdapter.notifyDataSetChanged();
+                mItemAdapter.notifyDataSetChanged();// notify the adapter if select all is changed
                 Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_LONG).show();
                 //mSelectCheckImageView.setVisibility(View.VISIBLE);
             }

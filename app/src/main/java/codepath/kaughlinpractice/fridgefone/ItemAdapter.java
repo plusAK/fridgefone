@@ -57,7 +57,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         public TextView mFoodNameTextView;
         public ImageView mFoodImageView;
         public ImageView mSelectCheckImageView;
-        public boolean OnOffSwitch;
+        public boolean OnSelectSwitch = true;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,22 +95,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
             int position = getAdapterPosition();
             // make sure the position is valid, i.e. actually exists in the view
-            if (position != RecyclerView.NO_POSITION) {
+            if (position != RecyclerView.NO_POSITION && mfridgeFragment.mSelectItemsBoolean) {
                 // get the recipe at the position, this won't work if the class is static
-                Item item = mItems.get(position);
                 // check if select item bool is true and show check when item is clicked
-                if(mfridgeFragment.mSelectItemsBoolean){
-//                    if(OnOffSwitch){
-//                        OnOffSwitch = false;
-//                    }
-//                    else{
-//                        OnOffSwitch = true;
-//
-//                    }
+                if (OnSelectSwitch) {
                     mSelectCheckImageView.setVisibility(View.VISIBLE);
                     mfridgeFragment.mSelectedViewsArray.add(view); // adds selected view to array list
+                    OnSelectSwitch = false;
                 }
+                else {
+                    mSelectCheckImageView.setVisibility(View.INVISIBLE);
+                    mfridgeFragment.mSelectedViewsArray.remove(view); // adds selected view to array list
+                    OnSelectSwitch = true;
 
+                }
             }
         }
     }
