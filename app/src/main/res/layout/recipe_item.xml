@@ -6,12 +6,27 @@
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="@dimen/list_image_width"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="122dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="@dimen/very_small_padding"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        android:scaleType="centerCrop"
+        app:srcCompat="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivImage"
+        android:layout_alignParentStart="true"
+        android:background="@color/opaque_black"
+        android:fontFamily="@font/roboto_light"
+        android:padding="@dimen/small_padding"
+        android:paddingLeft="@dimen/small_padding"
+        android:paddingRight="@dimen/small_padding"
+        android:text="@string/dish_title"
+        android:textColor="@color/white"
+        android:textSize="@dimen/details_dish_text_size" />
 
     <View
         android:id="@+id/line"
@@ -20,19 +35,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:background="@color/grey" />
-
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="@dimen/very_small_padding"
-        android:layout_toEndOf="@+id/ivImage"
-        android:padding="@dimen/very_small_padding"
-        android:text="@string/title"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        android:textSize="@dimen/list_dish_text_size"
-        android:textStyle="italic" />
 
 </RelativeLayout>
