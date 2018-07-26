@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -21,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,6 +45,7 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.tvIngredients) public TextView tvIngredients;
     @BindView(R.id.tvInstructions) public TextView tvInstructions;
     @BindView(R.id.buttonBack) public Button buttonBack;
+    @BindView(R.id.lvIngredients) public ListView lvIngredients;
 
     private boolean use_api = false;
     // the base URL for the API
@@ -56,6 +60,10 @@ public class DetailsFragment extends Fragment {
     Collection<String> neededIngredients;
     String instructionsString;
     String ingredientsString;
+
+    ArrayList<String> ingredients;
+
+    ArrayAdapter<String> ingredientsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,6 +90,12 @@ public class DetailsFragment extends Fragment {
         tvIngredients.setText("");
         instructionsString = "<big><b>Instructions</b></big><br />";
         ingredientsString = "<big><b>Ingredients</b></big>";
+
+        ingredients = new ArrayList<>(neededIngredients);
+        Log.d("DetailFragment", "Ingredient Array: " + ingredientsString.toString());
+        ingredientsAdapter = new ArrayAdapter<>(getContext(), R.layout.ingredient_item, R.id.tvIngredient, ingredients);
+        lvIngredients.setAdapter(ingredientsAdapter);
+
 
         int id = args.getInt("id");
         String image = args.getString("image");
@@ -139,7 +153,9 @@ public class DetailsFragment extends Fragment {
                     beautifyInstructions(partOfInstructions);
                     Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + partOfInstructions.toString());
                 }
-                tvIngredients.setText(Html.fromHtml(ingredientsString));
+               // tvIngredients.setText(Html.fromHtml(ingredientsString));
+                tvIngredients.setText(Html.fromHtml("<big><b>Ingredients</b></big>"));
+
                 tvInstructions.setText(Html.fromHtml(instructionsString));
             } catch (JSONException e) {
                 Log.d("DetailFragment", e.getMessage());
@@ -186,6 +202,8 @@ public class DetailsFragment extends Fragment {
                     newText = newText + "<br/>" + ingredientName;
                     Log.d("DetailFragment", "Found new ingredient " + ingredientName);
                     neededIngredients.add(ingredientName);
+                    ingredients.add(ingredientName);
+                    ingredientsAdapter.notifyDataSetChanged();
                 }
             }
             ingredientsString = ingredientsString + newText;
