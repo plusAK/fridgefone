@@ -64,10 +64,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
             mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
             mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
-            if(mfridgeFragment.mAllSelected){
+            if (mfridgeFragment.mAllSelected) {
                 mSelectCheckImageView.setVisibility(View.VISIBLE);
             }
-            else{
+            else {
                 mSelectCheckImageView.setVisibility(View.INVISIBLE);
             }
 
@@ -100,11 +100,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                 // check if select item bool is true and show check when item is clicked
                 if (OnSelectSwitch) {
                     mSelectCheckImageView.setVisibility(View.VISIBLE);
+                    view.setAlpha(.85f); // changes opacity of image once clicked
                     mfridgeFragment.mSelectedViewsArray.add(view); // adds selected view to array list
                     OnSelectSwitch = false;
                 }
                 else {
                     mSelectCheckImageView.setVisibility(View.INVISIBLE);
+                    view.setAlpha(1f); // changes opacity of image once clicked
                     mfridgeFragment.mSelectedViewsArray.remove(view); // adds selected view to array list
                     OnSelectSwitch = true;
 
