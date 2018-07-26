@@ -31,7 +31,7 @@ import codepath.kaughlinpractice.fridgefone.model.Item;
 
 public class FridgeFragment extends Fragment{
 
-    private final static int mNumVisibleShelfs = 12;
+    private final static int mNumVisibleShelves = 12;
     private Context mContext;
     private ImageView mGenerateRecipeListImageView;
     private ImageView mAddItemImageView;
@@ -214,9 +214,9 @@ public class FridgeFragment extends Fragment{
                         mItemList.add(0 , objects.get(i)); // add item to zero index
                         mItemAdapter.notifyItemInserted(mItemList.size()-1);
                     }
-                    if(mItemList.size() < mNumVisibleShelfs){
+                    if(mItemList.size() < mNumVisibleShelves){
 
-                        for(int i = mItemList.size();i < mNumVisibleShelfs; i ++){
+                        for(int i = mItemList.size();i < mNumVisibleShelves; i ++){
                             mItemList.add(new Item());
                         }
                     }
