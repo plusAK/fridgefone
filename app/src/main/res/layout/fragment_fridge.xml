@@ -80,6 +80,18 @@
             android:textSize="@dimen/pop_up_button_text_size"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/btnSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/swipeContainer"
+            android:layout_alignStart="@+id/ivAddItem"
+            android:background="@color/gray_button"
+            android:elevation="@dimen/small_padding"
+            android:text="@string/selectall"
+            android:textSize="@dimen/pop_up_button_text_size"
+            android:textStyle="bold" />
+
     </RelativeLayout>
 
 </FrameLayout>

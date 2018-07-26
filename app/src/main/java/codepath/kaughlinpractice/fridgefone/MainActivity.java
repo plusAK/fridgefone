@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public final static String KEY_ACCEPT_PARAM = "Accept";
     public String fridgeItems;
     public String mSelectedItemsString;
+    public boolean mAllSelected;
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
@@ -221,10 +222,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
             mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
-            Log.d("MainActivity", "Fridge Items: " + fridgeItems);
-            Log.d("MainActivity", "Selected Fridge Items String: " + mSelectedItemsString);
-            //params.put("ingredients", fridgeItems); // TODO -- add if statements so if select all is true use all fridgeItems as param
-            params.put("ingredients", mSelectedItemsString);
+            if(!mAllSelected){
+                Log.d("MainActivity", " other Selected Fridge Items String: " + mSelectedItemsString);
+                params.put("ingredients", mSelectedItemsString);
+            }
+            else{
+                Log.d("MainActivity", "In all selected Fridge Items: " + fridgeItems);
+                params.put("ingredients", fridgeItems);
+            }
+
             params.put("number", 5);
             // other parameters we could use later
             // params.put("fillIngredients", false);
@@ -286,9 +292,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void setFridgeItems(String fridge_items, String SelectedItemsString) {
+    public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean allSelected) {
         fridgeItems = fridge_items;
-        mSelectedItemsString = SelectedItemsString;
+        mSelectedItemsString = selectedItemsString;
+        mAllSelected = allSelected;
     }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {

@@ -7,6 +7,7 @@
     <string name="add_item">Add Item</string>
     <string name="delete_item">Remove</string>
     <string name="cancel">Cancel</string>
+    <string name="selectall">Select All</string>
     <string name="delete_item_question">Are you sure you want to delete</string>
     <string name="food_name">Food Name</string>
     <string name="dish_title">Dish Title</string>

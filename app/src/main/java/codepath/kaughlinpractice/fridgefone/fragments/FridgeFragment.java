@@ -40,12 +40,14 @@ public class FridgeFragment extends Fragment{
     private ItemAdapter mItemAdapter;
     private RecyclerView mItemRecyclerView;
     private String fridge_items = "";
+    private HashMap<String, Boolean> user_dict = null;
     public ImageView mSelectItemsImageView;
     public Button mCancelSelectButton;
+    public Button mSelectAllButton;
     public boolean mSelectItemsBoolean = false;
     public ArrayList<View> mSelectedViewsArray;
     public String mSelectedItemsString = "";
-    private HashMap<String, Boolean> user_dict = null;
+    public boolean mAllSelected = false;
 
 
     @Override
@@ -76,6 +78,9 @@ public class FridgeFragment extends Fragment{
         mSelectItemsImageView = (ImageView) view.findViewById(R.id.ivSelectItems);
         mCancelSelectButton = (Button) view.findViewById(R.id.btnCancelSelect);
         mCancelSelectButton.setVisibility(View.INVISIBLE);
+
+        mSelectAllButton = (Button) view.findViewById(R.id.btnSelectAll);
+        mSelectAllButton.setVisibility(View.INVISIBLE);
 
         // give access to MainActivity to adapter
         ((MainActivity) mContext).setItemsAccess(mItemAdapter, mItemList);
@@ -122,6 +127,8 @@ public class FridgeFragment extends Fragment{
                 mSelectItemsBoolean = true;
                 //((MainActivity) getContext()).setSelectTrue();
                 mCancelSelectButton.setVisibility(View.VISIBLE);
+                mSelectAllButton.setVisibility(View.VISIBLE);
+                mAddItemImageView.setVisibility(View.INVISIBLE);
                 mSelectItemsImageView.setVisibility(View.INVISIBLE);
                 Toast.makeText(getActivity(), "Select your items", Toast.LENGTH_LONG).show();
             }
@@ -131,14 +138,28 @@ public class FridgeFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 mSelectItemsBoolean = false;
+                mAllSelected = false;
+                mItemAdapter.notifyDataSetChanged(); // notify the adapter if select all is changed
                 mCancelSelectButton.setVisibility(View.INVISIBLE);
+                mSelectAllButton.setVisibility(View.INVISIBLE);
                 mSelectItemsImageView.setVisibility(View.VISIBLE);
+                mAddItemImageView.setVisibility(View.VISIBLE);
                 //make check box invisible for every item in mSelectedViews array
                 for(int i = 0; i < mSelectedViewsArray.size(); i ++){
                     View itemView = mSelectedViewsArray.get(i);
                     ImageView mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
                     mSelectCheckImageView.setVisibility(View.INVISIBLE);
                 }
+            }
+        });
+        mSelectAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mAllSelected = true;
+                mItemAdapter.notifyDataSetChanged();
+                Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_LONG).show();
+                //mSelectCheckImageView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -162,7 +183,7 @@ public class FridgeFragment extends Fragment{
 
         // You need to refresh page for item names to load from Parse
         Log.d("FridgeFragment", "Selected Items in Fridge: " + mSelectedItemsString);
-        ((MainActivity) getContext()).setFridgeItems(fridge_items, mSelectedItemsString); // TODO -- change to selected fridge items
+        ((MainActivity) getContext()).setFridgeItems(fridge_items, mSelectedItemsString, mAllSelected); // TODO -- change to selected fridge items
 
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) mContext).generateRecipes(user_dict);
