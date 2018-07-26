@@ -39,8 +39,8 @@ public class AddItemFragment extends DialogFragment {
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
-    AsyncHttpClient client;
-    ArrayList<String> autoCompleteItems = new ArrayList<String>();
+    public AsyncHttpClient client;
+    public ArrayList<String> autoCompleteItems = new ArrayList<String>();
     public ArrayAdapter<String> addItemAdapter;
 
     @Override
