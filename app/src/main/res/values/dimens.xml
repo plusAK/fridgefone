@@ -6,6 +6,8 @@
     <dimen name="fridge_item_text_size">10sp</dimen>
     <dimen name="list_dish_text_size">25sp</dimen>
     <dimen name="details_dish_text_size">25sp</dimen>
+    <dimen name="details_heading_text_size">17sp</dimen>
+    <dimen name="details_paragraph_text_size">17sp</dimen>
 
     <dimen name="no_margin">0dp</dimen>
     <dimen name="outside_padding_pop_ups">10dp</dimen>
@@ -26,6 +28,9 @@
     <dimen name="framelayout_padding">8dp</dimen>
     <dimen name="corner_radius">20dp</dimen>
     <dimen name="extremely_small_height">2dp</dimen>
+    <dimen name="details_icon_width">20dp</dimen>
+    <dimen name="details_icon_height">20dp</dimen>
+    <dimen name="detail_paragraph_padding">62dp</dimen>
 
     <dimen name="extremely_small_padding">1dp</dimen>
     <dimen name="three_padding">3dp</dimen>
@@ -33,4 +38,5 @@
     <dimen name="small_padding">10dp</dimen>
     <dimen name="less_medium_padding">13dp</dimen>
     <dimen name="medium_padding">15dp</dimen>
+    <dimen name="big_padding">30dp</dimen>
 </resources>
