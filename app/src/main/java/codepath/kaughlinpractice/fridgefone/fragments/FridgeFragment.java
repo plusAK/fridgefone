@@ -163,6 +163,7 @@ public class FridgeFragment extends Fragment{
         mSelectAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mSelectItemsBoolean = false;
                 mAllSelected = true;
                 mNoneSelected = false;
                 mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount());
@@ -197,7 +198,7 @@ public class FridgeFragment extends Fragment{
         // You need to refresh page for item names to load from Parse
         Log.d("FridgeFragment", "Selected Items in Fridge String: " + mSelectedNamesString);
         Log.d("FridgeFragment", "All Items in Fridge String: " + mAllNamesString);
-        ((MainActivity) getContext()).setFridgeItems(mAllNamesString, mSelectedNamesString, mAllSelected, mNoneSelected);
+        ((MainActivity) getContext()).setFridgeItems(mAllNamesString, mSelectedNamesString, mSelectItemsBoolean);
 
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);

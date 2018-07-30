@@ -41,10 +41,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
-    public String fridgeItems;
+    public String mAllFridgeItemsString;
     public String mSelectedItemsString;
-    public boolean mAllSelected;
-    public boolean mNoneSelected;
+    public boolean mSelectItemsBoolean;
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
@@ -207,31 +206,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast.makeText(this, "Deleted: " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
-    // get the list of currently playing movies from the API
     public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
         // create the url
         if (use_api) {
-            Log.d("MainActivity", "In API zone");
             String url = API_BASE_URL + "/recipes/findByIngredients";
             // set the request parameters
             RequestParams params = new RequestParams();
-            mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
-            if (mAllSelected == false && mNoneSelected == false){
-                Log.d("MainActivity", " Other Selected Fridge Items String: " + mSelectedItemsString);
-                params.put("ingredients",mSelectedItemsString);
+            if (mSelectItemsBoolean) {
+                APIParams(params, mSelectedItemsString);
+            } else {
+                APIParams(params, mAllFridgeItemsString);
             }
-            else {
-                Log.d("MainActivity", "In All Selected Fridge Items: " + fridgeItems);
-                params.put("ingredients", fridgeItems);
-            }
-
-            params.put("number", 5);
-            // other parameters we could use later
-            // params.put("fillIngredients", false);
-            // params.put("limitLicense", false);
-            // params.put("ranking", 1);
 
             // execute a GET request expecting a JSON object response
             mClient.get(url, params, new JsonHttpResponseHandler() {
@@ -283,17 +269,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void APIParams(RequestParams params, String items) {
+        mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+        mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
+        params.put("ingredients", items);
+        params.put("number", getApplicationContext().getResources().getInteger(R.integer.number_of_recipes));
+    }
+    // other parameters we could use later
+    // params.put("fillIngredients", false);
+    // params.put("limitLicense", false);
+    // params.put("ranking", 1);
+
     public void fragmentTransition(Fragment nextFrag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
 
-    public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean allSelected, Boolean noneSelected) {
-        fridgeItems = fridge_items;
+    public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean selectItemsBoolean) {
+        mAllFridgeItemsString = fridge_items;
         mSelectedItemsString = selectedItemsString;
-        mAllSelected = allSelected;
-        mNoneSelected = noneSelected;
+        mSelectItemsBoolean = selectItemsBoolean;
     }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {
