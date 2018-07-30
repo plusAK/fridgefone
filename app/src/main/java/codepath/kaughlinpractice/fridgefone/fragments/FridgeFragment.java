@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -22,6 +21,7 @@ import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.ItemAdapter;
@@ -39,14 +39,20 @@ public class FridgeFragment extends Fragment{
     private SwipeRefreshLayout mSwipeContainer;
     private ItemAdapter mItemAdapter;
     private RecyclerView mItemRecyclerView;
-    private String fridge_items = "";
+
     private HashMap<String, Boolean> user_dict = null;
     public ImageView mSelectItemsImageView;
     public Button mCancelSelectButton;
     public Button mSelectAllButton;
+
+    //public ArrayList<View> mSelectedViewsArray;
+    public ArrayList<String> mSelectedNamesArray;
+    public HashSet<String> mSelectedNamesSet;
+    public HashSet<String> mAllItemNamesSet;
+    public String mSelectedNamesString = "";
+    public String mAllNamesString = "";
+
     public boolean mSelectItemsBoolean = false;
-    public ArrayList<View> mSelectedViewsArray;
-    public String mSelectedItemsString = "";
     public boolean mAllSelected = false;
     private String currentFilters = null;
     public boolean mNoneSelected = true;
@@ -65,7 +71,9 @@ public class FridgeFragment extends Fragment{
 
         mContext = getContext();
         mItemList = new ArrayList<>();
-        mSelectedViewsArray = new ArrayList<>();
+        //mSelectedViewsArray = new ArrayList<>();
+        mSelectedNamesSet = new HashSet<>();
+        mAllItemNamesSet = new HashSet<>();
 
         mGenerateRecipeListImageView = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
         mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddItem);
@@ -127,7 +135,7 @@ public class FridgeFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 mSelectItemsBoolean = true;
-                mNoneSelected = false;
+                //mNoneSelected = false;
                 //((MainActivity) getContext()).setSelectTrue();
                 mCancelSelectButton.setVisibility(View.VISIBLE);
                 mSelectAllButton.setVisibility(View.VISIBLE);
@@ -143,17 +151,16 @@ public class FridgeFragment extends Fragment{
                 mSelectItemsBoolean = false;
                 mAllSelected = false;
                 mNoneSelected = true;
-                mItemAdapter.notifyDataSetChanged(); // notify the adapter if select all is changed
+                mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount()); // notify the adapter if select all is changed
+
                 mCancelSelectButton.setVisibility(View.INVISIBLE);
                 mSelectAllButton.setVisibility(View.INVISIBLE);
                 mSelectItemsImageView.setVisibility(View.VISIBLE);
                 mAddItemImageView.setVisibility(View.VISIBLE);
-                //make check box invisible for every item in mSelectedViews array
-                for(int i = 0; i < mSelectedViewsArray.size(); i ++){
-                    View itemView = mSelectedViewsArray.get(i);
-                    ImageView mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
-                    mSelectCheckImageView.setVisibility(View.INVISIBLE);
-                }
+
+                // clear hashset after cancel button  is clicked
+                mSelectedNamesSet.clear();
+                Log.d("FridgeFragment", "Selected Items in Fridge Hashset after Cancel: " + mSelectedNamesSet);
             }
         });
         mSelectAllButton.setOnClickListener(new View.OnClickListener() {
@@ -161,8 +168,9 @@ public class FridgeFragment extends Fragment{
             public void onClick(View view) {
                 mAllSelected = true;
                 mNoneSelected = false;
-                mItemAdapter.notifyDataSetChanged();// notify the adapter if select all is changed
+                mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount());
                 Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_LONG).show();
+                Log.d("FridgeFragment", "All Items in mAllItemNamesSet: " + mAllItemNamesSet);
                 //mSelectCheckImageView.setVisibility(View.VISIBLE);
             }
         });
@@ -172,24 +180,29 @@ public class FridgeFragment extends Fragment{
 
     public void generateRecipes() {
 
-        for(int i = 0; i < mSelectedViewsArray.size();i++){
-            View view = mSelectedViewsArray.get(i);
-            TextView item_name = view.findViewById(R.id.tvFood_Name);
 
-            if(i == mSelectedViewsArray.size() -1){
-                mSelectedItemsString += item_name.getText().toString();
-            }
-            else{
-                mSelectedItemsString += item_name.getText().toString() + ",";
-            }
-            Log.d("FridgeFragment", "Selected Items in Fridge: " + mSelectedItemsString);
+        Log.d("FridgeFragment", "Selected Items in Fridge Hashset: " + mSelectedNamesSet);
+
+//        mSelectedNamesArray = new ArrayList<>(mSelectedNamesSet);
+//        for(int i = 0; i <mSelectedNamesSet.size();i++){
+//            mSelectedItemsString += mSelectedNamesArray.get(i);
+//        }
+
+        if(mSelectedNamesSet.isEmpty()){
+            mNoneSelected = true;
+        }
+        else{
+            mNoneSelected = false;
         }
 
-        // You need to refresh page for item names to load from Parse
-        Log.d("FridgeFragment", "Selected Items in Fridge: " + mSelectedItemsString);
-        Log.d("FridgeFragment", "All Items in Fridge: " + fridge_items);
+        mSelectedNamesString = String.join(",", mSelectedNamesSet);
+        mAllNamesString = String.join(",", mAllItemNamesSet);
 
-        ((MainActivity) getContext()).setFridgeItems(fridge_items, mSelectedItemsString, mAllSelected, mNoneSelected);
+
+        // You need to refresh page for item names to load from Parse
+        Log.d("FridgeFragment", "Selected Items in Fridge String: " + mSelectedNamesString);
+        Log.d("FridgeFragment", "All Items in Fridge String: " + mAllNamesString);
+        ((MainActivity) getContext()).setFridgeItems(mAllNamesString, mSelectedNamesString, mAllSelected, mNoneSelected);
 
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
@@ -207,10 +220,9 @@ public class FridgeFragment extends Fragment{
                     for (int i = 0; i < objects.size(); i++) {
                         Log.d("FridgeFragment", "item[" + i + "]= " + objects.get(i).getName()
                                 + "\nImageurl =" + objects.get(i).getImageURL());
-                        fridge_items = fridge_items + objects.get(i).getName();
-                        if (i != objects.size()-1) {
-                            fridge_items = fridge_items + ",";
-                        }
+
+                        mAllItemNamesSet.add(objects.get(i).getName()); // add item name to hashset for all items in the fridge
+
                         mItemList.add(0 , objects.get(i)); // add item to zero index
                         mItemAdapter.notifyItemInserted(mItemList.size()-1);
                     }

@@ -91,7 +91,6 @@ public class DetailsFragment extends Fragment {
         GlideApp.with(getActivity())
                 .load(image)
                 .fitCenter()
-                //.circleCrop()
                 .into(ivRecipeImage);
 
 

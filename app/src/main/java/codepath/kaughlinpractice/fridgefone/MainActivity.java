@@ -201,12 +201,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DeleteItemFragment deleteItemFragment = new DeleteItemFragment();
         deleteItemFragment.setArguments(args);// connects bundle to fragment
         deleteItemFragment.show(getSupportFragmentManager(), "DeleteItemFragment");
+
+        //mfridgeFragment.mAllItemNamesSet.remove(item); // TODO -- figure out where you remove item from set
         Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
     }
 
     public void deleteItemFromFridge(Item item) {
         item.deleteInBackground();
         mItemsList.remove(item);
+        //mItemAdapter.notifyItemRemoved(mItemAdapter.getItemCount());
         mItemAdapter.notifyDataSetChanged();
         //mFridgeFragment.loadItems();
         Toast.makeText(this, "Deleted: " + item.getName(), Toast.LENGTH_LONG).show();

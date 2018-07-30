@@ -24,6 +24,11 @@
     <dimen name="framelayout_padding">8dp</dimen>
     <dimen name="corner_radius">20dp</dimen>
     <dimen name="extremely_small_height">2dp</dimen>
+    <dimen name="not_selected_view" format = "float">1</dimen>
+
+
+
+
 
     <dimen name="extremely_small_padding">1dp</dimen>
     <dimen name="three_padding">3dp</dimen>

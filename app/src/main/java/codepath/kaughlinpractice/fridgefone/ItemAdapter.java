@@ -3,6 +3,7 @@ package codepath.kaughlinpractice.fridgefone;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +38,73 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ItemAdapter.ViewHolder viewHolder, final int position) {
 
-        viewHolder.mFoodNameTextView.setText(mItems.get(i).getName());
+        viewHolder.mFoodNameTextView.setText(mItems.get(position).getName());
+        viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
 
         GlideApp.with(mContext)
-                .load(mItems.get(i).getImageURL())
+                .load(mItems.get(position).getImageURL())
                 .into(viewHolder.mFoodImageView);
 
+        // check if all are selected
+        if (mfridgeFragment.mAllSelected) {
+            viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
+
+            viewHolder.itemView.setAlpha(.85f); // changes opacity of image once clicked
+        }
+        else if(!mfridgeFragment.mAllSelected) {
+            viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
+            viewHolder.itemView.setAlpha(1f); // changes opacity of image once clicked
+        }
+
+
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
+
+                // make sure the position is valid, i.e. actually exists in the view
+                if (position != RecyclerView.NO_POSITION) {
+                    // get the recipe at the position, this won't work if the class is static
+                    Item item = mItems.get(position);
+                    // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
+
+                    ((MainActivity) mContext).askToDeleteItem(item);
+                }
+                return true;
+            }
+        });
+
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
+                // make sure the position is valid, i.e. actually exists in the view
+                if (position != RecyclerView.NO_POSITION && mfridgeFragment.mSelectItemsBoolean) {
+                    // get the recipe at the position, this won't work if the class is static
+                    // check if select item bool is true and show check when item is clicked
+
+                    String item_name = viewHolder.mFoodNameTextView.getText().toString();
+                    if (mfridgeFragment.mSelectedNamesSet.contains(item_name)) {
+                        mfridgeFragment.mSelectedNamesSet.remove(item_name);
+                        viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
+                        view.setAlpha(1f); // changes opacity of image once clicked //TODO  change to dimen later
+                        //view.setAlpha(R.dimen.not_selected);
+                    }
+
+                    else {
+                        mfridgeFragment.mSelectedNamesSet.add(item_name);
+                        viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
+                        view.setAlpha(.85f); // changes opacity of image once clicked //TODO  change to dimen later
+                        //view.setAlpha(R.dimen.selected_view); // changes opacity of image once clicked
+                    }
+                    Log.d("ItemAdapter", "Selected Items in Fridge Hashset: " + mfridgeFragment.mSelectedNamesSet);
+
+                }
+            }
+        });
     }
 
     @Override
@@ -52,67 +112,24 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         return mItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView mFoodNameTextView;
         public ImageView mFoodImageView;
         public ImageView mSelectCheckImageView;
-        public boolean OnSelectSwitch = true;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
             mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
             mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
-            if (mfridgeFragment.mAllSelected) {
-                mSelectCheckImageView.setVisibility(View.VISIBLE);
-            }
-            else {
-                mSelectCheckImageView.setVisibility(View.INVISIBLE);
-            }
 
-
-            itemView.setOnLongClickListener(this);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public boolean onLongClick(View view) {
-            // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
-            int position = getAdapterPosition();
-            // make sure the position is valid, i.e. actually exists in the view
-            if (position != RecyclerView.NO_POSITION) {
-                // get the recipe at the position, this won't work if the class is static
-                Item item = mItems.get(position);
-                // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
-                ((MainActivity) mContext).askToDeleteItem(item);
-            }
-            return true;
-        }
 
-        @Override
-        public void onClick(View view) {
-            // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
-            int position = getAdapterPosition();
-            // make sure the position is valid, i.e. actually exists in the view
-            if (position != RecyclerView.NO_POSITION && mfridgeFragment.mSelectItemsBoolean) {
-                // get the recipe at the position, this won't work if the class is static
-                // check if select item bool is true and show check when item is clicked
-                if (OnSelectSwitch) {
-                    mSelectCheckImageView.setVisibility(View.VISIBLE);
-                    view.setAlpha(.85f); // changes opacity of image once clicked
-                    mfridgeFragment.mSelectedViewsArray.add(view); // adds selected view to array list
-                    OnSelectSwitch = false;
-                }
-                else {
-                    mSelectCheckImageView.setVisibility(View.INVISIBLE);
-                    view.setAlpha(1f); // changes opacity of image once clicked
-                    mfridgeFragment.mSelectedViewsArray.remove(view); // adds selected view to array list
-                    OnSelectSwitch = true;
 
-                }
-            }
-        }
+
     }
     // Clean all elements of the recycler
     public void clear() {
