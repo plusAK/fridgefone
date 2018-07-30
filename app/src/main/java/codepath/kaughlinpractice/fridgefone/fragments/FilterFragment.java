@@ -74,7 +74,9 @@ public class FilterFragment extends DialogFragment {
                         currentFilters += checkBoxes.get(i).getText().toString() + ", ";
                     }
                 }
-                currentFilters = currentFilters.substring(0, currentFilters.length() - 2);
+                if (currentFilters.length() > 0) {
+                    currentFilters = currentFilters.substring(0, currentFilters.length() - 2);
+                }
 
                 dismiss();
                 ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
