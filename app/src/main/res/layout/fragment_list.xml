@@ -37,7 +37,7 @@
             android:layout_toEndOf="@+id/filterImageView"
             android:fontFamily="sans-serif-smallcaps"
             android:textAllCaps="false"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
