@@ -168,7 +168,6 @@ public class FridgeFragment extends Fragment{
                 mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount());
                 Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_LONG).show();
                 Log.d("FridgeFragment", "All Items in mAllItemNamesSet: " + mAllItemNamesSet);
-                //mSelectCheckImageView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -205,7 +204,6 @@ public class FridgeFragment extends Fragment{
 
     public void loadItems() {
 
-        fridge_items = "";
 
         final Item.Query itemsQuery = new Item.Query();
 
