@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
+    public final static Integer NUMBER_OF_RECIPES = 5;
+
     public String mAllFridgeItemsString;
     public String mSelectedItemsString;
     public boolean mSelectItemsBoolean;
@@ -273,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
         mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
         params.put("ingredients", items);
-        params.put("number", getApplicationContext().getResources().getInteger(R.integer.number_of_recipes));
+        params.put("number", NUMBER_OF_RECIPES);
     }
     // other parameters we could use later
     // params.put("fillIngredients", false);
