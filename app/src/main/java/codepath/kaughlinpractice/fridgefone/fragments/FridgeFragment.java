@@ -204,7 +204,6 @@ public class FridgeFragment extends Fragment{
 
     public void loadItems() {
 
-
         final Item.Query itemsQuery = new Item.Query();
 
         itemsQuery.findInBackground(new FindCallback<Item>()
