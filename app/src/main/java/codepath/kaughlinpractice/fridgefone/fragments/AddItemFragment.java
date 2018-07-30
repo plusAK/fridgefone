@@ -39,8 +39,8 @@ public class AddItemFragment extends DialogFragment {
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
-    AsyncHttpClient client;
-    ArrayList<String> autoCompleteItems = new ArrayList<String>();
+    public AsyncHttpClient client;
+    public ArrayList<String> autoCompleteItems = new ArrayList<String>();
     public ArrayAdapter<String> addItemAdapter;
 
     @Override
@@ -143,6 +143,38 @@ public class AddItemFragment extends DialogFragment {
                     "    \"image\": \"apple.jpg\"\n" +
                     "  },\n" +
                     "  {\n" +
+                    "    \"name\": \"almond\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"avocado\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"arugula\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"beef\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"bacon\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"bread\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"cucumber\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"name\": \"cabbage\",\n" +
+                    "    \"image\": \"apple.jpg\"\n" +
+                    "  },\n" +
+                    "  {\n" +
                     "    \"name\": \"applesauce\",\n" +
                     "    \"image\": \"applesauce.jpg\"\n" +
                     "  }\n" +
@@ -156,9 +188,9 @@ public class AddItemFragment extends DialogFragment {
                     String name = response.getJSONObject(i).getString("name");
                     autoCompleteItems.add(name);
                     addItemAdapter.notifyDataSetChanged();
-                    actvFoodItem.showDropDown();
                     Log.d("AddItemFragment", "Added " + name + " to list");
                 }
+                actvFoodItem.showDropDown();
             } catch (JSONException e) {
                 Log.d("MainActivity", "Not api_call error: " + e.getMessage());
             }

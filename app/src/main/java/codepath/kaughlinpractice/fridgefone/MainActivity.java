@@ -1,6 +1,5 @@
 package codepath.kaughlinpractice.fridgefone;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -49,15 +48,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
-
-    // instance field
-    AsyncHttpClient mClient;
+    public AsyncHttpClient mClient;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private Context mContext;
-    //public FridgeFragment mFridgeFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         detailsFrag.setArguments(args);
         fragmentTransition(detailsFrag);
     }
-
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -215,9 +207,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast.makeText(this, "Deleted: " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
-
     // get the list of currently playing movies from the API
-    public void generateRecipes(final HashMap<String, Boolean> user_dict, String currentFilters) {
+    public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
         // create the url
         if (use_api) {
             Log.d("MainActivity", "In API zone");
@@ -259,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             args.putBoolean(trait, user_dict.get(trait));
                         }
                     }
+                    args.putString("currentFilters", currentFilters);
                     args.putString("responseForBundle", responseForBundle);
                     listFrag.setArguments(args);
 
@@ -283,22 +275,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     args.putBoolean(trait, user_dict.get(trait));
                 }
             }
-                args.putString("currentFilters", currentFilters);
+            args.putString("currentFilters", currentFilters);
             args.putString("responseForBundle", responseForBundle);
             listFrag.setArguments(args);
 
             fragmentTransition(listFrag);
         }
-
     }
-
 
     public void fragmentTransition(Fragment nextFrag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
-
 
     public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean allSelected, Boolean noneSelected) {
         fridgeItems = fridge_items;

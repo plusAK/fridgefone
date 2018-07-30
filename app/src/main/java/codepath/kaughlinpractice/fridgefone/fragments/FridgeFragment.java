@@ -57,7 +57,6 @@ public class FridgeFragment extends Fragment{
     private String currentFilters = null;
     public boolean mNoneSelected = true;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,7 +66,6 @@ public class FridgeFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         mContext = getContext();
         mItemList = new ArrayList<>();
@@ -94,7 +92,6 @@ public class FridgeFragment extends Fragment{
 
         // give access to MainActivity to adapter
         ((MainActivity) mContext).setItemsAccess(mItemAdapter, mItemList);
-
 
         loadItems(); //load items to fridge
 
@@ -174,8 +171,6 @@ public class FridgeFragment extends Fragment{
                 //mSelectCheckImageView.setVisibility(View.VISIBLE);
             }
         });
-
-
     }
 
     public void generateRecipes() {
@@ -209,6 +204,8 @@ public class FridgeFragment extends Fragment{
     }
 
     public void loadItems() {
+
+        fridge_items = "";
 
         final Item.Query itemsQuery = new Item.Query();
 

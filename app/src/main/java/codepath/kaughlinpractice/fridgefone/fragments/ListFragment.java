@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
@@ -29,6 +31,7 @@ public class ListFragment extends Fragment {
     RecyclerView rvRecipes;
     private ImageView mFilterImageView;
     private TextView mCurrentFilters;
+    private Button mButtonBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +51,7 @@ public class ListFragment extends Fragment {
         recipes = new ArrayList<>();
 
         mFilterImageView = (ImageView) view.findViewById(R.id.filterImageView);
+        mButtonBack = (Button) view.findViewById(R.id.buttonBack);
 
         // construct the adapter from this data source
         recipeAdapter = new RecipeAdapter(recipes);
@@ -86,6 +90,13 @@ public class ListFragment extends Fragment {
             public void onClick(View view) {
                 FilterFragment filterFragment = new FilterFragment();
                 filterFragment.show(getFragmentManager(), "FilterFragment");
+            }
+        });
+
+        mButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getContext()).goToMyFridge();
             }
         });
     }

@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +31,7 @@ import java.util.HashSet;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import codepath.kaughlinpractice.fridgefone.GlideApp;
+import codepath.kaughlinpractice.fridgefone.IngredientAdapter;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
@@ -44,6 +48,8 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.tvIngredients) public TextView tvIngredients;
     @BindView(R.id.tvInstructions) public TextView tvInstructions;
     @BindView(R.id.buttonBack) public Button buttonBack;
+    @BindView(R.id.rvIngredients) public RecyclerView rvIngredients;
+    @BindView(R.id.rvInstructions) public RecyclerView rvInstructions;
 
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
@@ -58,6 +64,13 @@ public class DetailsFragment extends Fragment {
     String instructionsString;
     String ingredientsString;
     private String currentFilters = null;
+
+    ArrayList<String> ingredients;
+    ArrayList<String> instructions;
+
+    //ArrayAdapter<String> ingredientsAdapter;
+    IngredientAdapter ingredientAdapter;
+    IngredientAdapter instructionAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,8 +95,16 @@ public class DetailsFragment extends Fragment {
 
         tvInstructions.setText("");
         tvIngredients.setText("");
-        instructionsString = "<big><b>Instructions</b></big><br />";
+        instructionsString = "<big><b>Instructions</b></big>";
         ingredientsString = "<big><b>Ingredients</b></big>";
+
+        ingredients = new ArrayList<>(neededIngredients);
+        instructions = new ArrayList<>();
+        Log.d("DetailFragment", "Ingredient Array: " + ingredientsString.toString());
+
+//        ingredientsAdapter = new ArrayAdapter<>(getContext(), R.layout.ingredient_item, R.id.tvIngredient, ingredients);
+//        lvIngredients.setAdapter(ingredientsAdapter);
+
 
         int id = args.getInt("id");
         String image = args.getString("image");
@@ -140,8 +161,22 @@ public class DetailsFragment extends Fragment {
                     beautifyInstructions(partOfInstructions);
                     Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + partOfInstructions.toString());
                 }
-                tvIngredients.setText(Html.fromHtml(ingredientsString));
-                tvInstructions.setText(Html.fromHtml(instructionsString));
+               // tvIngredients.setText(Html.fromHtml(ingredientsString));
+                tvIngredients.setText(Html.fromHtml("<big><b>Ingredients</b></big>"));
+
+                ingredientAdapter = new IngredientAdapter(ingredients);
+                // RecyclerView setup (layout manager, use adapter)
+                rvIngredients.setLayoutManager(new LinearLayoutManager(getContext()));
+                rvIngredients.setAdapter(ingredientAdapter);
+
+                tvInstructions.setText(Html.fromHtml("<big><b>Instructions</b></big>"));
+
+                instructionAdapter = new IngredientAdapter(instructions);
+
+                rvInstructions.setLayoutManager(new LinearLayoutManager(getContext()));
+                rvInstructions.setAdapter(instructionAdapter);
+
+                //tvInstructions.setText(Html.fromHtml(instructionsString));
             } catch (JSONException e) {
                 Log.d("DetailFragment", e.getMessage());
             }
@@ -166,10 +201,11 @@ public class DetailsFragment extends Fragment {
                 JSONObject step = steps.getJSONObject(i);
                 int stepNum = step.getInt("number");
                 String stepDetails = step.getString("step");
+                instructions.add(stepDetails);
                 newText = newText + "<b>" + stepNum + ".</b> " + stepDetails + "<br /><br />";
                 addToIngredientsList(step.getJSONArray("ingredients"));
             }
-            instructionsString = instructionsString + newText;
+ //           instructionsString = instructionsString + newText;
         } catch (JSONException e) {
             Log.d("DetailFragment", "Error in beautifyInstructions " + e.getMessage());
         }
@@ -178,18 +214,21 @@ public class DetailsFragment extends Fragment {
     public void addToIngredientsList(JSONArray newIngredients) {
         // check to see if it exists
         // if it does not, then add item
-        String newText = "";
+       // String newText = "";
         try {
             for (int i = 0; i < newIngredients.length(); i += 1) {
                 JSONObject ingredientItem = newIngredients.getJSONObject(i);
                 String ingredientName = ingredientItem.getString("name");
                 if (!neededIngredients.contains(ingredientName)) {
-                    newText = newText + "<br/>" + ingredientName;
-                    Log.d("DetailFragment", "Found new ingredient " + ingredientName);
+                   // newText = newText + "<br/>" + ingredientName;
+                   // Log.d("DetailFragment", "Found new ingredient " + ingredientName);
                     neededIngredients.add(ingredientName);
+
+                    ingredients.add(ingredientName);
+                    //ingredientAdapter.notifyDataSetChanged();
                 }
             }
-            ingredientsString = ingredientsString + newText;
+           // ingredientsString = ingredientsString + newText;
         } catch (JSONException e) {
             Log.d("DetailFragment", "Error in addIngredients: " + e.getMessage());
         }
