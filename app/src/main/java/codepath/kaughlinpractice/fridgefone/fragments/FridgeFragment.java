@@ -190,7 +190,9 @@ public class FridgeFragment extends Fragment{
         // You need to refresh page for item names to load from Parse
         Log.d("FridgeFragment", "Selected Items in Fridge String: " + mSelectedNamesString);
         Log.d("FridgeFragment", "All Items in Fridge String: " + mAllNamesString);
+
         ((MainActivity) getContext()).setFridgeItems(mAllNamesString, mSelectedNamesString);
+
 
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
