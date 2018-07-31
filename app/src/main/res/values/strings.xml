@@ -34,4 +34,5 @@
     <string name="title">Title</string>
     <string name="add_shopping_list_toast">added to shopping list</string>
     <string name="remove_shopping_list_toast">removed from shopping list</string>
+    <string name="delete_item_toast">deleted</string>
 </resources>
