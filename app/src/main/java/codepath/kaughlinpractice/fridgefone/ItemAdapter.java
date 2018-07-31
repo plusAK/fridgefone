@@ -12,18 +12,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.model.Item;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private List<Item> mItems;
     private Context mContext;
-    private FridgeFragment mfridgeFragment;
+    Singleton mSingleInstance;
 
-    public ItemAdapter(List<Item> mItems, Context mContext, FridgeFragment mfridgeFragment) {
+    public ItemAdapter(List<Item> mItems, Context mContext) {
         this.mItems = mItems;
         this.mContext = mContext;
-        this.mfridgeFragment = mfridgeFragment;
+        mSingleInstance = Singleton.getSingletonInstance();
     }
 
 
@@ -34,6 +33,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         view = mInflater.inflate(R.layout.cardview_item, viewGroup, false);
 
+
         return new ViewHolder(view);
     }
 
@@ -41,19 +41,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull final ItemAdapter.ViewHolder viewHolder, final int position) {
 
         viewHolder.mFoodNameTextView.setText(mItems.get(position).getName());
-        viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
+//        viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
 
         GlideApp.with(mContext)
                 .load(mItems.get(position).getImageURL())
                 .into(viewHolder.mFoodImageView);
 
         // check if all are selected
-        if (mfridgeFragment.mAllSelected) {
+        if (mSingleInstance.ismAllSelected()) {
             viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
-
             viewHolder.itemView.setAlpha(.85f); // changes opacity of image once clicked
         }
-        else if(!mfridgeFragment.mAllSelected) {
+        else if(!mSingleInstance.ismAllSelected()) {
             viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
             viewHolder.itemView.setAlpha(1f); // changes opacity of image once clicked
         }
@@ -82,25 +81,26 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             public void onClick(View view) {
                 // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
                 // make sure the position is valid, i.e. actually exists in the view
-                if (position != RecyclerView.NO_POSITION && mfridgeFragment.mSelectItemsBoolean) {
-                    // get the recipe at the position, this won't work if the class is static
-                    // check if select item bool is true and show check when item is clicked
+                if (position != RecyclerView.NO_POSITION && mSingleInstance.ismSelectItemsBoolean()) {
+
 
                     String item_name = viewHolder.mFoodNameTextView.getText().toString();
-                    if (mfridgeFragment.mSelectedNamesSet.contains(item_name)) {
-                        mfridgeFragment.mSelectedNamesSet.remove(item_name);
+
+                    // check if the hash set contains this item if so change the opacity back to regular
+                    if (mSingleInstance.getmSelectedNamesSet().contains(item_name)) {
+                        mSingleInstance.getmSelectedNamesSet().remove(item_name);
                         viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
                         view.setAlpha(1f); // changes opacity of image once clicked //TODO  change to dimen later
                         //view.setAlpha(R.dimen.not_selected);
                     }
 
                     else {
-                        mfridgeFragment.mSelectedNamesSet.add(item_name);
+                        mSingleInstance.getmSelectedNamesSet().add(item_name);
                         viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
                         view.setAlpha(.85f); // changes opacity of image once clicked //TODO  change to dimen later
                         //view.setAlpha(R.dimen.selected_view); // changes opacity of image once clicked
                     }
-                    Log.d("ItemAdapter", "Selected Items in Fridge Hashset: " + mfridgeFragment.mSelectedNamesSet);
+                    Log.d("ItemAdapter", "Selected Items in Fridge Hashset: " + mSingleInstance.getmSelectedNamesSet());
 
                 }
             }
@@ -126,10 +126,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
 
         }
-
-
-
-
     }
     // Clean all elements of the recycler
     public void clear() {

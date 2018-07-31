@@ -27,6 +27,7 @@ import java.util.List;
 import codepath.kaughlinpractice.fridgefone.ItemAdapter;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
+import codepath.kaughlinpractice.fridgefone.Singleton;
 import codepath.kaughlinpractice.fridgefone.model.Item;
 
 public class FridgeFragment extends Fragment{
@@ -45,17 +46,12 @@ public class FridgeFragment extends Fragment{
     public Button mCancelSelectButton;
     public Button mSelectAllButton;
 
-    //public ArrayList<View> mSelectedViewsArray;
-    public ArrayList<String> mSelectedNamesArray;
-    public HashSet<String> mSelectedNamesSet;
-    public HashSet<String> mAllItemNamesSet;
     public String mSelectedNamesString = "";
     public String mAllNamesString = "";
 
-    public boolean mSelectItemsBoolean = false;
-    public boolean mAllSelected = false;
+    public Singleton mSingleInstance;
+
     private String currentFilters = null;
-    public boolean mNoneSelected = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,20 +60,23 @@ public class FridgeFragment extends Fragment{
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mContext = getContext();
         mItemList = new ArrayList<>();
-        //mSelectedViewsArray = new ArrayList<>();
-        mSelectedNamesSet = new HashSet<>();
-        mAllItemNamesSet = new HashSet<>();
+
+        //get the instance of the singleton class
+        mSingleInstance = Singleton.getSingletonInstance();
+        mSingleInstance.getmSelectedNamesSet();
+        mSingleInstance.getmAllItemNamesSet();
+
 
         mGenerateRecipeListImageView = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
         mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddItem);
 
         mItemRecyclerView = (RecyclerView) view.findViewById(R.id.rvFridgeHomeView);
-        mItemAdapter =  new ItemAdapter( mItemList, getActivity(),this);
+        mItemAdapter =  new ItemAdapter( mItemList, getActivity());
         mItemRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
         //construct adapter from data source
@@ -117,6 +116,7 @@ public class FridgeFragment extends Fragment{
             public void onClick(View view) {
                 Log.d("FridgeFragment", "clicked on generate");
                 generateRecipes();
+                mSingleInstance.setmAllSelected(false); // set All selected boolean to false
             }
         });
 
@@ -131,9 +131,7 @@ public class FridgeFragment extends Fragment{
         mSelectItemsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSelectItemsBoolean = true;
-                //mNoneSelected = false;
-                //((MainActivity) getContext()).setSelectTrue();
+                mSingleInstance.setmSelectItemsBoolean(true);
                 mCancelSelectButton.setVisibility(View.VISIBLE);
                 mSelectAllButton.setVisibility(View.VISIBLE);
                 mAddItemImageView.setVisibility(View.INVISIBLE);
@@ -145,9 +143,9 @@ public class FridgeFragment extends Fragment{
         mCancelSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSelectItemsBoolean = false;
-                mAllSelected = false;
-                mNoneSelected = true;
+                mSingleInstance.setmSelectItemsBoolean(false);
+                mSingleInstance.setmAllSelected(false); // set All selected boolean to false
+                mSingleInstance.setmNoneSelected(true);
                 mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount()); // notify the adapter if select all is changed
 
                 mCancelSelectButton.setVisibility(View.INVISIBLE);
@@ -156,18 +154,18 @@ public class FridgeFragment extends Fragment{
                 mAddItemImageView.setVisibility(View.VISIBLE);
 
                 // clear hashset after cancel button  is clicked
-                mSelectedNamesSet.clear();
-                Log.d("FridgeFragment", "Selected Items in Fridge Hashset after Cancel: " + mSelectedNamesSet);
+                mSingleInstance.getmSelectedNamesSet().clear();
+                Log.d("FridgeFragment", "Selected Items in Fridge Hashset after Cancel: " + mSingleInstance.getmSelectedNamesSet());
             }
         });
         mSelectAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAllSelected = true;
-                mNoneSelected = false;
+                mSingleInstance.setmAllSelected(true); // set All selected boolean to true
+                mSingleInstance.setmNoneSelected(false);
                 mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount());
                 Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_LONG).show();
-                Log.d("FridgeFragment", "All Items in mAllItemNamesSet: " + mAllItemNamesSet);
+                Log.d("FridgeFragment", "All Items in mAllItemNamesSet: " + mSingleInstance.getmAllItemNamesSet());
             }
         });
     }
@@ -175,28 +173,24 @@ public class FridgeFragment extends Fragment{
     public void generateRecipes() {
 
 
-        Log.d("FridgeFragment", "Selected Items in Fridge Hashset: " + mSelectedNamesSet);
+        Log.d("FridgeFragment", "Selected Items in Fridge Hashset: " + mSingleInstance.getmSelectedNamesSet());
 
-//        mSelectedNamesArray = new ArrayList<>(mSelectedNamesSet);
-//        for(int i = 0; i <mSelectedNamesSet.size();i++){
-//            mSelectedItemsString += mSelectedNamesArray.get(i);
-//        }
 
-        if(mSelectedNamesSet.isEmpty()){
-            mNoneSelected = true;
+        if(mSingleInstance.getmSelectedNamesSet().isEmpty()){
+            mSingleInstance.setmNoneSelected(true);
         }
         else{
-            mNoneSelected = false;
+            mSingleInstance.setmNoneSelected(false);
         }
 
-        mSelectedNamesString = String.join(",", mSelectedNamesSet);
-        mAllNamesString = String.join(",", mAllItemNamesSet);
+        mSelectedNamesString = String.join(",", mSingleInstance.getmSelectedNamesSet());
+        mAllNamesString = String.join(",", mSingleInstance.getmAllItemNamesSet());
 
 
         // You need to refresh page for item names to load from Parse
         Log.d("FridgeFragment", "Selected Items in Fridge String: " + mSelectedNamesString);
         Log.d("FridgeFragment", "All Items in Fridge String: " + mAllNamesString);
-        ((MainActivity) getContext()).setFridgeItems(mAllNamesString, mSelectedNamesString, mAllSelected, mNoneSelected);
+        ((MainActivity) getContext()).setFridgeItems(mAllNamesString, mSelectedNamesString);
 
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
@@ -215,7 +209,7 @@ public class FridgeFragment extends Fragment{
                         Log.d("FridgeFragment", "item[" + i + "]= " + objects.get(i).getName()
                                 + "\nImageurl =" + objects.get(i).getImageURL());
 
-                        mAllItemNamesSet.add(objects.get(i).getName()); // add item name to hashset for all items in the fridge
+                        mSingleInstance.getmAllItemNamesSet().add(objects.get(i).getName()); // add item name to hashset for all items in the fridge
 
                         mItemList.add(0 , objects.get(i)); // add item to zero index
                         mItemAdapter.notifyItemInserted(mItemList.size()-1);

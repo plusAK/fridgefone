@@ -41,10 +41,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
-    public String fridgeItems;
+    public String mAllFridgeItemsString;
     public String mSelectedItemsString;
-    public boolean mAllSelected;
-    public boolean mNoneSelected;
+    public Singleton mSingleInstance;
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
@@ -66,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        // initialize Singleton instance
+        mSingleInstance = Singleton.getSingletonInstance();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -218,13 +220,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
             mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
 
-            if (mAllSelected == false && mNoneSelected == false){
+            if (mSingleInstance.ismAllSelected() == false && mSingleInstance.ismNoneSelected()== false){
                 Log.d("MainActivity", " Other Selected Fridge Items String: " + mSelectedItemsString);
                 params.put("ingredients",mSelectedItemsString);
             }
             else {
-                Log.d("MainActivity", "In All Selected Fridge Items: " + fridgeItems);
-                params.put("ingredients", fridgeItems);
+                Log.d("MainActivity", "In All Selected Fridge Items: " + mAllFridgeItemsString);
+                params.put("ingredients", mAllFridgeItemsString);
             }
 
             params.put("number", 5);
@@ -289,11 +291,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
 
-    public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean allSelected, Boolean noneSelected) {
-        fridgeItems = fridge_items;
+    public void setFridgeItems(String allFridgeItems, String selectedItemsString) {
+        mAllFridgeItemsString = allFridgeItems;
         mSelectedItemsString = selectedItemsString;
-        mAllSelected = allSelected;
-        mNoneSelected = noneSelected;
     }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {
