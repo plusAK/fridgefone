@@ -1,7 +1,6 @@
 package codepath.kaughlinpractice.fridgefone;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,18 +20,19 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // context for rendering
     Context mContext;
     // Singleton class used to get access to selected ingredients
+    Singleton mSingleInstance;
 
 
     // initialize with list
     public DetailsAdapter(ArrayList<String> details, int numIngredients) {
         this.mDetails = details;
         this.mNumIngredients = numIngredients;
+        this.mSingleInstance = Singleton.getSingletonInstance();
     }
 
     // creates and inflates a new view
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // TODO -- given the viewType I can distinguish between instructions and ingredients
         // get the context and create the inflater
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -67,9 +67,9 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
                 // populate the view with the correct header title
                 if (position == 0) {
-                    headerViewHolder.tvHeader.setText("Ingredients");
+                    headerViewHolder.tvHeader.setText(R.string.ingredients);
                 } else {
-                    headerViewHolder.tvHeader.setText("Instructions");
+                    headerViewHolder.tvHeader.setText(R.string.instructions);
                 }
                 break;
             case 1:
@@ -83,7 +83,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
 
                 if (position % 2 == 1) {
-                    ingredientViewHolder.itemView.setBackgroundColor(Color.parseColor("#f2f5f9"));
+                    ingredientViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.alternating_gray));
                 }
                 break;
             case 2:
@@ -100,9 +100,10 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
 
                 if (position % 2 == 1) {
-                    instructionViewHolder.itemView.setBackgroundColor(Color.parseColor("#f2f5f9"));
+                    instructionViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.alternating_gray));
+                    break;
+
                 }
-                break;
         }
     }
 

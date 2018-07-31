@@ -13,4 +13,5 @@
     <color name="gray_button">#FFEDEDED</color>
     <color name="food_text_background">#2d2d2d</color>
     <color name="obsedian">#211f1f</color>
+    <color name="alternating_gray">#f2f5f9</color>
 </resources>
