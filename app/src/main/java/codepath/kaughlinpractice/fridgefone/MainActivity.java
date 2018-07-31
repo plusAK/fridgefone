@@ -34,17 +34,21 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    public boolean use_api = false;
+    public boolean use_api = true;
 
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
-    public String fridgeItems;
+
+    public String mAllFridgeItemsString;
     public String mSelectedItemsString;
-    public boolean mAllSelected;
-    public boolean mNoneSelected;
+    public Singleton mSingleInstance;
+
+    public final static Integer NUMBER_OF_RECIPES = 5;
+
+
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
@@ -66,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        // initialize Singleton instance
+        mSingleInstance = Singleton.getSingletonInstance();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -193,42 +200,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DeleteItemFragment deleteItemFragment = new DeleteItemFragment();
         deleteItemFragment.setArguments(args);// connects bundle to fragment
         deleteItemFragment.show(getSupportFragmentManager(), "DeleteItemFragment");
+
+        //mfridgeFragment.mAllItemNamesSet.remove(item); // TODO -- figure out where you remove item from set
         Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
     }
 
     public void deleteItemFromFridge(Item item) {
         item.deleteInBackground();
         mItemsList.remove(item);
+        //mItemAdapter.notifyItemRemoved(mItemAdapter.getItemCount());
         mItemAdapter.notifyDataSetChanged();
         //mFridgeFragment.loadItems();
         Toast.makeText(this, "Deleted: " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
-    // get the list of currently playing movies from the API
     public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
         // create the url
         if (use_api) {
-            Log.d("MainActivity", "In API zone");
             String url = API_BASE_URL + "/recipes/findByIngredients";
             // set the request parameters
             RequestParams params = new RequestParams();
+
             mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
             mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
+            params.put("number", NUMBER_OF_RECIPES);
 
-            if (mAllSelected == false && mNoneSelected == false){
+            if (mSingleInstance.ismAllSelected() == false && mSingleInstance.ismNoneSelected() == false) {
                 Log.d("MainActivity", " Other Selected Fridge Items String: " + mSelectedItemsString);
-                params.put("ingredients",mSelectedItemsString);
+                params.put("ingredients", mSelectedItemsString);
+            } else {
+                Log.d("MainActivity", "In All Selected Fridge Items: " + mAllFridgeItemsString);
+                params.put("ingredients", mAllFridgeItemsString);
             }
-            else {
-                Log.d("MainActivity", "In All Selected Fridge Items: " + fridgeItems);
-                params.put("ingredients", fridgeItems);
-            }
-
-            params.put("number", 5);
-            // other parameters we could use later
-            // params.put("fillIngredients", false);
-            // params.put("limitLicense", false);
-            // params.put("ranking", 1);
 
             // execute a GET request expecting a JSON object response
             mClient.get(url, params, new JsonHttpResponseHandler() {
@@ -254,8 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     fragmentTransition(listFrag);
                 }
             });
-        }
-        else {
+        } else {
             String responseForBundle =
                     "[{\"id\":556470,\"title\":\"Veggie & Chicken Kebab\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/544976-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}," +
                             "{\"id\":556470,\"title\":\"Curried Chicken Pitas\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/421176-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
@@ -279,6 +281,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransition(listFrag);
         }
     }
+//
+//    public void APIParams(RequestParams params, String items) {
+//        mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+//        mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
+//        params.put("ingredients", items);
+//        params.put("number", NUMBER_OF_RECIPES);
+//    }
+    // other parameters we could use later
+    // params.put("fillIngredients", false);
+    // params.put("limitLicense", false);
+    // params.put("ranking", 1);
 
     public void fragmentTransition(Fragment nextFrag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -286,12 +299,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
 
-    public void setFridgeItems(String fridge_items, String selectedItemsString, Boolean allSelected, Boolean noneSelected) {
-        fridgeItems = fridge_items;
-        mSelectedItemsString = selectedItemsString;
-        mAllSelected = allSelected;
-        mNoneSelected = noneSelected;
-    }
+    public void setFridgeItems(String allFridgeItems, String selectedItemsString){
+            mAllFridgeItemsString = allFridgeItems;
+            mSelectedItemsString = selectedItemsString;
+        }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {
         mItemAdapter = setter;
