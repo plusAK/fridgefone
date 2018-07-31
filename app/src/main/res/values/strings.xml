@@ -32,4 +32,6 @@
     <string name="fast">fast</string>
     <string name="save">Save</string>
     <string name="title">Title</string>
+    <string name="add_shopping_list_toast">added to shopping list</string>
+    <string name="remove_shopping_list_toast">removed from shopping list</string>
 </resources>
