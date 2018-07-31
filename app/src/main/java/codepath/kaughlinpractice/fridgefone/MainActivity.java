@@ -34,7 +34,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    public boolean use_api = false;
+    public boolean use_api = true;
 
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
@@ -221,38 +221,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // set the request parameters
             RequestParams params = new RequestParams();
 
+            mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+            mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
+            params.put("number", NUMBER_OF_RECIPES);
+
             if (mSingleInstance.ismAllSelected() == false && mSingleInstance.ismNoneSelected() == false) {
                 Log.d("MainActivity", " Other Selected Fridge Items String: " + mSelectedItemsString);
                 params.put("ingredients", mSelectedItemsString);
             } else {
                 Log.d("MainActivity", "In All Selected Fridge Items: " + mAllFridgeItemsString);
                 params.put("ingredients", mAllFridgeItemsString);
-
-                // execute a GET request expecting a JSON object response
-                mClient.get(url, params, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        Log.d("MainActivity", "Before response to string");
-                        String responseForBundle = response.toString();
-                        Log.d("MainActivity", "ResponseForBundle: " + responseForBundle);
-
-                        Fragment listFrag = new ListFragment();
-
-                        //bundles recipe arguments
-                        Bundle args = new Bundle();
-                        if (user_dict != null) {
-                            for (String trait : Recipe.recipe_traits) {
-                                args.putBoolean(trait, user_dict.get(trait));
-                            }
-                        }
-                        args.putString("currentFilters", currentFilters);
-                        args.putString("responseForBundle", responseForBundle);
-                        listFrag.setArguments(args);
-
-                        fragmentTransition(listFrag);
-                    }
-                });
             }
+
+            // execute a GET request expecting a JSON object response
+            mClient.get(url, params, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    Log.d("MainActivity", "Before response to string");
+                    String responseForBundle = response.toString();
+                    Log.d("MainActivity", "ResponseForBundle: " + responseForBundle);
+
+                    Fragment listFrag = new ListFragment();
+
+                    //bundles recipe arguments
+                    Bundle args = new Bundle();
+                    if (user_dict != null) {
+                        for (String trait : Recipe.recipe_traits) {
+                            args.putBoolean(trait, user_dict.get(trait));
+                        }
+                    }
+                    args.putString("currentFilters", currentFilters);
+                    args.putString("responseForBundle", responseForBundle);
+                    listFrag.setArguments(args);
+
+                    fragmentTransition(listFrag);
+                }
+            });
         } else {
             String responseForBundle =
                     "[{\"id\":556470,\"title\":\"Veggie & Chicken Kebab\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/544976-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}," +
@@ -277,13 +281,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransition(listFrag);
         }
     }
-
-    public void APIParams(RequestParams params, String items) {
-        mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-        mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
-        params.put("ingredients", items);
-        params.put("number", NUMBER_OF_RECIPES);
-    }
+//
+//    public void APIParams(RequestParams params, String items) {
+//        mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
+//        mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
+//        params.put("ingredients", items);
+//        params.put("number", NUMBER_OF_RECIPES);
+//    }
     // other parameters we could use later
     // params.put("fillIngredients", false);
     // params.put("limitLicense", false);
