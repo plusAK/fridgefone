@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +30,7 @@ import java.util.HashSet;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import codepath.kaughlinpractice.fridgefone.GlideApp;
-import codepath.kaughlinpractice.fridgefone.IngredientAdapter;
+import codepath.kaughlinpractice.fridgefone.DetailsAdapter;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
@@ -45,11 +44,8 @@ public class DetailsFragment extends Fragment {
     public Recipe recipe;
     @BindView(R.id.ivRecipeImage) public ImageView ivRecipeImage;
     @BindView(R.id.tvDishTitle) public TextView tvDishTitle;
-    @BindView(R.id.tvIngredients) public TextView tvIngredients;
-    @BindView(R.id.tvInstructions) public TextView tvInstructions;
     @BindView(R.id.buttonBack) public Button buttonBack;
-    @BindView(R.id.rvIngredients) public RecyclerView rvIngredients;
-    @BindView(R.id.rvInstructions) public RecyclerView rvInstructions;
+    @BindView(R.id.rvDetails) public RecyclerView rvDetails;
 
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
@@ -60,17 +56,15 @@ public class DetailsFragment extends Fragment {
     AsyncHttpClient client;
     private HashMap<String, Boolean> user_dict = null;
 
-    Collection<String> neededIngredients;
-    String instructionsString;
-    String ingredientsString;
     private String currentFilters = null;
 
-    ArrayList<String> ingredients;
-    ArrayList<String> instructions;
+    ArrayList<String> mInstructionsList;
+    Collection<String> mIngredientsSet;
+//    ArrayList<String> mInstructions;
 
-    //ArrayAdapter<String> ingredientsAdapter;
-    IngredientAdapter ingredientAdapter;
-    IngredientAdapter instructionAdapter;
+//    IngredientAdapter mIngredientAdapter;
+//    IngredientAdapter mInstructionAdapter;
+    DetailsAdapter mDetailsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,23 +81,17 @@ public class DetailsFragment extends Fragment {
 
         // initialize the client
         client = new AsyncHttpClient();
-        neededIngredients = new HashSet<>();
+        mIngredientsSet = new HashSet<>();
 
         Bundle args = getArguments();
         String name = args.getString("name");
         tvDishTitle.setText(name);
 
-        tvInstructions.setText("");
-        tvIngredients.setText("");
-        instructionsString = "<big><b>Instructions</b></big>";
-        ingredientsString = "<big><b>Ingredients</b></big>";
+//        tvInstructions.setText("");
+//        tvIngredients.setText("");
 
-        ingredients = new ArrayList<>(neededIngredients);
-        instructions = new ArrayList<>();
-        Log.d("DetailFragment", "Ingredient Array: " + ingredientsString.toString());
-
-//        ingredientsAdapter = new ArrayAdapter<>(getContext(), R.layout.ingredient_item, R.id.tvIngredient, ingredients);
-//        lvIngredients.setAdapter(ingredientsAdapter);
+        mInstructionsList = new ArrayList<>();
+//        mInstructions = new ArrayList<>();
 
 
         int id = args.getInt("id");
@@ -112,7 +100,6 @@ public class DetailsFragment extends Fragment {
         GlideApp.with(getActivity())
                 .load(image)
                 .fitCenter()
-                //.circleCrop()
                 .into(ivRecipeImage);
 
 
@@ -129,7 +116,6 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     String responseString = response.toString();
-                    Log.d("DetailFragment", "JSON Array : " + responseString);
                     try {
                         for (int i = 0; i < response.length(); i += 1) {
                             JSONObject partOfInstructions = response.getJSONObject(i);
@@ -160,22 +146,33 @@ public class DetailsFragment extends Fragment {
                 for (int i = 0; i < response.length(); i += 1) {
                     JSONObject partOfInstructions = response.getJSONObject(i);
                     beautifyInstructions(partOfInstructions);
-                    Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + partOfInstructions.toString());
                 }
                // tvIngredients.setText(Html.fromHtml(ingredientsString));
-                tvIngredients.setText(Html.fromHtml("<big><b>Ingredients</b></big>"));
+//                tvIngredients.setText(Html.fromHtml("<big><b>Ingredients</b></big>"));
 
-                ingredientAdapter = new IngredientAdapter(ingredients);
+//                mIngredients.add("Instructions");
+
+                ArrayList<String> details = new ArrayList<>();
+                details.add("Ingredients");
+                for (String ingredient: mIngredientsSet) {
+                    details.add(ingredient);
+                }
+                details.add("Instructions");
+                for(String step: mInstructionsList) {
+                    details.add(step);
+                }
+
+                mDetailsAdapter = new DetailsAdapter(details, mIngredientsSet.size());
                 // RecyclerView setup (layout manager, use adapter)
-                rvIngredients.setLayoutManager(new LinearLayoutManager(getContext()));
-                rvIngredients.setAdapter(ingredientAdapter);
+                rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
+                rvDetails.setAdapter(mDetailsAdapter);
 
-                tvInstructions.setText(Html.fromHtml("<big><b>Instructions</b></big>"));
+//                tvInstructions.setText(Html.fromHtml("<big><b>Instructions</b></big>"));
 
-                instructionAdapter = new IngredientAdapter(instructions);
-
-                rvInstructions.setLayoutManager(new LinearLayoutManager(getContext()));
-                rvInstructions.setAdapter(instructionAdapter);
+//                mInstructionAdapter = new IngredientAdapter(mInstructions);
+//
+//                rvInstructions.setLayoutManager(new LinearLayoutManager(getContext()));
+//                rvInstructions.setAdapter(mInstructionAdapter);
 
                 //tvInstructions.setText(Html.fromHtml(instructionsString));
             } catch (JSONException e) {
@@ -202,11 +199,10 @@ public class DetailsFragment extends Fragment {
                 JSONObject step = steps.getJSONObject(i);
                 int stepNum = step.getInt("number");
                 String stepDetails = step.getString("step");
-                instructions.add(stepDetails);
+                mInstructionsList.add(stepDetails);
                 newText = newText + "<b>" + stepNum + ".</b> " + stepDetails + "<br /><br />";
                 addToIngredientsList(step.getJSONArray("ingredients"));
             }
- //           instructionsString = instructionsString + newText;
         } catch (JSONException e) {
             Log.d("DetailFragment", "Error in beautifyInstructions " + e.getMessage());
         }
@@ -215,21 +211,15 @@ public class DetailsFragment extends Fragment {
     public void addToIngredientsList(JSONArray newIngredients) {
         // check to see if it exists
         // if it does not, then add item
-       // String newText = "";
         try {
             for (int i = 0; i < newIngredients.length(); i += 1) {
                 JSONObject ingredientItem = newIngredients.getJSONObject(i);
                 String ingredientName = ingredientItem.getString("name");
-                if (!neededIngredients.contains(ingredientName)) {
-                   // newText = newText + "<br/>" + ingredientName;
-                   // Log.d("DetailFragment", "Found new ingredient " + ingredientName);
-                    neededIngredients.add(ingredientName);
-
-                    ingredients.add(ingredientName);
-                    //ingredientAdapter.notifyDataSetChanged();
+                if (!mIngredientsSet.contains(ingredientName)) {
+                    mIngredientsSet.add(ingredientName);
+//                    mIngredients.add(ingredientName);
                 }
             }
-           // ingredientsString = ingredientsString + newText;
         } catch (JSONException e) {
             Log.d("DetailFragment", "Error in addIngredients: " + e.getMessage());
         }
