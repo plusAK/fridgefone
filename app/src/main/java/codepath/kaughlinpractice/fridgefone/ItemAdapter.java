@@ -17,12 +17,18 @@ import codepath.kaughlinpractice.fridgefone.model.Item;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private List<Item> mItems;
     private Context mContext;
+    private OnSelectInterface mOnSelectInterface;
     Singleton mSingleInstance;
 
-    public ItemAdapter(List<Item> mItems, Context mContext) {
+    public interface OnSelectInterface{
+        void onSelect();
+    }
+
+    public ItemAdapter(List<Item> mItems, Context mContext, OnSelectInterface onSelectInterface ) {
         this.mItems = mItems;
         this.mContext = mContext;
-        mSingleInstance = Singleton.getSingletonInstance();
+        this.mSingleInstance = Singleton.getSingletonInstance();
+        this.mOnSelectInterface = onSelectInterface;
     }
 
 
@@ -32,8 +38,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         view = mInflater.inflate(R.layout.cardview_item, viewGroup, false);
-
-
         return new ViewHolder(view);
     }
 
@@ -54,7 +58,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         }
         else if(!mSingleInstance.ismAllSelected()) {
             viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
-            viewHolder.itemView.setAlpha(1f); // changes opacity of image once clicked
+            viewHolder.itemView.setAlpha(1f); // changes opacity of image no clicked
         }
 
 
@@ -79,6 +83,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // set to true to show user has started clicking items
+                mSingleInstance.setmSelectItemsBoolean(true);
+                mOnSelectInterface.onSelect();
+
+
                 // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
                 // make sure the position is valid, i.e. actually exists in the view
                 if (position != RecyclerView.NO_POSITION && mSingleInstance.ismSelectItemsBoolean()) {
@@ -87,14 +96,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                     String item_name = viewHolder.mFoodNameTextView.getText().toString();
 
                     // check if the hash set contains this item if so change the opacity back to regular
+                    //if image is not clicked
                     if (mSingleInstance.getmSelectedNamesSet().contains(item_name)) {
                         mSingleInstance.getmSelectedNamesSet().remove(item_name);
                         viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
-                        view.setAlpha(1f); // changes opacity of image once clicked //TODO  change to dimen later
+                        view.setAlpha(1f); // changes opacity of image no click //TODO  change to dimen later
                         //view.setAlpha(R.dimen.not_selected);
-                    }
-
-                    else {
+                    } else {
+                        // if image is clicked
                         mSingleInstance.getmSelectedNamesSet().add(item_name);
                         viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
                         view.setAlpha(.85f); // changes opacity of image once clicked //TODO  change to dimen later
