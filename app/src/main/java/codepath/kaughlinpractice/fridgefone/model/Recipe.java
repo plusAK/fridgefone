@@ -25,6 +25,7 @@ public class Recipe {
     static boolean mUseRecipeInformationAPI = false;
 
     public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
+
     String name;
     int id;
     String image;
@@ -50,9 +51,6 @@ public class Recipe {
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
 
-    // JSONObject ingredients;
-    // TODO -- figure out how to have ingredients without erroring
-
     public static Recipe fromJSON(JSONObject jsonObject, final Context context, final Bundle args, final ArrayList<Recipe> rec, final RecipeAdapter recipeAdapter) throws JSONException {
 
         // initialize the client
@@ -63,7 +61,6 @@ public class Recipe {
         recipe.name = jsonObject.getString("title");
         recipe.id = jsonObject.getInt("id");
         recipe.image = jsonObject.getString("image");
-        Log.d("Recipe", "Have access to basic Recipe Info");
 
         recipe.validity = false;
         recipes = new ArrayList<>();
@@ -399,7 +396,7 @@ public class Recipe {
                     "}";
 
 
-            JSONObject response = null;
+            JSONObject response;
             try {
                 response = new JSONObject(stringResponse);
                 makeDict(context.getString(R.string.vegetarian), response, recipe);
@@ -421,10 +418,8 @@ public class Recipe {
             }
         }
 
-        Log.d("Recipe", "Recipe readyInMinutes" + recipe.readyInMinutes);
         return recipe;
     }
-
 
     // this is for testing purposes
     public static Recipe fromString(String name) {
