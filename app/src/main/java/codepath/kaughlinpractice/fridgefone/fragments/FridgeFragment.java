@@ -49,6 +49,8 @@ public class FridgeFragment extends Fragment{
     public String mSelectedNamesString = "";
     public String mAllNamesString = "";
 
+    public boolean mFirstClick = false;
+
     public Singleton mSingleInstance;
 
     private String currentFilters = null;
@@ -92,7 +94,7 @@ public class FridgeFragment extends Fragment{
                 mSingleInstance.setmAllSelected(true); // set All selected boolean to true
                 mSingleInstance.setmNoneSelected(false);
                 mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount());
-                Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_SHORT).show();
                 Log.d("FridgeFragment", "All Items in mAllItemNamesSet: " + mSingleInstance.getmAllItemNamesSet());
 
                 return true;
@@ -115,6 +117,8 @@ public class FridgeFragment extends Fragment{
                 // clear hashset after cancel button  is clicked
                 mSingleInstance.getmSelectedNamesSet().clear();
                 Log.d("FridgeFragment", "Selected Items in Fridge Hashset after Cancel: " + mSingleInstance.getmSelectedNamesSet());
+
+                mFirstClick = false;
                 return true;
 
         }
@@ -143,12 +147,15 @@ public class FridgeFragment extends Fragment{
         // intialize itemadapter with interface for on select
         mItemAdapter =  new ItemAdapter(mItemList, getActivity(), new ItemAdapter.OnSelectInterface() {
             @Override
-            public void onSelect() {
-                mAddItemImageView.setVisibility(View.INVISIBLE);
-                mGenerateRecipeListImageView.setVisibility(View.VISIBLE);
-                mSelectAllMenuBtn.setVisible(true);
-                mCancelMenuBtn.setVisible(true);
-                Toast.makeText(getActivity(), "Select your items", Toast.LENGTH_LONG).show();
+            public void onFirstSelect() {
+                if(!mFirstClick) {
+                    mAddItemImageView.setVisibility(View.INVISIBLE);
+                    mGenerateRecipeListImageView.setVisibility(View.VISIBLE);
+                    mSelectAllMenuBtn.setVisible(true);
+                    mCancelMenuBtn.setVisible(true);
+                    Toast.makeText(getActivity(), "Select your items", Toast.LENGTH_SHORT).show();
+                    mFirstClick = true;
+                }
             }
         });
 
