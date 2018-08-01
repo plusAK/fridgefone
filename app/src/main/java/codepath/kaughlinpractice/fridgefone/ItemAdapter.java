@@ -21,7 +21,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     Singleton mSingleInstance;
 
     public interface OnSelectInterface{
-        void onSelect();
+        void onFirstSelect();
     }
 
     public ItemAdapter(List<Item> mItems, Context mContext, OnSelectInterface onSelectInterface ) {
@@ -85,7 +85,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             public void onClick(View view) {
                 // set to true to show user has started clicking items
                 mSingleInstance.setmSelectItemsBoolean(true);
-                mOnSelectInterface.onSelect();
+                mOnSelectInterface.onFirstSelect();
 
 
                 // when a user long clicks on an item, it calls the MainActivity's delete method which handles deletion
