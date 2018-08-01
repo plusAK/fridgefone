@@ -34,7 +34,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    public boolean use_api = false;
+    public boolean mUseGenerateRecipeAPI = false;
+    public boolean mUseAutocompleteAPI = false;
 
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getItem(String foodItem) {
 
-        if (use_api) {
+        if (mUseAutocompleteAPI) {
 
             String url = API_BASE_URL + "/food/ingredients/autocomplete";
             RequestParams params = new RequestParams();
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
         // create the url
-        if (use_api) {
+        if (mUseGenerateRecipeAPI) {
             String url = API_BASE_URL + "/recipes/findByIngredients";
             // set the request parameters
             RequestParams params = new RequestParams();
