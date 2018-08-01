@@ -83,6 +83,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     ingredientViewHolder.tvIngredient.setText(ingredient);
                 }
 
+                // if you have the ingredient in your fridge, change icon to green check box
                 if (mAllItemNamesSet.contains(ingredient)) {
                     ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.green_checked);
                 }
@@ -100,16 +101,17 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             ingredientViewHolder.addedToShoppingList = !ingredientViewHolder.addedToShoppingList;
                             if (ingredientViewHolder.addedToShoppingList) {
                                 ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.grayed_plus);
-                                Toast.makeText(mContext,ingredient + " " + R.string.add_shopping_list_toast , Toast.LENGTH_SHORT).show();
+                                String add_shopping_list = mContext.getString(R.string.add_shopping_list_toast);
+                                Toast.makeText(mContext,ingredient + " " + add_shopping_list , Toast.LENGTH_SHORT).show();
                             } else {
                                 ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.white_plus);
-                                Toast.makeText(mContext, ingredient + " " + R.string.remove_shopping_list_toast, Toast.LENGTH_SHORT).show();
+                                String remove_shopping_list = mContext.getString(R.string.remove_shopping_list_toast);
+                                Toast.makeText(mContext, ingredient + " " + remove_shopping_list, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
                 });
 
-                // if you have the ingredient in your fridge, change icon to green check box
                 break;
             case 2:
                 InstructionViewHolder instructionViewHolder = (InstructionViewHolder) holder;
