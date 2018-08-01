@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public final static Integer NUMBER_OF_RECIPES = 5;
 
-
-
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
     public AsyncHttpClient mClient;
