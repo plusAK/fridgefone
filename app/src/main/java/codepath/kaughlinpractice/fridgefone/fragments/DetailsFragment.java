@@ -29,8 +29,8 @@ import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import codepath.kaughlinpractice.fridgefone.GlideApp;
 import codepath.kaughlinpractice.fridgefone.DetailsAdapter;
+import codepath.kaughlinpractice.fridgefone.GlideApp;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
@@ -39,7 +39,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class DetailsFragment extends Fragment {
 
-    private boolean use_api = false;
+    private boolean mUseInstructionsAPI = false;
 
     public Recipe recipe;
     @BindView(R.id.ivRecipeImage) public ImageView ivRecipeImage;
@@ -60,10 +60,6 @@ public class DetailsFragment extends Fragment {
 
     ArrayList<String> mInstructionsList;
     Collection<String> mIngredientsSet;
-//    ArrayList<String> mInstructions;
-
-//    IngredientAdapter mIngredientAdapter;
-//    IngredientAdapter mInstructionAdapter;
     DetailsAdapter mDetailsAdapter;
 
     @Override
@@ -81,21 +77,15 @@ public class DetailsFragment extends Fragment {
 
         // initialize the client
         client = new AsyncHttpClient();
+
+        mInstructionsList = new ArrayList<>();
         mIngredientsSet = new HashSet<>();
 
         Bundle args = getArguments();
         String name = args.getString("name");
-        tvDishTitle.setText(name);
-
-//        tvInstructions.setText("");
-//        tvIngredients.setText("");
-
-        mInstructionsList = new ArrayList<>();
-//        mInstructions = new ArrayList<>();
-
-
         int id = args.getInt("id");
         String image = args.getString("image");
+        tvDishTitle.setText(name);
 
         GlideApp.with(getActivity())
                 .load(image)
@@ -103,7 +93,7 @@ public class DetailsFragment extends Fragment {
                 .into(ivRecipeImage);
 
 
-        if (use_api) {
+        if (mUseInstructionsAPI) {
             String url = API_BASE_URL + "/recipes/" + id + "/analyzedInstructions";
             // set the request parameters
             client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
@@ -115,13 +105,26 @@ public class DetailsFragment extends Fragment {
             client.get(url, params, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    String responseString = response.toString();
                     try {
                         for (int i = 0; i < response.length(); i += 1) {
                             JSONObject partOfInstructions = response.getJSONObject(i);
                             beautifyInstructions(partOfInstructions);
-                            Log.d("DetailFragment", "Step " + Integer.toString(i + 1) + ": " + partOfInstructions.toString());
                         }
+
+                        ArrayList<String> details = new ArrayList<>();
+                        details.add(getString(R.string.ingredients));
+                        for (String ingredient: mIngredientsSet) {
+                            details.add(ingredient);
+                        }
+                        details.add(getString(R.string.instructions));
+                        for(String step: mInstructionsList) {
+                            details.add(step);
+                        }
+
+                        mDetailsAdapter = new DetailsAdapter(details, mIngredientsSet.size());
+                        // RecyclerView setup (layout manager, use adapter)
+                        rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
+                        rvDetails.setAdapter(mDetailsAdapter);
                     } catch (JSONException e) {
                         Log.d("DetailFragment", e.getMessage());
                     }
@@ -140,24 +143,20 @@ public class DetailsFragment extends Fragment {
             try {
                 response = new JSONArray(responseString);
             } catch (JSONException e) {
-                Log.d("DetailFragment", "Not api_call error: " + e.getMessage());
+                Log.d("DetailFragment", "Converting string to JSON array error: " + e.getMessage());
             }
             try {
                 for (int i = 0; i < response.length(); i += 1) {
                     JSONObject partOfInstructions = response.getJSONObject(i);
                     beautifyInstructions(partOfInstructions);
                 }
-               // tvIngredients.setText(Html.fromHtml(ingredientsString));
-//                tvIngredients.setText(Html.fromHtml("<big><b>Ingredients</b></big>"));
-
-//                mIngredients.add("Instructions");
 
                 ArrayList<String> details = new ArrayList<>();
-                details.add("Ingredients");
+                details.add(getString(R.string.ingredients));
                 for (String ingredient: mIngredientsSet) {
                     details.add(ingredient);
                 }
-                details.add("Instructions");
+                details.add(getString(R.string.instructions));
                 for(String step: mInstructionsList) {
                     details.add(step);
                 }
@@ -166,17 +165,8 @@ public class DetailsFragment extends Fragment {
                 // RecyclerView setup (layout manager, use adapter)
                 rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
                 rvDetails.setAdapter(mDetailsAdapter);
-
-//                tvInstructions.setText(Html.fromHtml("<big><b>Instructions</b></big>"));
-
-//                mInstructionAdapter = new IngredientAdapter(mInstructions);
-//
-//                rvInstructions.setLayoutManager(new LinearLayoutManager(getContext()));
-//                rvInstructions.setAdapter(mInstructionAdapter);
-
-                //tvInstructions.setText(Html.fromHtml(instructionsString));
             } catch (JSONException e) {
-                Log.d("DetailFragment", e.getMessage());
+                Log.d("DetailFragment", "Error parsing through JSON Array" + e.getMessage());
             }
         }
 
@@ -190,17 +180,12 @@ public class DetailsFragment extends Fragment {
     }
 
     public void beautifyInstructions(JSONObject partOfInstructions) {
-        String newText = "";
         try {
-            String name = partOfInstructions.getString("name");
-            newText = newText + "<u><b>" + name + "</b></u>" +  "<br />";
             JSONArray steps = partOfInstructions.getJSONArray("steps");
             for (int i = 0; i < steps.length(); i += 1) {
                 JSONObject step = steps.getJSONObject(i);
-                int stepNum = step.getInt("number");
                 String stepDetails = step.getString("step");
                 mInstructionsList.add(stepDetails);
-                newText = newText + "<b>" + stepNum + ".</b> " + stepDetails + "<br /><br />";
                 addToIngredientsList(step.getJSONArray("ingredients"));
             }
         } catch (JSONException e) {
@@ -217,7 +202,6 @@ public class DetailsFragment extends Fragment {
                 String ingredientName = ingredientItem.getString("name");
                 if (!mIngredientsSet.contains(ingredientName)) {
                     mIngredientsSet.add(ingredientName);
-//                    mIngredients.add(ingredientName);
                 }
             }
         } catch (JSONException e) {

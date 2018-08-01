@@ -34,7 +34,12 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+
     public boolean use_api = false;
+
+    public boolean mUseGenerateRecipeAPI = false;
+    public boolean mUseAutocompleteAPI = false;
+
 
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getItem(String foodItem) {
 
-        if (use_api) {
+        if (mUseAutocompleteAPI) {
 
             String url = API_BASE_URL + "/food/ingredients/autocomplete";
             RequestParams params = new RequestParams();
@@ -202,9 +207,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DeleteItemFragment deleteItemFragment = new DeleteItemFragment();
         deleteItemFragment.setArguments(args);// connects bundle to fragment
         deleteItemFragment.show(getSupportFragmentManager(), "DeleteItemFragment");
-
-        //mfridgeFragment.mAllItemNamesSet.remove(item); // TODO -- figure out where you remove item from set
-        Log.d("ItemAdapter", String.format("Deleting this item from the fridge: " + item.getName()));
     }
 
     public void deleteItemFromFridge(Item item) {
@@ -213,12 +215,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //mItemAdapter.notifyItemRemoved(mItemAdapter.getItemCount());
         mItemAdapter.notifyDataSetChanged();
         //mFridgeFragment.loadItems();
-        Toast.makeText(this, "Deleted: " + item.getName(), Toast.LENGTH_LONG).show();
+        mSingleInstance.getmAllItemNamesSet().remove(item.getName());
+        mSingleInstance.getmSelectedNamesSet().remove(item.getName());
+        Toast.makeText(this, R.string.delete_item_toast + " " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
     public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
         // create the url
-        if (use_api) {
+        if (mUseGenerateRecipeAPI) {
             String url = API_BASE_URL + "/recipes/findByIngredients";
             // set the request parameters
             RequestParams params = new RequestParams();

@@ -30,7 +30,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class AddItemFragment extends DialogFragment {
 
-    public boolean use_api = false;
+    public boolean mUseAutocompleteAPI = false;
 
     private Button addButton;
     private AutoCompleteTextView actvFoodItem;
@@ -101,7 +101,7 @@ public class AddItemFragment extends DialogFragment {
     }
 
     public void getItemForAutoComplete(String foodItem) {
-        if (use_api) {
+        if (mUseAutocompleteAPI) {
             String url = API_BASE_URL + "/food/ingredients/autocomplete";
             RequestParams params = new RequestParams();
             client.addHeader(API_KEY_PARAM, getString(R.string.api_key));

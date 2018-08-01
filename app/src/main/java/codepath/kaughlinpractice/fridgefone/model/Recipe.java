@@ -22,7 +22,7 @@ import cz.msebera.android.httpclient.Header;
 @Parcel
 public class Recipe {
 
-    static boolean use_api = false;
+    static boolean mUseRecipeInformationAPI = false;
 
     public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
     String name;
@@ -69,7 +69,7 @@ public class Recipe {
         recipes = new ArrayList<>();
         recipe.recipe_dict = new HashMap<>();
 
-        if (use_api) {
+        if (mUseRecipeInformationAPI) {
             String url = API_BASE_URL +"/recipes/" + recipe.id + "/information";
             // set the request parameters
             RequestParams params = new RequestParams();
