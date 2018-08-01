@@ -34,8 +34,12 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+
+    public boolean use_api = false;
+
     public boolean mUseGenerateRecipeAPI = false;
     public boolean mUseAutocompleteAPI = false;
+
 
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
@@ -84,9 +88,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
     // allows for you to click the menu button and pull out the navigation drawer
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // allows for click on the menu toggle
         if(mToggle.onOptionsItemSelected(item)){
             return true;
         }
