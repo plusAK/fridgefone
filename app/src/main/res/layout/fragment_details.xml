@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DetailsFragment">
 
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -41,10 +40,11 @@
                     android:layout_alignParentEnd="true"
                     android:background="@color/opaque_black"
                     android:fontFamily="@font/roboto_light"
+                    android:paddingBottom="@dimen/medium_padding"
                     android:paddingLeft="@dimen/small_padding"
                     android:paddingRight="@dimen/small_padding"
                     android:paddingTop="@dimen/medium_padding"
-                    android:paddingBottom="@dimen/medium_padding"
+                    android:requiresFadingEdge="vertical"
                     android:text="@string/dish_title"
                     android:textColor="@color/white"
                     android:textSize="@dimen/details_dish_text_size" />
@@ -53,9 +53,20 @@
                     android:id="@+id/rvDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/big_padding"
                     android:layout_below="@+id/ivRecipeImage"
-                     />
+                    android:layout_marginBottom="@dimen/big_padding" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivFavoriteStar"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignBottom="@+id/ivRecipeImage"
+                    android:layout_alignParentEnd="true"
+
+                    android:layout_marginBottom="@dimen/medium_padding"
+                    android:layout_marginRight="@dimen/small_padding"
+                    android:padding="@dimen/very_small_padding"
+                    android:src="@drawable/white_star_outline" />
 
             </RelativeLayout>
         </ScrollView>

@@ -43,6 +43,7 @@ public class DetailsFragment extends Fragment {
 
     public Recipe recipe;
     @BindView(R.id.ivRecipeImage) public ImageView ivRecipeImage;
+    @BindView(R.id.ivFavoriteStar) public ImageView ivFavoriteStar;
     @BindView(R.id.tvDishTitle) public TextView tvDishTitle;
     @BindView(R.id.buttonBack) public Button buttonBack;
     @BindView(R.id.rvDetails) public RecyclerView rvDetails;
@@ -57,6 +58,7 @@ public class DetailsFragment extends Fragment {
     private HashMap<String, Boolean> user_dict = null;
 
     private String currentFilters = null;
+    private boolean favorited;
 
     ArrayList<String> mInstructionsList;
     Collection<String> mIngredientsSet;
@@ -80,6 +82,7 @@ public class DetailsFragment extends Fragment {
 
         mInstructionsList = new ArrayList<>();
         mIngredientsSet = new HashSet<>();
+        favorited = false;
 
         Bundle args = getArguments();
         String name = args.getString("name");
@@ -91,6 +94,18 @@ public class DetailsFragment extends Fragment {
                 .load(image)
                 .fitCenter()
                 .into(ivRecipeImage);
+
+        ivFavoriteStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                favorited = !favorited;
+                if (favorited) {
+                    ivFavoriteStar.setImageResource(R.drawable.white_star_filled);
+                } else {
+                    ivFavoriteStar.setImageResource(R.drawable.white_star_outline);
+                }
+            }
+        });
 
 
         if (mUseInstructionsAPI) {
