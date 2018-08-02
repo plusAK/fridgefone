@@ -8,12 +8,14 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
@@ -39,6 +41,7 @@ public class Recipe {
     boolean veryPopular;
     int servings;
     public boolean validity;
+    private HashSet<String> ingredients;
     public HashMap<String, Boolean> recipe_dict;
 
     static RecipeAdapter adapter;
@@ -65,6 +68,7 @@ public class Recipe {
         recipe.validity = false;
         recipes = new ArrayList<>();
         recipe.recipe_dict = new HashMap<>();
+        recipe.ingredients = new HashSet<>();
 
         if (mUseRecipeInformationAPI) {
             String url = API_BASE_URL +"/recipes/" + recipe.id + "/information";
@@ -91,6 +95,15 @@ public class Recipe {
                         makeDict(context.getString(R.string.cheap), response, recipe);
                         recipe.readyInMinutes = response.getInt("readyInMinutes");
                         recipe.servings = response.getInt("servings");
+
+                        JSONArray ingredientsJSON = response.getJSONArray("extendedIngredients");
+                        for (int i = 0; i < ingredientsJSON.length(); i += 1) {
+                            String ingredient = ingredientsJSON.getJSONObject(i).getString("name");
+                            if (!recipe.ingredients.contains(ingredient)) {
+                                recipe.ingredients.add(ingredient);
+                                Log.d("Recipe", ingredient);
+                            }
+                        }
 
                         if (recipe.isValid(args)) {
                             rec.add(recipe);
@@ -409,6 +422,15 @@ public class Recipe {
                 recipe.readyInMinutes = response.getInt("readyInMinutes");
                 recipe.servings = response.getInt("servings");
 
+                JSONArray ingredientsJSON = response.getJSONArray("extendedIngredients");
+                for (int i = 0; i < ingredientsJSON.length(); i += 1) {
+                    String ingredient = ingredientsJSON.getJSONObject(i).getString("name");
+                    if (!recipe.ingredients.contains(ingredient)) {
+                        recipe.ingredients.add(ingredient);
+                        Log.d("Recipe", ingredient);
+                    }
+                }
+
                 if (recipe.isValid(args)) {
                     rec.add(recipe);
                     recipeAdapter.notifyItemInserted(rec.size() - 1);
@@ -417,7 +439,6 @@ public class Recipe {
                 Log.d("MainActivity", "Not api_call error: " + e.getMessage());
             }
         }
-
         return recipe;
     }
 
@@ -490,6 +511,10 @@ public class Recipe {
 
     public int getServings() {
         return servings;
+    }
+
+    public HashSet<String> getIngredients() {
+        return ingredients;
     }
 
     public boolean isValid(Bundle args) {

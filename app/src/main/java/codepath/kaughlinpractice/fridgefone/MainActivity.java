@@ -34,9 +34,6 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-
-    public boolean use_api = false;
-
     public boolean mUseGenerateRecipeAPI = false;
     public boolean mUseAutocompleteAPI = false;
 
@@ -107,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         args.putString("name", recipe.getName());
         args.putInt("id", recipe.getId());
         args.putString("image", recipe.getImage());
+        ArrayList<String> ingredients = new ArrayList<>(recipe.getIngredients());
+        args.putStringArrayList("ingredients", ingredients);
 
         detailsFrag.setArguments(args);
         fragmentTransition(detailsFrag);
