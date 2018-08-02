@@ -88,6 +88,7 @@ public class DetailsFragment extends Fragment {
         String name = args.getString("name");
         int id = args.getInt("id");
         String image = args.getString("image");
+        final ArrayList<String> ingredients = args.getStringArrayList("ingredients");
         tvDishTitle.setText(name);
 
         GlideApp.with(getActivity())
@@ -123,20 +124,27 @@ public class DetailsFragment extends Fragment {
                     try {
                         for (int i = 0; i < response.length(); i += 1) {
                             JSONObject partOfInstructions = response.getJSONObject(i);
-                            beautifyInstructions(partOfInstructions);
+                            parseInstructions(partOfInstructions);
                         }
 
                         ArrayList<String> details = new ArrayList<>();
                         details.add(getString(R.string.ingredients));
+                        /*
                         for (String ingredient: mIngredientsSet) {
                             details.add(ingredient);
                         }
+                        */
+                        for (String ingredient: ingredients) {
+                            details.add(ingredient);
+                        }
                         details.add(getString(R.string.instructions));
+
                         for(String step: mInstructionsList) {
                             details.add(step);
                         }
 
-                        mDetailsAdapter = new DetailsAdapter(details, mIngredientsSet.size());
+
+                        mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
                         // RecyclerView setup (layout manager, use adapter)
                         rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
                         rvDetails.setAdapter(mDetailsAdapter);
@@ -163,20 +171,22 @@ public class DetailsFragment extends Fragment {
             try {
                 for (int i = 0; i < response.length(); i += 1) {
                     JSONObject partOfInstructions = response.getJSONObject(i);
-                    beautifyInstructions(partOfInstructions);
+                    parseInstructions(partOfInstructions);
                 }
 
                 ArrayList<String> details = new ArrayList<>();
                 details.add(getString(R.string.ingredients));
-                for (String ingredient: mIngredientsSet) {
+
+                for (String ingredient: ingredients) {
                     details.add(ingredient);
                 }
+
                 details.add(getString(R.string.instructions));
                 for(String step: mInstructionsList) {
                     details.add(step);
                 }
 
-                mDetailsAdapter = new DetailsAdapter(details, mIngredientsSet.size());
+                mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
                 // RecyclerView setup (layout manager, use adapter)
                 rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
                 rvDetails.setAdapter(mDetailsAdapter);
@@ -194,33 +204,16 @@ public class DetailsFragment extends Fragment {
 
     }
 
-    public void beautifyInstructions(JSONObject partOfInstructions) {
+    public void parseInstructions(JSONObject partOfInstructions) {
         try {
             JSONArray steps = partOfInstructions.getJSONArray("steps");
             for (int i = 0; i < steps.length(); i += 1) {
                 JSONObject step = steps.getJSONObject(i);
                 String stepDetails = step.getString("step");
                 mInstructionsList.add(stepDetails);
-                addToIngredientsList(step.getJSONArray("ingredients"));
             }
         } catch (JSONException e) {
-            Log.d("DetailFragment", "Error in beautifyInstructions " + e.getMessage());
-        }
-    }
-
-    public void addToIngredientsList(JSONArray newIngredients) {
-        // check to see if it exists
-        // if it does not, then add item
-        try {
-            for (int i = 0; i < newIngredients.length(); i += 1) {
-                JSONObject ingredientItem = newIngredients.getJSONObject(i);
-                String ingredientName = ingredientItem.getString("name");
-                if (!mIngredientsSet.contains(ingredientName)) {
-                    mIngredientsSet.add(ingredientName);
-                }
-            }
-        } catch (JSONException e) {
-            Log.d("DetailFragment", "Error in addIngredients: " + e.getMessage());
+            Log.d("DetailFragment", "Error in parseInstructions " + e.getMessage());
         }
     }
 }
