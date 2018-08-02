@@ -39,5 +39,5 @@
     <dimen name="medium_padding">15dp</dimen>
     <dimen name="big_padding">30dp</dimen>
     <dimen name="favorite_icon_size"></dimen>
-    <dimen name="list_fragment_padding">3dp</dimen>
+    <dimen name="list_fragment_padding">1dp</dimen>
 </resources>

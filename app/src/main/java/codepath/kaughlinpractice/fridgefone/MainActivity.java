@@ -267,8 +267,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             "{\"id\":556470,\"title\":\"Curried Chicken Pitas\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/421176-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
                             "{\"id\":556470,\"title\":\"Curry Chicken and Grape Salad\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/1010550-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
                             "{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
-                            "{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
-                            "{\"id\":556470,\"title\":\"King Cake with Pecan Praline Filling\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/855114-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
+                            "{\"id\":556470,\"title\":\"King Cake with Pecan Praline Filling\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/855114-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
+                            "{\"id\":556470,\"title\":\"Veggie & Chicken Kebab\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/544976-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
 
             Fragment listFrag = new ListFragment();
 

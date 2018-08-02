@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
@@ -76,6 +77,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     GlideApp.with(context)
                             .load(recipe1.getImage())
                             .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
                             .into(leftRecipeViewHolder.recipe_image1);
                 }
                 if (position2 < mRecipes.size()) {
@@ -83,6 +85,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     GlideApp.with(context)
                             .load(recipe2.getImage())
                             .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
                             .into(leftRecipeViewHolder.recipe_image2);
                 }
                 if (position3 < mRecipes.size()) {
@@ -90,6 +93,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     GlideApp.with(context)
                             .load(recipe3.getImage())
                             .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
                             .into(leftRecipeViewHolder.recipe_image3);
                 }
                 leftRecipeViewHolder.recipe_image1.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +138,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     GlideApp.with(context)
                             .load(recipe1.getImage())
                             .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
                             .into(rightRecipeViewHolder.recipe_image1);
                 }
                 if (position2 < mRecipes.size()) {
@@ -141,6 +146,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     GlideApp.with(context)
                             .load(recipe2.getImage())
                             .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
                             .into(rightRecipeViewHolder.recipe_image2);
                 }
                 if (position3 < mRecipes.size()) {
@@ -148,6 +154,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     GlideApp.with(context)
                             .load(recipe3.getImage())
                             .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
                             .into(rightRecipeViewHolder.recipe_image3);
                 }
                 rightRecipeViewHolder.recipe_image1.setOnClickListener(new View.OnClickListener() {
