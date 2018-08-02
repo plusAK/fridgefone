@@ -3,13 +3,15 @@ package codepath.kaughlinpractice.fridgefone;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -19,15 +21,15 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     int mNumIngredients;
     // context for rendering
     Context mContext;
-    // Singleton class used to get access to selected ingredients
-    Singleton mSingleInstance;
+    // Save HashSet of ingredients you have (get from Singleton class)
+    HashSet<String> mAllItemNamesSet;
 
 
     // initialize with list
     public DetailsAdapter(ArrayList<String> details, int numIngredients) {
         this.mDetails = details;
         this.mNumIngredients = numIngredients;
-        this.mSingleInstance = Singleton.getSingletonInstance();
+        this.mAllItemNamesSet = Singleton.getSingletonInstance().getmAllItemNamesSet();
     }
 
     // creates and inflates a new view
@@ -73,18 +75,43 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 break;
             case 1:
-                IngredientViewHolder ingredientViewHolder = (IngredientViewHolder) holder;
+                final IngredientViewHolder ingredientViewHolder = (IngredientViewHolder) holder;
                 // get the ingredient name at the specified position
-                String ingredient = mDetails.get(position);
+                final String ingredient = mDetails.get(position);
                 // populate the view with the ingredient's name
                 if (ingredientViewHolder.tvIngredient != null) {
-                    Log.d("IngredientAdapter", "Not Null");
                     ingredientViewHolder.tvIngredient.setText(ingredient);
+                }
+
+                // if you have the ingredient in your fridge, change icon to green check box
+                if (mAllItemNamesSet.contains(ingredient)) {
+                    ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.green_checked);
                 }
 
                 if (position % 2 == 1) {
                     ingredientViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.alternating_gray));
                 }
+
+                ingredientViewHolder.ivIngredientIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // add to shopping list if user clicks on plus
+                        // take out from shopping list if user clicks again
+                        if(!ingredientViewHolder.containsIngredient) {
+                            ingredientViewHolder.addedToShoppingList = !ingredientViewHolder.addedToShoppingList;
+                            if (ingredientViewHolder.addedToShoppingList) {
+                                ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.grayed_plus);
+                                String add_shopping_list = mContext.getString(R.string.add_shopping_list_toast);
+                                Toast.makeText(mContext,ingredient + " " + add_shopping_list , Toast.LENGTH_SHORT).show();
+                            } else {
+                                ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.white_plus);
+                                String remove_shopping_list = mContext.getString(R.string.remove_shopping_list_toast);
+                                Toast.makeText(mContext, ingredient + " " + remove_shopping_list, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
                 break;
             case 2:
                 InstructionViewHolder instructionViewHolder = (InstructionViewHolder) holder;
@@ -144,11 +171,17 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         // track view objects
         TextView tvIngredient;
+        ImageView ivIngredientIcon;
+        boolean containsIngredient;
+        boolean addedToShoppingList;
 
         public IngredientViewHolder(@NonNull View itemView) {
             super(itemView);
             // lookup view objects by id
             tvIngredient = (TextView) itemView.findViewById(R.id.tvIngredient);
+            ivIngredientIcon = (ImageView) itemView.findViewById(R.id.ivIngredientIcon);
+            containsIngredient = false;
+            addedToShoppingList = false;
         }
     }
 

@@ -41,4 +41,5 @@ dependencies {
     annotationProcessor 'org.parceler:parceler:1.1.11'
 
     implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 }

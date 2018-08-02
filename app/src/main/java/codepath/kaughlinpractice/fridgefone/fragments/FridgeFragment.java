@@ -10,6 +10,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -42,21 +45,83 @@ public class FridgeFragment extends Fragment{
     private RecyclerView mItemRecyclerView;
 
     private HashMap<String, Boolean> user_dict = null;
-    public ImageView mSelectItemsImageView;
-    public Button mCancelSelectButton;
-    public Button mSelectAllButton;
 
     public String mSelectedNamesString = "";
     public String mAllNamesString = "";
+
+    public boolean mFirstClick = false;
 
     public Singleton mSingleInstance;
 
     private String currentFilters = null;
 
+    public MenuItem mSelectAllMenuBtn;
+    public MenuItem mCancelMenuBtn;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_fridge, container, false);
+    }
+
+    // allows to use specific action bar
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    // inflates specific action bar
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflate menu that adds items to the action bar
+        inflater.inflate(R.menu.fridge_home_menu, menu);
+
+        mSelectAllMenuBtn = menu.findItem(R.id.SelectAllMenubtn);
+        mCancelMenuBtn = menu.findItem(R.id.CancelMenubtn);
+        //set initial visibility of menu items
+        mSelectAllMenuBtn.setVisible(false);
+        mCancelMenuBtn.setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //handles presses on the action bar
+        switch (item.getItemId()){
+            case R.id.SelectAllMenubtn:
+                Log.d("FridgeFragment", "onOptionsItemSelected: select all menu btn ");
+                mSingleInstance.setmAllSelected(true); // set All selected boolean to true
+                mSingleInstance.setmNoneSelected(false);
+                mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount());
+                Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_SHORT).show();
+                Log.d("FridgeFragment", "All Items in mAllItemNamesSet: " + mSingleInstance.getmAllItemNamesSet());
+
+                return true;
+
+            case R.id.CancelMenubtn:
+                Log.d("FridgeFragment", "onOptionsItemSelected: cancel has been clicked");
+                //set visibility of menu items to false
+                mSelectAllMenuBtn.setVisible(false);
+                mCancelMenuBtn.setVisible(false);
+
+                mSingleInstance.setmSelectItemsBoolean(false);
+                mSingleInstance.setmAllSelected(false); // set All selected boolean to false
+                mSingleInstance.setmNoneSelected(true);
+
+                mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount()); // notify the adapter if select all is changed
+
+                mAddItemImageView.setVisibility(View.VISIBLE);
+                mGenerateRecipeListImageView.setVisibility(View.INVISIBLE);
+
+                // clear hashset after cancel button  is clicked
+                mSingleInstance.getmSelectedNamesSet().clear();
+                Log.d("FridgeFragment", "Selected Items in Fridge Hashset after Cancel: " + mSingleInstance.getmSelectedNamesSet());
+
+                mFirstClick = false;
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -73,26 +138,36 @@ public class FridgeFragment extends Fragment{
 
 
         mGenerateRecipeListImageView = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
+        mGenerateRecipeListImageView.setVisibility(View.INVISIBLE);
         mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddItem);
 
         mItemRecyclerView = (RecyclerView) view.findViewById(R.id.rvFridgeHomeView);
-        mItemAdapter =  new ItemAdapter( mItemList, getActivity());
+
+        // intialize itemadapter with interface for on select
+        mItemAdapter =  new ItemAdapter(mItemList, getActivity(), new ItemAdapter.OnSelectInterface() {
+            @Override
+            public void onFirstSelect() {
+                if(!mFirstClick) {
+                    mAddItemImageView.setVisibility(View.INVISIBLE);
+                    mGenerateRecipeListImageView.setVisibility(View.VISIBLE);
+                    mSelectAllMenuBtn.setVisible(true);
+                    mCancelMenuBtn.setVisible(true);
+                    Toast.makeText(getActivity(), "Select your items", Toast.LENGTH_SHORT).show();
+                    mFirstClick = true;
+                }
+            }
+        });
+
+
         mItemRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
         //construct adapter from data source
         mItemRecyclerView.setAdapter(mItemAdapter);
 
-        mSelectItemsImageView = (ImageView) view.findViewById(R.id.ivSelectItems);
-        mCancelSelectButton = (Button) view.findViewById(R.id.btnCancelSelect);
-        mCancelSelectButton.setVisibility(View.INVISIBLE);
-
-        mSelectAllButton = (Button) view.findViewById(R.id.btnSelectAll);
-        mSelectAllButton.setVisibility(View.INVISIBLE);
-
         // give access to MainActivity to adapter
         ((MainActivity) mContext).setItemsAccess(mItemAdapter, mItemList);
-
         loadItems(); //load items to fridge
+
 
         mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -111,6 +186,9 @@ public class FridgeFragment extends Fragment{
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+
+
+
         mGenerateRecipeListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,47 +203,6 @@ public class FridgeFragment extends Fragment{
             public void onClick(View view) {
                 AddItemFragment addItemFragment = new AddItemFragment();
                 addItemFragment.show(getFragmentManager(), "AddItemFragment");
-            }
-        });
-
-        mSelectItemsImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSingleInstance.setmSelectItemsBoolean(true);
-                mCancelSelectButton.setVisibility(View.VISIBLE);
-                mSelectAllButton.setVisibility(View.VISIBLE);
-                mAddItemImageView.setVisibility(View.INVISIBLE);
-                mSelectItemsImageView.setVisibility(View.INVISIBLE);
-                Toast.makeText(getActivity(), "Select your items", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        mCancelSelectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSingleInstance.setmSelectItemsBoolean(false);
-                mSingleInstance.setmAllSelected(false); // set All selected boolean to false
-                mSingleInstance.setmNoneSelected(true);
-                mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount()); // notify the adapter if select all is changed
-
-                mCancelSelectButton.setVisibility(View.INVISIBLE);
-                mSelectAllButton.setVisibility(View.INVISIBLE);
-                mSelectItemsImageView.setVisibility(View.VISIBLE);
-                mAddItemImageView.setVisibility(View.VISIBLE);
-
-                // clear hashset after cancel button  is clicked
-                mSingleInstance.getmSelectedNamesSet().clear();
-                Log.d("FridgeFragment", "Selected Items in Fridge Hashset after Cancel: " + mSingleInstance.getmSelectedNamesSet());
-            }
-        });
-        mSelectAllButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSingleInstance.setmAllSelected(true); // set All selected boolean to true
-                mSingleInstance.setmNoneSelected(false);
-                mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount());
-                Toast.makeText(getActivity(), "All items selected", Toast.LENGTH_LONG).show();
-                Log.d("FridgeFragment", "All Items in mAllItemNamesSet: " + mSingleInstance.getmAllItemNamesSet());
             }
         });
     }
