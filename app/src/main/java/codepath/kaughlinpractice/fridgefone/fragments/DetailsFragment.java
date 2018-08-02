@@ -143,6 +143,7 @@ public class DetailsFragment extends Fragment {
                             details.add(step);
                         }
 
+
                         mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
                         // RecyclerView setup (layout manager, use adapter)
                         rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -185,7 +186,7 @@ public class DetailsFragment extends Fragment {
                     details.add(step);
                 }
 
-                mDetailsAdapter = new DetailsAdapter(details, mIngredientsSet.size());
+                mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
                 // RecyclerView setup (layout manager, use adapter)
                 rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
                 rvDetails.setAdapter(mDetailsAdapter);
@@ -212,7 +213,7 @@ public class DetailsFragment extends Fragment {
                 mInstructionsList.add(stepDetails);
             }
         } catch (JSONException e) {
-            Log.d("DetailFragment", "Error in beautifyInstructions " + e.getMessage());
+            Log.d("DetailFragment", "Error in parseInstructions " + e.getMessage());
         }
     }
 }
