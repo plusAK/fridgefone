@@ -55,7 +55,6 @@ public class FridgeFragment extends Fragment{
 
     private String currentFilters = null;
 
-
     public MenuItem mSelectAllMenuBtn;
     public MenuItem mCancelMenuBtn;
 

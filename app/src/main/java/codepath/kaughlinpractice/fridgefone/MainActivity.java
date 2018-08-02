@@ -35,8 +35,6 @@ import cz.msebera.android.httpclient.Header;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
-    public boolean use_api = false;
-
     public boolean mUseGenerateRecipeAPI = false;
     public boolean mUseAutocompleteAPI = false;
 
