@@ -43,6 +43,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 View rightRecipeView = inflater.inflate(R.layout.right_recipe_item, parent, false);
                 // return a new ViewHolder
                 return new RightRecipeViewHolder(rightRecipeView);
+            case 2:
+                // create the view using the layout
+                View oneRecipeView = inflater.inflate(R.layout.one_recipe_item, parent, false);
+                // return a new ViewHolder
+                return new OneRecipeViewHolder(oneRecipeView);
+            case 3:
+                // create the view using the layout
+                View twoRecipeView = inflater.inflate(R.layout.two_recipe_item, parent, false);
+                // return a new ViewHolder
+                return new TwoRecipeViewHolder(twoRecipeView);
             default:
                 return null;
         }
@@ -53,49 +63,39 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
         // get the data according to position
-        Recipe recipe1 = null;
-        Recipe recipe2 = null;
-        Recipe recipe3 = null;
+        Recipe recipe1;
+        Recipe recipe2;
+        Recipe recipe3;
         final int position1 = position * 3;
         final int position2 = (position * 3) + 1;
         final int position3 = (position * 3) + 2;
-        if ((position * 3) < mRecipes.size()) {
-            recipe1 = mRecipes.get(position1);
-        }
-        if (((position * 3) + 1) < mRecipes.size()) {
-            recipe2 = mRecipes.get(position2);
-        }
-        if (((position * 3) + 2) < mRecipes.size()) {
-            recipe3 = mRecipes.get(position3);
-        }
 
         switch(holder.getItemViewType()) {
             case 0:
                 LeftRecipeViewHolder leftRecipeViewHolder = (LeftRecipeViewHolder) holder;
-                if (position1 < mRecipes.size()) {
-                    leftRecipeViewHolder.recipe_name1.setText(recipe1.getName());
-                    GlideApp.with(context)
-                            .load(recipe1.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(leftRecipeViewHolder.recipe_image1);
-                }
-                if (position2 < mRecipes.size()) {
+                recipe1 = mRecipes.get(position1);
+                leftRecipeViewHolder.recipe_name1.setText(recipe1.getName());
+                GlideApp.with(context)
+                        .load(recipe1.getImage())
+                        .fitCenter()
+                        .transform(new RoundedCornersTransformation(50, 0))
+                        .into(leftRecipeViewHolder.recipe_image1);
+
+                recipe2 = mRecipes.get(position2);
                     leftRecipeViewHolder.recipe_name2.setText(recipe2.getName());
                     GlideApp.with(context)
                             .load(recipe2.getImage())
                             .fitCenter()
                             .transform(new RoundedCornersTransformation(50, 0))
                             .into(leftRecipeViewHolder.recipe_image2);
-                }
-                if (position3 < mRecipes.size()) {
+
+                recipe3 = mRecipes.get(position3);
                     leftRecipeViewHolder.recipe_name3.setText(recipe3.getName());
                     GlideApp.with(context)
                             .load(recipe3.getImage())
                             .fitCenter()
                             .transform(new RoundedCornersTransformation(50, 0))
                             .into(leftRecipeViewHolder.recipe_image3);
-                }
                 leftRecipeViewHolder.recipe_image1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -133,30 +133,30 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             case 1:
                 RightRecipeViewHolder rightRecipeViewHolder = (RightRecipeViewHolder) holder;
-                if (position1 < mRecipes.size()) {
-                    rightRecipeViewHolder.recipe_name1.setText(recipe1.getName());
-                    GlideApp.with(context)
-                            .load(recipe1.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(rightRecipeViewHolder.recipe_image1);
-                }
-                if (position2 < mRecipes.size()) {
-                    rightRecipeViewHolder.recipe_name2.setText(recipe2.getName());
-                    GlideApp.with(context)
-                            .load(recipe2.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(rightRecipeViewHolder.recipe_image2);
-                }
-                if (position3 < mRecipes.size()) {
-                    rightRecipeViewHolder.recipe_name3.setText(recipe3.getName());
-                    GlideApp.with(context)
-                            .load(recipe3.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(rightRecipeViewHolder.recipe_image3);
-                }
+                recipe1 = mRecipes.get(position1);
+                rightRecipeViewHolder.recipe_name1.setText(recipe1.getName());
+                GlideApp.with(context)
+                        .load(recipe1.getImage())
+                        .fitCenter()
+                        .transform(new RoundedCornersTransformation(50, 0))
+                        .into(rightRecipeViewHolder.recipe_image1);
+
+                recipe2 = mRecipes.get(position2);
+                rightRecipeViewHolder.recipe_name2.setText(recipe2.getName());
+                GlideApp.with(context)
+                        .load(recipe2.getImage())
+                        .fitCenter()
+                        .transform(new RoundedCornersTransformation(50, 0))
+                        .into(rightRecipeViewHolder.recipe_image2);
+
+                recipe3 = mRecipes.get(position3);
+                rightRecipeViewHolder.recipe_name3.setText(recipe3.getName());
+                GlideApp.with(context)
+                        .load(recipe3.getImage())
+                        .fitCenter()
+                        .transform(new RoundedCornersTransformation(50, 0))
+                        .into(rightRecipeViewHolder.recipe_image3);
+
                 rightRecipeViewHolder.recipe_image1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -191,24 +191,62 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     }
                 });
                 break;
+            case 2:
+                OneRecipeViewHolder oneRecipeViewHolder = (OneRecipeViewHolder) holder;
+                recipe1 = mRecipes.get(position1);
+                oneRecipeViewHolder.recipe_name1.setText(recipe1.getName());
+                    GlideApp.with(context)
+                            .load(recipe1.getImage())
+                            .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
+                            .into(oneRecipeViewHolder.recipe_image1);
+
+                break;
+            case 3:
+                TwoRecipeViewHolder twoRecipeViewHolder = (TwoRecipeViewHolder) holder;
+                recipe1 = mRecipes.get(position1);
+                twoRecipeViewHolder.recipe_name1.setText(recipe1.getName());
+                    GlideApp.with(context)
+                            .load(recipe1.getImage())
+                            .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
+                            .into(twoRecipeViewHolder.recipe_image1);
+
+                recipe2 = mRecipes.get(position2);
+                twoRecipeViewHolder.recipe_name2.setText(recipe1.getName());
+                    GlideApp.with(context)
+                            .load(recipe2.getImage())
+                            .fitCenter()
+                            .transform(new RoundedCornersTransformation(50, 0))
+                            .into(twoRecipeViewHolder.recipe_image2);
+
+                break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return (mRecipes.size() / 3);
+        if (mRecipes.size() % 3 == 0) {
+            return (mRecipes.size() / 3);
+        } else {
+            return ((mRecipes.size() / 3) + 1);
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if ((position % 2) == 0) {
+        if (((mRecipes.size() % 3) == 1) && (position == (mRecipes.size() / 3))) {
+            return 2;
+        } else if (((mRecipes.size() % 3) == 2) && (position == (mRecipes.size() / 3))) {
+            return 3;
+        } else if ((position % 2) == 0) {
             return 0;
         } else {
             return 1;
         }
     }
 
-    public class LeftRecipeViewHolder extends RecyclerView.ViewHolder{
+    public class LeftRecipeViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView recipe_image1;
         public TextView recipe_name1;
@@ -229,7 +267,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public class RightRecipeViewHolder extends RecyclerView.ViewHolder{
+    public class RightRecipeViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView recipe_image1;
         public TextView recipe_name1;
@@ -247,6 +285,36 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             recipe_name2 = (TextView) itemView.findViewById(R.id.tvName2);
             recipe_image3 = (ImageView) itemView.findViewById(R.id.ivImage3);
             recipe_name3 = (TextView) itemView.findViewById(R.id.tvName3);
+        }
+    }
+
+    public class OneRecipeViewHolder extends RecyclerView.ViewHolder {
+
+        public ImageView recipe_image1;
+        public TextView recipe_name1;
+
+        public OneRecipeViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            recipe_image1 = (ImageView) itemView.findViewById(R.id.ivImage1);
+            recipe_name1 = (TextView) itemView.findViewById(R.id.tvName1);
+        }
+    }
+
+    public class TwoRecipeViewHolder extends RecyclerView.ViewHolder {
+
+        public ImageView recipe_image1;
+        public TextView recipe_name1;
+        public ImageView recipe_image2;
+        public TextView recipe_name2;
+
+        public TwoRecipeViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            recipe_image1 = (ImageView) itemView.findViewById(R.id.ivImage1);
+            recipe_name1 = (TextView) itemView.findViewById(R.id.tvName1);
+            recipe_image2 = (ImageView) itemView.findViewById(R.id.ivImage2);
+            recipe_name2 = (TextView) itemView.findViewById(R.id.tvName2);
         }
     }
 
