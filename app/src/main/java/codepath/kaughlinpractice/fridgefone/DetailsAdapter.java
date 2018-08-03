@@ -24,6 +24,10 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // Save HashSet of ingredients you have (get from Singleton class)
     HashSet<String> mAllItemNamesSet;
 
+    final static int HEADER_VIEW = 0;
+    final static int INGREDIENT_VIEW = 1;
+    final static int INSTRUCTION_VIEW = 2;
+
 
     // initialize with list
     public DetailsAdapter(ArrayList<String> details, int numIngredients) {
@@ -40,17 +44,17 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         switch(viewType) {
-            case 0:
+            case HEADER_VIEW:
                 // create the view using the recipe_item layout
                 View headerView = inflater.inflate(R.layout.details_header_item, parent, false);
                 // return a new ViewHolder
                 return new HeaderViewHolder(headerView);
-            case 1:
+            case INGREDIENT_VIEW:
                 // create the view using the recipe_item layout
                 View ingredientView = inflater.inflate(R.layout.ingredient_item, parent, false);
                 // return a new ViewHolder
                 return new IngredientViewHolder(ingredientView);
-            case 2:
+            case INSTRUCTION_VIEW:
                 // create the view using the recipe_item layout
                 View instructionView = inflater.inflate(R.layout.instructions_item, parent, false);
                 // return a new ViewHolder
@@ -65,7 +69,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         switch (holder.getItemViewType()) {
-            case 0:
+            case HEADER_VIEW:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
                 // populate the view with the correct header title
                 if (position == 0) {
@@ -74,7 +78,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     headerViewHolder.tvHeader.setText(R.string.instructions);
                 }
                 break;
-            case 1:
+            case INGREDIENT_VIEW:
                 final IngredientViewHolder ingredientViewHolder = (IngredientViewHolder) holder;
                 // get the ingredient name at the specified position
                 final String ingredient = mDetails.get(position);
@@ -113,7 +117,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 });
 
                 break;
-            case 2:
+            case INSTRUCTION_VIEW:
                 InstructionViewHolder instructionViewHolder = (InstructionViewHolder) holder;
                 // get the instruction step at the specified position
                 String instruction = mDetails.get(position);
@@ -146,11 +150,11 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // case 1, position corresponds to ingredient needed
         // case 2, position corresponds to instruction step
         if (position == 0 || position == mNumIngredients + 1) {
-            return 0;
+            return HEADER_VIEW;
         } else if (position > 0 && position <= mNumIngredients) {
-            return 1;
+            return INGREDIENT_VIEW;
         } else {
-            return 2;
+            return INSTRUCTION_VIEW;
         }
     }
 

@@ -3,16 +3,17 @@
 
     <dimen name="pop_up_button_text_size">14sp</dimen>
     <dimen name="pop_up_text_size">16sp</dimen>
-    <dimen name="fridge_item_text_size">10sp</dimen>
+    <dimen name="fridge_item_text_size">15sp</dimen>
     <dimen name="list_dish_text_size">25sp</dimen>
     <dimen name="details_dish_text_size">25sp</dimen>
     <dimen name="details_heading_text_size">20sp</dimen>
     <dimen name="details_paragraph_text_size">17sp</dimen>
 
+
+    <dimen name="fridge_title_text_size">30dp</dimen>
     <dimen name="no_margin">0dp</dimen>
     <dimen name="outside_padding_pop_ups">10dp</dimen>
     <dimen name="button_height">40dp</dimen>
-    <dimen name="fridge_item_square_len">120dp</dimen>
     <dimen name="fridge_item_image_height">80dp</dimen>
     <dimen name="fridge_item_image_width">100dp</dimen>
     <dimen name="fridge_item_text_height">20dp</dimen>
@@ -39,4 +40,8 @@
     <dimen name="medium_padding">15dp</dimen>
     <dimen name="big_padding">30dp</dimen>
     <dimen name="favorite_icon_size"></dimen>
+    <dimen name="cardview_width">120dp</dimen>
+    <dimen name="cardview_height">150dp</dimen>
+    <dimen name="cardview_rounded_corners">4dp</dimen>
+
 </resources>
