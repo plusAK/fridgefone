@@ -49,12 +49,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
         GlideApp.with(mContext)
                 .load(mItems.get(position).getImageURL())
-                .into(viewHolder.mFoodImageView);
+                .into(viewHolder.mFoodCircleImageView);
 
         // check if all are selected
         if (mSingleInstance.ismAllSelected()) {
             viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
-            viewHolder.itemView.setAlpha(.85f); // changes opacity of image once clicked
+            viewHolder.itemView.setAlpha(.65f); // changes opacity of image once clicked
         }
         else if(!mSingleInstance.ismAllSelected()) {
             viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
@@ -106,7 +106,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                         // if image is clicked
                         mSingleInstance.getmSelectedNamesSet().add(item_name);
                         viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
-                        view.setAlpha(.85f); // changes opacity of image once clicked //TODO  change to dimen later
+                        view.setAlpha(.65f); // changes opacity of image once clicked //TODO  change to dimen later
                         //view.setAlpha(R.dimen.selected_view); // changes opacity of image once clicked
                     }
                     Log.d("ItemAdapter", "Selected Items in Fridge Hashset: " + mSingleInstance.getmSelectedNamesSet());
@@ -124,14 +124,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView mFoodNameTextView;
-        public ImageView mFoodImageView;
+        public ImageView mFoodCircleImageView;
         public ImageView mSelectCheckImageView;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
-            mFoodImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
+            mFoodCircleImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
             mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
 
         }

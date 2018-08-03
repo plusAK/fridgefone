@@ -4,43 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FridgeFragment"
-    android:padding="@dimen/framelayout_padding"
-    android:background="@color/black"
-    >
+    android:background="@color/white"
+    tools:context=".fragments.FridgeFragment">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/round_corner_lightgrey"
         android:padding="@dimen/small_padding"
         tools:context=".MainActivity">
-
-        <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/swipeContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/fridge_bottom_padding">
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvFridgeHomeView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/round_corner_grey"
-                android:padding="@dimen/less_medium_padding">
-
-            </android.support.v7.widget.RecyclerView>
-
-        </android.support.v4.widget.SwipeRefreshLayout>
 
         <ImageView
             android:id="@+id/ivAddItem"
             android:layout_width="@dimen/fridge_button_size"
             android:layout_height="@dimen/fridge_button_size"
-            android:layout_alignBottom="@+id/swipeContainer"
+            android:layout_alignTop="@+id/ivGenerateRecipeList"
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:focusable="true"
@@ -50,11 +29,30 @@
             android:id="@+id/ivGenerateRecipeList"
             android:layout_width="@dimen/fridge_button_size"
             android:layout_height="@dimen/fridge_button_size"
-            android:layout_alignBottom="@+id/swipeContainer"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:focusable="true"
             app:srcCompat="@drawable/cooking_pot_button" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="49dp">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvFridgeHomeView"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
     </RelativeLayout>

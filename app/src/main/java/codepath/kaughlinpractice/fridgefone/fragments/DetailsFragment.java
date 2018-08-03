@@ -33,7 +33,6 @@ import codepath.kaughlinpractice.fridgefone.DetailsAdapter;
 import codepath.kaughlinpractice.fridgefone.GlideApp;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
-import codepath.kaughlinpractice.fridgefone.model.Recipe;
 import cz.msebera.android.httpclient.Header;
 
 
@@ -41,7 +40,6 @@ public class DetailsFragment extends Fragment {
 
     private boolean mUseInstructionsAPI = false;
 
-    public Recipe recipe;
     @BindView(R.id.ivRecipeImage) public ImageView ivRecipeImage;
     @BindView(R.id.ivFavoriteStar) public ImageView ivFavoriteStar;
     @BindView(R.id.tvDishTitle) public TextView tvDishTitle;
@@ -129,11 +127,6 @@ public class DetailsFragment extends Fragment {
 
                         ArrayList<String> details = new ArrayList<>();
                         details.add(getString(R.string.ingredients));
-                        /*
-                        for (String ingredient: mIngredientsSet) {
-                            details.add(ingredient);
-                        }
-                        */
                         for (String ingredient: ingredients) {
                             details.add(ingredient);
                         }
@@ -142,7 +135,6 @@ public class DetailsFragment extends Fragment {
                         for(String step: mInstructionsList) {
                             details.add(step);
                         }
-
 
                         mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
                         // RecyclerView setup (layout manager, use adapter)
@@ -173,14 +165,12 @@ public class DetailsFragment extends Fragment {
                     JSONObject partOfInstructions = response.getJSONObject(i);
                     parseInstructions(partOfInstructions);
                 }
-
                 ArrayList<String> details = new ArrayList<>();
                 details.add(getString(R.string.ingredients));
 
                 for (String ingredient: ingredients) {
                     details.add(ingredient);
                 }
-
                 details.add(getString(R.string.instructions));
                 for(String step: mInstructionsList) {
                     details.add(step);
