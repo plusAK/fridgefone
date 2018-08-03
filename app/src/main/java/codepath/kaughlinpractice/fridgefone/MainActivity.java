@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //mFridgeFragment.loadItems();
         mSingleInstance.getmAllItemNamesSet().remove(item.getName());
         mSingleInstance.getmSelectedNamesSet().remove(item.getName());
-        Toast.makeText(this, R.string.delete_item_toast + " " + item.getName(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.delete_item_toast) + " " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
     public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
