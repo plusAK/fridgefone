@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/list_fragment_padding">
+
+                <ImageView
+                    android:id="@+id/ivImage1"
+                    android:layout_width="match_parent"
+                    android:layout_height="143dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/tvName1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:background="@color/opaque_black"
+                    android:fontFamily="@font/roboto_light"
+                    android:padding="@dimen/very_small_padding"
+                    android:paddingLeft="@dimen/very_small_padding"
+                    android:paddingRight="@dimen/very_small_padding"
+                    android:text="@string/dish_title"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="4dp"
+                android:padding="@dimen/list_fragment_padding">
+
+                <ImageView
+                    android:id="@+id/ivImage2"
+                    android:layout_width="match_parent"
+                    android:layout_height="143dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/tvName2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:background="@color/opaque_black"
+                    android:fontFamily="@font/roboto_light"
+                    android:padding="@dimen/very_small_padding"
+                    android:paddingLeft="@dimen/very_small_padding"
+                    android:paddingRight="@dimen/very_small_padding"
+                    android:text="@string/dish_title"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/list_fragment_padding">
+
+            <ImageView
+                android:id="@+id/ivImage3"
+                android:layout_width="match_parent"
+                android:layout_height="290dp"
+                android:layout_weight="1"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tvName3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:background="@color/opaque_black"
+                android:fontFamily="@font/roboto_light"
+                android:padding="@dimen/very_small_padding"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingRight="@dimen/very_small_padding"
+                android:text="@string/dish_title"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>

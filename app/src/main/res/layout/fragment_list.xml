@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity"
-        android:background="@color/obsedian">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/filterImageView"
@@ -25,7 +25,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvRecipes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/currentFilters" />
 
