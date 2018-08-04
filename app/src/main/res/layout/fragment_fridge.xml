@@ -23,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:focusable="true"
-            app:srcCompat="@drawable/round_add_button" />
+            app:srcCompat="@drawable/black_outline_add" />
 
         <ImageView
             android:id="@+id/ivGenerateRecipeList"

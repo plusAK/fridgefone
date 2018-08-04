@@ -58,168 +58,89 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+    public void setRecipes(final int position, TextView recipe_name, ImageView recipe_image) {
+            Recipe recipe = mRecipes.get(position);
+            recipe_name.setText(recipe.getName());
+            GlideApp.with(context)
+                    .load(recipe.getImage())
+                    .fitCenter()
+                    .transform(new RoundedCornersTransformation(50, 0))
+                    .into(recipe_image);
+    }
+
+    public void setRecipeListener(TextView recipe_name, ImageView recipe_image, final int position, final int recipePosition) {
+        recipe_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // make sure the position is valid, i.e. actually exists in the view
+                if (position != RecyclerView.NO_POSITION) {
+                    // get the recipe at the position, this won't work if the class is static
+                    Recipe recipe = mRecipes.get(recipePosition);
+                    ((MainActivity) context).openDetails(recipe); // similar to Intent, going through Activity to get to new fragment
+                }
+            }
+        });
+        recipe_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // make sure the position is valid, i.e. actually exists in the view
+                if (position != RecyclerView.NO_POSITION) {
+                    // get the recipe at the position, this won't work if the class is static
+                    Recipe recipe = mRecipes.get(recipePosition);
+                    ((MainActivity) context).openDetails(recipe); // similar to Intent, going through Activity to get to new fragment
+                }
+            }
+        });
+    }
+
     // bind the values based on the position of the element
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
-        // get the data according to position
-        Recipe recipe1;
-        Recipe recipe2;
-        Recipe recipe3;
         final int position1 = position * 3;
-        final int position2 = (position * 3) + 1;
-        final int position3 = (position * 3) + 2;
+        final int position2 = position1 + 1;
+        final int position3 = position2 + 2;
 
         switch(holder.getItemViewType()) {
             case 0:
                 LeftRecipeViewHolder leftRecipeViewHolder = (LeftRecipeViewHolder) holder;
-                recipe1 = mRecipes.get(position1);
-                leftRecipeViewHolder.recipe_name1.setText(recipe1.getName());
-                GlideApp.with(context)
-                        .load(recipe1.getImage())
-                        .fitCenter()
-                        .transform(new RoundedCornersTransformation(50, 0))
-                        .into(leftRecipeViewHolder.recipe_image1);
 
-                recipe2 = mRecipes.get(position2);
-                    leftRecipeViewHolder.recipe_name2.setText(recipe2.getName());
-                    GlideApp.with(context)
-                            .load(recipe2.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(leftRecipeViewHolder.recipe_image2);
+                setRecipes(position1, leftRecipeViewHolder.recipe_name1, leftRecipeViewHolder.recipe_image1);
+                setRecipes(position2, leftRecipeViewHolder.recipe_name2, leftRecipeViewHolder.recipe_image2);
+                setRecipes(position3, leftRecipeViewHolder.recipe_name3, leftRecipeViewHolder.recipe_image3);
 
-                recipe3 = mRecipes.get(position3);
-                    leftRecipeViewHolder.recipe_name3.setText(recipe3.getName());
-                    GlideApp.with(context)
-                            .load(recipe3.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(leftRecipeViewHolder.recipe_image3);
-                leftRecipeViewHolder.recipe_image1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // make sure the position is valid, i.e. actually exists in the view
-                        if (position != RecyclerView.NO_POSITION) {
-                            // get the recipe at the position, this won't work if the class is static
-                            Recipe recipe1 = mRecipes.get(position1);
-                            ((MainActivity) context).openDetails(recipe1); // similar to Intent, going through Activity to get to new fragment
-                        }
-                    }
-                });
-                leftRecipeViewHolder.recipe_image2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // make sure the position is valid, i.e. actually exists in the view
-                        if (position != RecyclerView.NO_POSITION) {
-                            // get the recipe at the position, this won't work if the class is static
-                            Recipe recipe2 = mRecipes.get(position2);
-                            ((MainActivity) context).openDetails(recipe2); // similar to Intent, going through Activity to get to new fragment
-                        }
-                    }
-                });
-                leftRecipeViewHolder.recipe_image3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // make sure the position is valid, i.e. actually exists in the view
-                        if (position != RecyclerView.NO_POSITION) {
-                            // get the recipe at the position, this won't work if the class is static
-                            Recipe recipe3 = mRecipes.get(position3);
-                            ((MainActivity) context).openDetails(recipe3); // similar to Intent, going through Activity to get to new fragment
-                        }
-                    }
-                });
+                setRecipeListener(leftRecipeViewHolder.recipe_name1, leftRecipeViewHolder.recipe_image1, position, position1);
+                setRecipeListener(leftRecipeViewHolder.recipe_name2, leftRecipeViewHolder.recipe_image2, position, position2);
+                setRecipeListener(leftRecipeViewHolder.recipe_name3, leftRecipeViewHolder.recipe_image3, position, position3);
                 break;
 
             case 1:
                 RightRecipeViewHolder rightRecipeViewHolder = (RightRecipeViewHolder) holder;
-                recipe1 = mRecipes.get(position1);
-                rightRecipeViewHolder.recipe_name1.setText(recipe1.getName());
-                GlideApp.with(context)
-                        .load(recipe1.getImage())
-                        .fitCenter()
-                        .transform(new RoundedCornersTransformation(50, 0))
-                        .into(rightRecipeViewHolder.recipe_image1);
 
-                recipe2 = mRecipes.get(position2);
-                rightRecipeViewHolder.recipe_name2.setText(recipe2.getName());
-                GlideApp.with(context)
-                        .load(recipe2.getImage())
-                        .fitCenter()
-                        .transform(new RoundedCornersTransformation(50, 0))
-                        .into(rightRecipeViewHolder.recipe_image2);
+                setRecipes(position1, rightRecipeViewHolder.recipe_name1, rightRecipeViewHolder.recipe_image1);
+                setRecipes(position2, rightRecipeViewHolder.recipe_name2, rightRecipeViewHolder.recipe_image2);
+                setRecipes(position3, rightRecipeViewHolder.recipe_name3, rightRecipeViewHolder.recipe_image3);
 
-                recipe3 = mRecipes.get(position3);
-                rightRecipeViewHolder.recipe_name3.setText(recipe3.getName());
-                GlideApp.with(context)
-                        .load(recipe3.getImage())
-                        .fitCenter()
-                        .transform(new RoundedCornersTransformation(50, 0))
-                        .into(rightRecipeViewHolder.recipe_image3);
-
-                rightRecipeViewHolder.recipe_image1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // make sure the position is valid, i.e. actually exists in the view
-                        if (position != RecyclerView.NO_POSITION) {
-                            // get the recipe at the position, this won't work if the class is static
-                            Recipe recipe1 = mRecipes.get(position1);
-                            ((MainActivity) context).openDetails(recipe1); // similar to Intent, going through Activity to get to new fragment
-                        }
-                    }
-                });
-                rightRecipeViewHolder.recipe_image2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // make sure the position is valid, i.e. actually exists in the view
-                        if (position != RecyclerView.NO_POSITION) {
-                            // get the recipe at the position, this won't work if the class is static
-                            Recipe recipe2 = mRecipes.get(position2);
-                            ((MainActivity) context).openDetails(recipe2); // similar to Intent, going through Activity to get to new fragment
-                        }
-                    }
-                });
-                rightRecipeViewHolder.recipe_image3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // make sure the position is valid, i.e. actually exists in the view
-                        if (position != RecyclerView.NO_POSITION) {
-                            // get the recipe at the position, this won't work if the class is static
-                            Recipe recipe3 = mRecipes.get(position3);
-                            ((MainActivity) context).openDetails(recipe3); // similar to Intent, going through Activity to get to new fragment
-                        }
-                    }
-                });
+                setRecipeListener(rightRecipeViewHolder.recipe_name1, rightRecipeViewHolder.recipe_image1, position, position1);
+                setRecipeListener(rightRecipeViewHolder.recipe_name2, rightRecipeViewHolder.recipe_image2, position, position2);
+                setRecipeListener(rightRecipeViewHolder.recipe_name3, rightRecipeViewHolder.recipe_image3, position, position3);
                 break;
             case 2:
                 OneRecipeViewHolder oneRecipeViewHolder = (OneRecipeViewHolder) holder;
-                recipe1 = mRecipes.get(position1);
-                oneRecipeViewHolder.recipe_name1.setText(recipe1.getName());
-                    GlideApp.with(context)
-                            .load(recipe1.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(oneRecipeViewHolder.recipe_image1);
+
+                setRecipes(position1, oneRecipeViewHolder.recipe_name1, oneRecipeViewHolder.recipe_image1);
+
+                setRecipeListener(oneRecipeViewHolder.recipe_name1, oneRecipeViewHolder.recipe_image1, position, position1);
 
                 break;
             case 3:
                 TwoRecipeViewHolder twoRecipeViewHolder = (TwoRecipeViewHolder) holder;
-                recipe1 = mRecipes.get(position1);
-                twoRecipeViewHolder.recipe_name1.setText(recipe1.getName());
-                    GlideApp.with(context)
-                            .load(recipe1.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(twoRecipeViewHolder.recipe_image1);
 
-                recipe2 = mRecipes.get(position2);
-                twoRecipeViewHolder.recipe_name2.setText(recipe1.getName());
-                    GlideApp.with(context)
-                            .load(recipe2.getImage())
-                            .fitCenter()
-                            .transform(new RoundedCornersTransformation(50, 0))
-                            .into(twoRecipeViewHolder.recipe_image2);
+                setRecipes(position1, twoRecipeViewHolder.recipe_name1, twoRecipeViewHolder.recipe_image1);
+                setRecipes(position2, twoRecipeViewHolder.recipe_name2, twoRecipeViewHolder.recipe_image2);
 
+                setRecipeListener(twoRecipeViewHolder.recipe_name1, twoRecipeViewHolder.recipe_image1, position, position1);
+                setRecipeListener(twoRecipeViewHolder.recipe_name2, twoRecipeViewHolder.recipe_image2, position, position2);
                 break;
         }
     }
