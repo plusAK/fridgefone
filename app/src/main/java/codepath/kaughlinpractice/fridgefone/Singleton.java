@@ -9,6 +9,8 @@ public class Singleton {
     //shared data variables
     private HashSet<String> mSelectedNamesSet;
     private HashSet<String> mAllItemNamesSet;
+    private String mSelectedItemsString;
+    private String mAllFridgeItemsString;
     private boolean mAllSelected;
     private boolean mSelectItemsBoolean;
     private boolean mNoneSelected;
@@ -41,6 +43,8 @@ public class Singleton {
         return mAllItemNamesSet;
     }
 
+    public String getmSelectedItemsString() { return mSelectedItemsString; }
+
     public boolean ismAllSelected() {
         return mAllSelected;
     }
@@ -53,6 +57,10 @@ public class Singleton {
         return mNoneSelected;
     }
 
+    public String getmAllFridgeItemsString() {
+        return mAllFridgeItemsString;
+    }
+
     // setters
     public void setmAllSelected(boolean mAllSelected) {
         this.mAllSelected = mAllSelected;
@@ -62,7 +70,15 @@ public class Singleton {
         this.mSelectItemsBoolean = mSelectItemsBoolean;
     }
 
+    public void setmSelectedItemsString(String mSelectedItemsString) {
+        this.mSelectedItemsString = mSelectedItemsString;
+    }
+
     public void setmNoneSelected(boolean mNoneSelected) {
         this.mNoneSelected = mNoneSelected;
+    }
+
+    public void setmAllFridgeItemsString(String mAllFridgeItemsString) {
+        this.mAllFridgeItemsString = mAllFridgeItemsString;
     }
 }

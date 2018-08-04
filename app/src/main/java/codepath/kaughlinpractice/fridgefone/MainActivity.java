@@ -14,9 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,25 +33,12 @@ import cz.msebera.android.httpclient.Header;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
-    public boolean mUseGenerateRecipeAPI = false;
-    public boolean mUseAutocompleteAPI = false;
+    private FridgeClient mClient;
 
-
-    // the base URL for the API
-    public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
-    // the parameter name for the API key
-    public final static String API_KEY_PARAM = "X-Mashape-Key";
-    public final static String KEY_ACCEPT_PARAM = "Accept";
-
-    public String mAllFridgeItemsString;
-    public String mSelectedItemsString;
     public Singleton mSingleInstance;
-
-    public final static Integer NUMBER_OF_RECIPES = 6;
 
     public ItemAdapter mItemAdapter;
     public ArrayList<Item> mItemsList;
-    public AsyncHttpClient mClient;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -66,21 +51,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
 
-        // initialize the client
-        mClient = new AsyncHttpClient();
-
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
         // initialize Singleton instance
         mSingleInstance = Singleton.getSingletonInstance();
+        // initialize the client
+        mClient = new FridgeClient(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView=(NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(savedInstanceState == null) { // allows to save the fragment you are in when the screen rotates
+        // allows to save the fragment you are in when the screen rotates
+        if(savedInstanceState == null) {
             goToMyFridge();
             navigationView.setCheckedItem(R.id.nav_Fridge);
         }
@@ -140,21 +125,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getItem(String foodItem) {
 
-        if (mUseAutocompleteAPI) {
-
-            String url = API_BASE_URL + "/food/ingredients/autocomplete";
-            RequestParams params = new RequestParams();
-            mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
-            params.put("query", foodItem);
+        if (FridgeClient.mUseAutocompleteAPI) {
 
             // execute a GET request expecting a JSON object response
-            mClient.get(url, params, new JsonHttpResponseHandler() {
+            mClient.getAutoComplete(foodItem, new JsonHttpResponseHandler(){
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
-                        //String r = response.toString();
-                        //Log.d("MainActivity", "Response: " + r);
+
                         Item item = Item.fromJSON(response.getJSONObject(0));
                         Log.d("MainActivity", "Item: " + item.getName());
                     } catch (JSONException e) {
@@ -220,28 +198,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
         // create the url
-        if (mUseGenerateRecipeAPI) {
-            String url = API_BASE_URL + "/recipes/findByIngredients";
-            // set the request parameters
-            RequestParams params = new RequestParams();
-
-            mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
-            params.put("number", NUMBER_OF_RECIPES);
-
-            if (mSingleInstance.ismAllSelected() == false && mSingleInstance.ismNoneSelected() == false) {
-                Log.d("MainActivity", " Other Selected Fridge Items String: " + mSelectedItemsString);
-                params.put("ingredients", mSelectedItemsString);
-            } else {
-                Log.d("MainActivity", "In All Selected Fridge Items: " + mAllFridgeItemsString);
-                params.put("ingredients", mAllFridgeItemsString);
-            }
+        if (FridgeClient.mUseGenerateRecipeAPI) {
 
             // execute a GET request expecting a JSON object response
-            mClient.get(url, params, new JsonHttpResponseHandler() {
+            mClient.getRecipeList(new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    Log.d("MainActivity", "Before response to string");
+
                     String responseForBundle = response.toString();
                     Log.d("MainActivity", "ResponseForBundle: " + responseForBundle);
 
@@ -305,11 +268,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
     }
-
-    public void setFridgeItems(String allFridgeItems, String selectedItemsString){
-            mAllFridgeItemsString = allFridgeItems;
-            mSelectedItemsString = selectedItemsString;
-        }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {
         mItemAdapter = setter;

@@ -219,17 +219,14 @@ public class FridgeFragment extends Fragment{
         else{
             mSingleInstance.setmNoneSelected(false);
         }
+        mSingleInstance.setmSelectedItemsString(String.join(",", mSingleInstance.getmSelectedNamesSet()));
+        mSingleInstance.setmAllFridgeItemsString(String.join(",", mSingleInstance.getmAllItemNamesSet()));
 
-        mSelectedNamesString = String.join(",", mSingleInstance.getmSelectedNamesSet());
-        mAllNamesString = String.join(",", mSingleInstance.getmAllItemNamesSet());
 
 
         // You need to refresh page for item names to load from Parse
         Log.d("FridgeFragment", "Selected Items in Fridge String: " + mSelectedNamesString);
         Log.d("FridgeFragment", "All Items in Fridge String: " + mAllNamesString);
-
-        ((MainActivity) getContext()).setFridgeItems(mAllNamesString, mSelectedNamesString);
-
 
         Log.d("FridgeFragment", "should move pages");
         ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
