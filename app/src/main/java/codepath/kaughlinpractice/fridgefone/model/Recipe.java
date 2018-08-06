@@ -30,7 +30,7 @@ import cz.msebera.android.httpclient.Header;
 @ParseClassName("Recipe")
 public class Recipe extends ParseObject{
 
-    static boolean mUseRecipeInformationAPI = true;
+    static boolean mUseRecipeInformationAPI = false;
 
     public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
 
