@@ -15,22 +15,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import codepath.kaughlinpractice.fridgefone.FridgeClient;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 import cz.msebera.android.httpclient.Header;
 
 public class AddItemFragment extends DialogFragment {
 
-    public boolean mUseAutocompleteAPI = false;
 
     private Button addButton;
     private AutoCompleteTextView actvFoodItem;
@@ -39,7 +37,7 @@ public class AddItemFragment extends DialogFragment {
     // the parameter name for the API key
     public final static String API_KEY_PARAM = "X-Mashape-Key";
     public final static String KEY_ACCEPT_PARAM = "Accept";
-    public AsyncHttpClient client;
+    public FridgeClient mClient;
     public ArrayList<String> autoCompleteItems = new ArrayList<String>();
     public ArrayAdapter<String> addItemAdapter;
 
@@ -53,7 +51,8 @@ public class AddItemFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        client = new AsyncHttpClient();
+        //intialize client
+        mClient = new FridgeClient(getActivity());
         addItemAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, autoCompleteItems);
 
@@ -101,15 +100,9 @@ public class AddItemFragment extends DialogFragment {
     }
 
     public void getItemForAutoComplete(String foodItem) {
-        if (mUseAutocompleteAPI) {
-            String url = API_BASE_URL + "/food/ingredients/autocomplete";
-            RequestParams params = new RequestParams();
-            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
-            params.put("query", foodItem);
-
+        if (FridgeClient.mUseAutocompleteAPI) {
             // execute a GET request expecting a JSON object response
-            client.get(url, params, new JsonHttpResponseHandler() {
+            mClient.getAutoComplete(foodItem, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {

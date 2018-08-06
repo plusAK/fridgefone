@@ -14,9 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +28,7 @@ import java.util.HashSet;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import codepath.kaughlinpractice.fridgefone.DetailsAdapter;
+import codepath.kaughlinpractice.fridgefone.FridgeClient;
 import codepath.kaughlinpractice.fridgefone.GlideApp;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
@@ -38,7 +37,6 @@ import cz.msebera.android.httpclient.Header;
 
 public class DetailsFragment extends Fragment {
 
-    private boolean mUseInstructionsAPI = false;
 
     @BindView(R.id.ivRecipeImage) public ImageView ivRecipeImage;
     @BindView(R.id.ivFavoriteStar) public ImageView ivFavoriteStar;
@@ -46,13 +44,8 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.buttonBack) public Button buttonBack;
     @BindView(R.id.rvDetails) public RecyclerView rvDetails;
 
-    // the base URL for the API
-    public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
-    // the parameter name for the API key
-    public final static String API_KEY_PARAM = "X-Mashape-Key";
-    public final static String KEY_ACCEPT_PARAM = "Accept";
-    // instance field
-    AsyncHttpClient client;
+
+    public FridgeClient mClient;
     private HashMap<String, Boolean> user_dict = null;
 
     private String currentFilters = null;
@@ -76,7 +69,7 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // initialize the client
-        client = new AsyncHttpClient();
+        mClient = new FridgeClient(getActivity());
 
         mInstructionsList = new ArrayList<>();
         mIngredientsSet = new HashSet<>();
@@ -107,16 +100,10 @@ public class DetailsFragment extends Fragment {
         });
 
 
-        if (mUseInstructionsAPI) {
-            String url = API_BASE_URL + "/recipes/" + id + "/analyzedInstructions";
-            // set the request parameters
-            client.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
-            RequestParams params = new RequestParams();
-            params.put("stepBreakdown", false);
+        if (FridgeClient.mUseInstructionsAPI) {
 
             // execute a GET request expecting a JSON object response
-            client.get(url, params, new JsonHttpResponseHandler() {
+            mClient.getInstructions(id, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
