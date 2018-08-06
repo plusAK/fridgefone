@@ -43,10 +43,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
+    private android.support.v7.widget.Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.nav_actionbar);
+        setSupportActionBar(mToolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
@@ -134,9 +139,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
 
                         Item item = Item.fromJSON(response.getJSONObject(0));
-                        Log.d("MainActivity", "Item: " + item.getName());
                     } catch (JSONException e) {
-                        Log.d("MainActivity", e.getMessage());
+                        Log.d("MainActivity", "Error: " + e.getMessage());
                     }
                 }
 
@@ -160,15 +164,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             "    \"image\": \"applesauce.jpg\"\n" +
             "  }\n" +
              "]";
-            Log.d("MainActivity", "Mock API Works");
             JSONArray response = null;
             try {
                 // Creating items to send to parse server
                 response = new JSONArray(stringResponse);
                 Item item = Item.fromJSON(response.getJSONObject(0));
-                Log.d("MainActivity", "Item: " + item.getName());
             } catch (JSONException e) {
-                Log.d("MainActivity", "Error after API call: " + e.getMessage());
+                Log.d("MainActivity", "Error: " + e.getMessage());
             }
         }
         goToMyFridge();
@@ -206,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
                     String responseForBundle = response.toString();
-                    Log.d("MainActivity", "ResponseForBundle: " + responseForBundle);
 
                     Fragment listFrag = new ListFragment();
 
@@ -251,17 +252,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransition(listFrag);
         }
     }
-//
-//    public void APIParams(RequestParams params, String items) {
-//        mClient.addHeader(API_KEY_PARAM, getString(R.string.api_key));
-//        mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
-//        params.put("ingredients", items);
-//        params.put("number", NUMBER_OF_RECIPES);
-//    }
-    // other parameters we could use later
-    // params.put("fillIngredients", false);
-    // params.put("limitLicense", false);
-    // params.put("ranking", 1);
 
     public void fragmentTransition(Fragment nextFrag) {
         FragmentManager fragmentManager = getSupportFragmentManager();

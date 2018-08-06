@@ -64,6 +64,18 @@ public class DetailsFragment extends Fragment {
         return view;
     }
 
+    // set Transparent background for actionbar
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//
+//        AppCompatActivity appCompatActivity = (AppCompatActivity)context;
+//        ActionBar bar= appCompatActivity.getSupportActionBar();
+//        //bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00acacac")));
+//        bar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -128,7 +140,7 @@ public class DetailsFragment extends Fragment {
                         rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
                         rvDetails.setAdapter(mDetailsAdapter);
                     } catch (JSONException e) {
-                        Log.d("DetailFragment", e.getMessage());
+                        Log.d("DetailFragment", "Error: " + e.getMessage());
                     }
                 }
 
@@ -145,7 +157,7 @@ public class DetailsFragment extends Fragment {
             try {
                 response = new JSONArray(responseString);
             } catch (JSONException e) {
-                Log.d("DetailFragment", "Converting string to JSON array error: " + e.getMessage());
+                Log.d("DetailFragment", "Error: " + e.getMessage());
             }
             try {
                 for (int i = 0; i < response.length(); i += 1) {
@@ -168,7 +180,7 @@ public class DetailsFragment extends Fragment {
                 rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
                 rvDetails.setAdapter(mDetailsAdapter);
             } catch (JSONException e) {
-                Log.d("DetailFragment", "Error parsing through JSON Array" + e.getMessage());
+                Log.d("DetailFragment", "Error " + e.getMessage());
             }
         }
 
@@ -190,7 +202,7 @@ public class DetailsFragment extends Fragment {
                 mInstructionsList.add(stepDetails);
             }
         } catch (JSONException e) {
-            Log.d("DetailFragment", "Error in parseInstructions " + e.getMessage());
+            Log.d("DetailFragment", "Error " + e.getMessage());
         }
     }
 }
