@@ -91,15 +91,14 @@ public class ListFragment extends Fragment {
             // change string into JSONArray
             response = new JSONArray(responseForBundle);
         } catch (JSONException e) {
-            Log.d("ListFragment", "Not api_call error: " + e.getMessage());
+            Log.d("ListFragment", "Error: " + e.getMessage());
         }
         try {
             for (int i = 0; i < response.length(); i += 1) {
                 Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity(), args, recipes, recipeAdapter);
-                Log.d("ListFragment", recipe.getName());
             }
         } catch (JSONException e) {
-            Log.d("ListFragment", e.getMessage());
+            Log.d("ListFragment", "Error: " + e.getMessage());
         }
 
         String currentFilters = args.getString("currentFilters");

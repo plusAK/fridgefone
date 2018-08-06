@@ -144,7 +144,6 @@ public class Recipe extends ParseObject{
                 if (e == null) {
                     if (!haveRecipeInServer(objects, id)) {
                         if (mUseRecipeInformationAPI) {
-                            Log.d("Recipe", "Using the API");
                             String url = API_BASE_URL +"/recipes/" + recipe.id + "/information";
                             // set the request parameters
                             RequestParams params = new RequestParams();
@@ -172,7 +171,7 @@ public class Recipe extends ParseObject{
 
                                         @Override
                                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                            Log.d("Recipe", "JSON Object Error: " + throwable);
+                                            Log.d("Recipe", "Error: " + throwable);
                                         }
                                     });
                         }
@@ -198,7 +197,6 @@ public class Recipe extends ParseObject{
                     } else {
                         String stringResponse = findRecipeInServer(objects, id);
                         try {
-                            Log.d("Recipe", "We already have recipe id " + id);
                             JSONObject response = new JSONObject(stringResponse);
                             recipe.setRecipeInformation(stringResponse);
                             recipe.name = recipe.getName();
@@ -266,9 +264,8 @@ public class Recipe extends ParseObject{
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("Recipe", "Recipe created successfully");
                 } else {
-                    Log.d("Recipe", "Recipe failure");
+                    Log.d("Recipe", "Error");
                     e.printStackTrace();
                 }
             }
@@ -363,7 +360,6 @@ public class Recipe extends ParseObject{
                 String ingredient = ingredientsJSON.getJSONObject(i).getString("name");
                 if (!ingredients.contains(ingredient)) {
                     ingredients.add(ingredient);
-                    Log.d("Recipe", ingredient);
                 }
             }
         } catch (JSONException e) {

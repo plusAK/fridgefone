@@ -51,10 +51,8 @@ public class FridgeClient {
         RequestParams params = new RequestParams();
         params.put("number", NUMBER_OF_RECIPES);
         if (mSingleInstance.ismAllSelected() == false && mSingleInstance.ismNoneSelected() == false) {
-            Log.d("MainActivity", " Other Selected Fridge Items String: " + mSingleInstance.getmSelectedItemsString());
             params.put("ingredients", mSingleInstance.getmSelectedItemsString());
         } else {
-            Log.d("MainActivity", "In All Selected Fridge Items: " + mSingleInstance.getmSelectedItemsString());
             params.put("ingredients", mSingleInstance.getmSelectedItemsString());
         }
 

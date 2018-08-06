@@ -56,9 +56,8 @@ public class Item extends ParseObject {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("Item", "Create item success");
                 } else {
-                    Log.d("Item", "Item failure");
+                    Log.d("Item", "Error");
                     e.printStackTrace();
                 }
             }

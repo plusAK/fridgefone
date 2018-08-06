@@ -3,7 +3,6 @@ package codepath.kaughlinpractice.fridgefone;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,8 +108,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                         view.setAlpha(.65f); // changes opacity of image once clicked //TODO  change to dimen later
                         //view.setAlpha(R.dimen.selected_view); // changes opacity of image once clicked
                     }
-                    Log.d("ItemAdapter", "Selected Items in Fridge Hashset: " + mSingleInstance.getmSelectedNamesSet());
-
                 }
             }
         });

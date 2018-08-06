@@ -67,7 +67,6 @@ public class AddItemFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String foodItem = actvFoodItem.getText().toString();
-                Log.d("AddItemFragment", "Adding: " + foodItem);
                 Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
                 ((MainActivity) getContext()).getItem(foodItem);
                 dismiss();
@@ -112,11 +111,9 @@ public class AddItemFragment extends DialogFragment {
                             actvFoodItem.setAdapter(new ArrayAdapter<String>(getActivity(),
                                     android.R.layout.simple_dropdown_item_1line, autoCompleteItems));
                             actvFoodItem.showDropDown();
-                            Log.d("AddItemFragment", "Size of item adapter: " + addItemAdapter.getCount());
-                            Log.d("AddItemFragment", "Added " + name + " to list");
                         }
                     } catch (JSONException e) {
-                        Log.d("MainActivity", e.getMessage());
+                        Log.d("MainActivity", "Error: " + e.getMessage());
                     }
                 }
 
@@ -172,7 +169,6 @@ public class AddItemFragment extends DialogFragment {
                     "    \"image\": \"applesauce.jpg\"\n" +
                     "  }\n" +
                     "]";
-            Log.d("MainActivity", "Mock API Works");
             JSONArray response = null;
             try {
                 response = new JSONArray(stringResponse);
@@ -181,11 +177,10 @@ public class AddItemFragment extends DialogFragment {
                     String name = response.getJSONObject(i).getString("name");
                     autoCompleteItems.add(name);
                     addItemAdapter.notifyDataSetChanged();
-                    Log.d("AddItemFragment", "Added " + name + " to list");
                 }
                 actvFoodItem.showDropDown();
             } catch (JSONException e) {
-                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
+                Log.d("MainActivity", "Error: " + e.getMessage());
             }
         }
     }
