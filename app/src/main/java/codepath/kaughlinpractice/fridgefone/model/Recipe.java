@@ -25,6 +25,7 @@ import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
+import codepath.kaughlinpractice.fridgefone.Singleton;
 import cz.msebera.android.httpclient.Header;
 
 @ParseClassName("Recipe")
@@ -324,7 +325,7 @@ public class Recipe extends ParseObject{
 
     public boolean isValid(Bundle args) {
         for (String trait: recipe_traits) {
-            if (args.containsKey(trait) && args.getBoolean(trait) && !this.recipe_dict.get(trait)) {
+            if (Singleton.getSingletonInstance().getmUserDict().get(trait) && !this.recipe_dict.get(trait)) {
                 return false;
             }
         }
