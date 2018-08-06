@@ -30,8 +30,8 @@ import cz.msebera.android.httpclient.Header;
 public class AddItemFragment extends DialogFragment {
 
 
-    private Button addButton;
-    private AutoCompleteTextView actvFoodItem;
+    private Button mAddButton;
+    private AutoCompleteTextView mFoodItemAutoCompleteTextView;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
@@ -56,17 +56,17 @@ public class AddItemFragment extends DialogFragment {
         addItemAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, autoCompleteItems);
 
-        addButton = (Button) view.findViewById(R.id.btnAdd);
+        mAddButton = (Button) view.findViewById(R.id.btnAdd);
         Button cancelButton = (Button) view.findViewById(R.id.btnCancel);
-        actvFoodItem = (AutoCompleteTextView) view.findViewById(R.id.actvFoodItem);
-        actvFoodItem.setAdapter(addItemAdapter);
-        actvFoodItem.setThreshold(1);
-        //actvFoodItem.setDropDownHeight(3);
+        mFoodItemAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.actvFoodItem);
+        mFoodItemAutoCompleteTextView.setAdapter(addItemAdapter);
+        mFoodItemAutoCompleteTextView.setThreshold(1);
+        //mFoodItemAutoCompleteTextView.setDropDownHeight(3);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String foodItem = actvFoodItem.getText().toString();
+                String foodItem = mFoodItemAutoCompleteTextView.getText().toString();
                 Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
                 ((MainActivity) getContext()).getItem(foodItem);
                 dismiss();
@@ -80,7 +80,7 @@ public class AddItemFragment extends DialogFragment {
             }
         });
 
-        actvFoodItem.addTextChangedListener(new TextWatcher() {
+        mFoodItemAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -108,9 +108,9 @@ public class AddItemFragment extends DialogFragment {
                         for (int i = 0; i < response.length(); i++) {
                             String name = response.getJSONObject(i).getString("name");
                             autoCompleteItems.add(name);
-                            actvFoodItem.setAdapter(new ArrayAdapter<String>(getActivity(),
+                            mFoodItemAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(getActivity(),
                                     android.R.layout.simple_dropdown_item_1line, autoCompleteItems));
-                            actvFoodItem.showDropDown();
+                            mFoodItemAutoCompleteTextView.showDropDown();
                         }
                     } catch (JSONException e) {
                         Log.d("MainActivity", "Error: " + e.getMessage());
@@ -178,7 +178,7 @@ public class AddItemFragment extends DialogFragment {
                     autoCompleteItems.add(name);
                     addItemAdapter.notifyDataSetChanged();
                 }
-                actvFoodItem.showDropDown();
+                mFoodItemAutoCompleteTextView.showDropDown();
             } catch (JSONException e) {
                 Log.d("MainActivity", "Error: " + e.getMessage());
             }
