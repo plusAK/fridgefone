@@ -30,11 +30,11 @@ public class ListFragment extends Fragment {
 
     private RecyclerView mFilterRecyclerView;
     private FilterAdapter mFilterAdapter;
-    public ArrayList<String> mFilters;
+    private ArrayList<String> mFilters;
 
-    RecipeAdapter recipeAdapter;
-    ArrayList<Recipe> recipes;
-    RecyclerView rvRecipes;
+    private RecipeAdapter mRecipeAdapter;
+    private ArrayList<Recipe> mRecipeArrayList;
+    private RecyclerView mRecipeRecyclerView;
     private ImageView mFilterImageView;
     private TextView mCurrentFilters;
     private Button mButtonBack;
@@ -58,7 +58,7 @@ public class ListFragment extends Fragment {
             mFilters.add(mFilterTitles[i]);
         }
 
-        mFilterRecyclerView = view.findViewById(R.id.idRecyclerViewHorizontalList);
+        mFilterRecyclerView = view.findViewById(R.id.HorizontalListRecyclerView);
         // add a divider after each item for more clarity
         mFilterRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.HORIZONTAL));
         mFilterAdapter = new FilterAdapter(mFilters);
@@ -68,20 +68,20 @@ public class ListFragment extends Fragment {
 
         mCurrentFilters = (TextView) view.findViewById(R.id.currentFilters);
         // find RecyclerView
-        rvRecipes = (RecyclerView) view.findViewById(R.id.rvRecipes);
+        mRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.rvRecipes);
         // init the array list (data source)
-        recipes = new ArrayList<>();
+        mRecipeArrayList = new ArrayList<>();
 
         mFilterImageView = (ImageView) view.findViewById(R.id.filterImageView);
         mButtonBack = (Button) view.findViewById(R.id.buttonBack);
 
         // construct the adapter from this data source
-        recipeAdapter = new RecipeAdapter(recipes);
+        mRecipeAdapter = new RecipeAdapter(mRecipeArrayList);
 
         // RecyclerView setup (layout manager, user adapter)
-        rvRecipes.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecipeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // set the adapter
-        rvRecipes.setAdapter(recipeAdapter);
+        mRecipeRecyclerView.setAdapter(mRecipeAdapter);
 
         //get bundle contents
         Bundle args = getArguments();
@@ -95,7 +95,7 @@ public class ListFragment extends Fragment {
         }
         try {
             for (int i = 0; i < response.length(); i += 1) {
-                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity(), args, recipes, recipeAdapter);
+                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity(), args, mRecipeArrayList, mRecipeAdapter);
             }
         } catch (JSONException e) {
             Log.d("ListFragment", "Error: " + e.getMessage());
