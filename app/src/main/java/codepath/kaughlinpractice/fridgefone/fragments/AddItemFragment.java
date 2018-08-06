@@ -32,11 +32,6 @@ public class AddItemFragment extends DialogFragment {
 
     private Button addButton;
     private AutoCompleteTextView actvFoodItem;
-    // the base URL for the API
-    public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
-    // the parameter name for the API key
-    public final static String API_KEY_PARAM = "X-Mashape-Key";
-    public final static String KEY_ACCEPT_PARAM = "Accept";
     public FridgeClient mClient;
     public ArrayList<String> autoCompleteItems = new ArrayList<String>();
     public ArrayAdapter<String> addItemAdapter;

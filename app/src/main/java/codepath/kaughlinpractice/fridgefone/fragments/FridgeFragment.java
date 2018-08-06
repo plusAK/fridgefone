@@ -8,13 +8,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -44,8 +45,6 @@ public class FridgeFragment extends Fragment{
 
     private HashMap<String, Boolean> user_dict = null;
 
-    public String mSelectedNamesString = "";
-    public String mAllNamesString = "";
 
     public boolean mFirstClick = false;
 
@@ -185,16 +184,57 @@ public class FridgeFragment extends Fragment{
         mGenerateRecipeListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                generateRecipes();
-                mSingleInstance.setmAllSelected(false); // set All selected boolean to false
+                final Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.anim_shake);
+                view.startAnimation(anim);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                        generateRecipes();
+                        mSingleInstance.setmAllSelected(false); // set All selected boolean to false
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
             }
         });
+//
+//        final View view = view.findViewById(R.id.imageView1);
+//
 
         mAddItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddItemFragment addItemFragment = new AddItemFragment();
-                addItemFragment.show(getFragmentManager(), "AddItemFragment");
+                final Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.anim_scaledown);
+                view.startAnimation(anim);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        AddItemFragment addItemFragment = new AddItemFragment();
+                        addItemFragment.show(getFragmentManager(), "AddItemFragment");
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+
             }
         });
     }
