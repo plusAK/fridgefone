@@ -54,7 +54,7 @@ public class DetailsFragment extends Fragment {
     ArrayList<String> mInstructionsList;
     Collection<String> mIngredientsSet;
     DetailsAdapter mDetailsAdapter;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

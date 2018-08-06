@@ -4,9 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -23,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import codepath.kaughlinpractice.fridgefone.FridgeClient;
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
 import codepath.kaughlinpractice.fridgefone.Singleton;
@@ -30,8 +29,6 @@ import cz.msebera.android.httpclient.Header;
 
 @ParseClassName("Recipe")
 public class Recipe extends ParseObject{
-
-    static boolean mUseRecipeInformationAPI = false;
 
     public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
 
@@ -52,14 +49,8 @@ public class Recipe extends ParseObject{
     private Context mContext;
 
     static RecipeAdapter adapter;
-    static AsyncHttpClient client;
+    static FridgeClient mClient;
     static ArrayList<Recipe> recipes;
-
-    // the base URL for the API
-    private final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
-    // the parameter name for the API key
-    private final static String API_KEY_PARAM = "X-Mashape-Key";
-    private final static String KEY_ACCEPT_PARAM = "Accept";
 
     private static final String KEY_NAME = "name";
     private static final String KEY_ID = "id";
@@ -121,7 +112,7 @@ public class Recipe extends ParseObject{
     public static Recipe fromJSON(final JSONObject jsonObject, final Context context, final Bundle args, final ArrayList<Recipe> rec, final RecipeAdapter recipeAdapter) throws JSONException {
 
         // initialize the client
-        client = new AsyncHttpClient();
+        mClient = new FridgeClient(context);
         adapter = new RecipeAdapter(recipes);
 
         final Recipe recipe = new Recipe();
@@ -143,18 +134,10 @@ public class Recipe extends ParseObject{
             public void done(List<Recipe> objects, ParseException e) {
                 if (e == null) {
                     if (!haveRecipeInServer(objects, id)) {
-                        if (mUseRecipeInformationAPI) {
-                            Log.d("Recipe", "Using the API");
-                            String url = API_BASE_URL +"/recipes/" + recipe.id + "/information";
-                            // set the request parameters
-                            RequestParams params = new RequestParams();
-                            // String x = R.string.api_key;
+                        if (FridgeClient.mUseRecipeInformationAPI) {
 
-                            client.addHeader(API_KEY_PARAM, context.getString(R.string.api_key));
-                            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
                             // execute a GET request expecting a JSON object response
-                            client.get(url, params,
-                                    new JsonHttpResponseHandler() {
+                            mClient.getInformation(id, new JsonHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                             String r = response.toString();
