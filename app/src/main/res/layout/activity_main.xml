@@ -7,12 +7,22 @@
     android:id="@+id/DrawerLayout"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/my_fragment"
-        android:name="codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/navigation_actionbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <FrameLayout
+            android:id="@+id/my_fragment"
+            android:name="codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+    </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"
@@ -20,7 +30,9 @@
         android:layout_gravity="start"
         android:id="@+id/nav_view"
         app:menu="@menu/navigation_menu"
+        app:headerLayout="@layout/navigation_header"
         >
-
     </android.support.design.widget.NavigationView>
+
+
 </android.support.v4.widget.DrawerLayout>

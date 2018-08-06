@@ -3,10 +3,11 @@ package codepath.kaughlinpractice.fridgefone;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -92,6 +93,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                 // make sure the position is valid, i.e. actually exists in the view
                 if (position != RecyclerView.NO_POSITION && mSingleInstance.ismSelectItemsBoolean()) {
 
+                    final Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.anim_scaledown);
+                    view.startAnimation(anim);
+
 
                     String item_name = viewHolder.mFoodNameTextView.getText().toString();
 
@@ -109,8 +113,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                         view.setAlpha(.65f); // changes opacity of image once clicked //TODO  change to dimen later
                         //view.setAlpha(R.dimen.selected_view); // changes opacity of image once clicked
                     }
-                    Log.d("ItemAdapter", "Selected Items in Fridge Hashset: " + mSingleInstance.getmSelectedNamesSet());
-
                 }
             }
         });

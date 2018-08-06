@@ -24,6 +24,7 @@ public class FridgeClient {
     public static boolean mUseInstructionsAPI = false;
     public static boolean mUseAutocompleteAPI = false;
     public static boolean mUseGenerateRecipeAPI = false;
+    public static boolean mUseRecipeInformationAPI = false;
 
     public FridgeClient(Context context) {
         this.mContext = context;
@@ -51,10 +52,8 @@ public class FridgeClient {
         RequestParams params = new RequestParams();
         params.put("number", NUMBER_OF_RECIPES);
         if (mSingleInstance.ismAllSelected() == false && mSingleInstance.ismNoneSelected() == false) {
-            Log.d("MainActivity", " Other Selected Fridge Items String: " + mSingleInstance.getmSelectedItemsString());
             params.put("ingredients", mSingleInstance.getmSelectedItemsString());
         } else {
-            Log.d("MainActivity", "In All Selected Fridge Items: " + mSingleInstance.getmSelectedItemsString());
             params.put("ingredients", mSingleInstance.getmSelectedItemsString());
         }
 
@@ -79,6 +78,16 @@ public class FridgeClient {
         params.put("stepBreakdown", false);
         mClient.get(apiUrl,params,handler);
     }
+
+    public void getInformation(int id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("/recipes/" + id + "/information");
+        mClient.addHeader(API_KEY_PARAM, mContext.getResources().getString(R.string.api_key));
+        mClient.addHeader(KEY_ACCEPT_PARAM, "application/json");
+        // set the request parameters
+        RequestParams params = new RequestParams();
+        mClient.get(apiUrl,params,handler);
+    }
+
 
     private String getApiUrl(String path) {
         return this.API_BASE_URL + "/" + path;

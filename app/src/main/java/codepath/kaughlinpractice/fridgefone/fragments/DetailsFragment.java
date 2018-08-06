@@ -38,11 +38,11 @@ import cz.msebera.android.httpclient.Header;
 public class DetailsFragment extends Fragment {
 
 
-    @BindView(R.id.ivRecipeImage) public ImageView ivRecipeImage;
-    @BindView(R.id.ivFavoriteStar) public ImageView ivFavoriteStar;
-    @BindView(R.id.tvDishTitle) public TextView tvDishTitle;
-    @BindView(R.id.buttonBack) public Button buttonBack;
-    @BindView(R.id.rvDetails) public RecyclerView rvDetails;
+    @BindView(R.id.ivRecipeImage) public ImageView mRecipeImageView;
+    @BindView(R.id.ivFavoriteStar) public ImageView mFavoriteStarImageView;
+    @BindView(R.id.tvDishTitle) public TextView mDishTitleTextView;
+    @BindView(R.id.buttonBack) public Button mButtonBack;
+    @BindView(R.id.rvDetails) public RecyclerView mDetailsRecyclerView;
 
 
     public FridgeClient mClient;
@@ -64,6 +64,18 @@ public class DetailsFragment extends Fragment {
         return view;
     }
 
+    // set Transparent background for actionbar
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//
+//        AppCompatActivity appCompatActivity = (AppCompatActivity)context;
+//        ActionBar bar= appCompatActivity.getSupportActionBar();
+//        //bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00acacac")));
+//        bar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -80,21 +92,21 @@ public class DetailsFragment extends Fragment {
         int id = args.getInt("id");
         String image = args.getString("image");
         final ArrayList<String> ingredients = args.getStringArrayList("ingredients");
-        tvDishTitle.setText(name);
+        mDishTitleTextView.setText(name);
 
         GlideApp.with(getActivity())
                 .load(image)
                 .fitCenter()
-                .into(ivRecipeImage);
+                .into(mRecipeImageView);
 
-        ivFavoriteStar.setOnClickListener(new View.OnClickListener() {
+        mFavoriteStarImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 favorited = !favorited;
                 if (favorited) {
-                    ivFavoriteStar.setImageResource(R.drawable.white_star_filled);
+                    mFavoriteStarImageView.setImageResource(R.drawable.white_star_filled);
                 } else {
-                    ivFavoriteStar.setImageResource(R.drawable.white_star_outline);
+                    mFavoriteStarImageView.setImageResource(R.drawable.white_star_outline);
                 }
             }
         });
@@ -125,10 +137,10 @@ public class DetailsFragment extends Fragment {
 
                         mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
                         // RecyclerView setup (layout manager, use adapter)
-                        rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
-                        rvDetails.setAdapter(mDetailsAdapter);
+                        mDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        mDetailsRecyclerView.setAdapter(mDetailsAdapter);
                     } catch (JSONException e) {
-                        Log.d("DetailFragment", e.getMessage());
+                        Log.d("DetailFragment", "Error: " + e.getMessage());
                     }
                 }
 
@@ -145,7 +157,7 @@ public class DetailsFragment extends Fragment {
             try {
                 response = new JSONArray(responseString);
             } catch (JSONException e) {
-                Log.d("DetailFragment", "Converting string to JSON array error: " + e.getMessage());
+                Log.d("DetailFragment", "Error: " + e.getMessage());
             }
             try {
                 for (int i = 0; i < response.length(); i += 1) {
@@ -165,14 +177,14 @@ public class DetailsFragment extends Fragment {
 
                 mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
                 // RecyclerView setup (layout manager, use adapter)
-                rvDetails.setLayoutManager(new LinearLayoutManager(getContext()));
-                rvDetails.setAdapter(mDetailsAdapter);
+                mDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                mDetailsRecyclerView.setAdapter(mDetailsAdapter);
             } catch (JSONException e) {
-                Log.d("DetailFragment", "Error parsing through JSON Array" + e.getMessage());
+                Log.d("DetailFragment", "Error " + e.getMessage());
             }
         }
 
-        buttonBack.setOnClickListener(new View.OnClickListener() {
+        mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((MainActivity) getContext()).generateRecipes(user_dict, currentFilters); //basically intent to go back to recipe list screen
@@ -190,7 +202,7 @@ public class DetailsFragment extends Fragment {
                 mInstructionsList.add(stepDetails);
             }
         } catch (JSONException e) {
-            Log.d("DetailFragment", "Error in parseInstructions " + e.getMessage());
+            Log.d("DetailFragment", "Error " + e.getMessage());
         }
     }
 }

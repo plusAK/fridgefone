@@ -30,13 +30,9 @@ import cz.msebera.android.httpclient.Header;
 public class AddItemFragment extends DialogFragment {
 
 
-    private Button addButton;
-    private AutoCompleteTextView actvFoodItem;
-    // the base URL for the API
-    public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
-    // the parameter name for the API key
-    public final static String API_KEY_PARAM = "X-Mashape-Key";
-    public final static String KEY_ACCEPT_PARAM = "Accept";
+
+    private Button mAddButton;
+    private AutoCompleteTextView mFoodItemAutoCompleteTextView;
     public FridgeClient mClient;
     public ArrayList<String> autoCompleteItems = new ArrayList<String>();
     public ArrayAdapter<String> addItemAdapter;
@@ -56,18 +52,17 @@ public class AddItemFragment extends DialogFragment {
         addItemAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, autoCompleteItems);
 
-        addButton = (Button) view.findViewById(R.id.btnAdd);
+        mAddButton = (Button) view.findViewById(R.id.btnAdd);
         Button cancelButton = (Button) view.findViewById(R.id.btnCancel);
-        actvFoodItem = (AutoCompleteTextView) view.findViewById(R.id.actvFoodItem);
-        actvFoodItem.setAdapter(addItemAdapter);
-        actvFoodItem.setThreshold(1);
-        //actvFoodItem.setDropDownHeight(3);
+        mFoodItemAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.actvFoodItem);
+        mFoodItemAutoCompleteTextView.setAdapter(addItemAdapter);
+        mFoodItemAutoCompleteTextView.setThreshold(1);
+        //mFoodItemAutoCompleteTextView.setDropDownHeight(3);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String foodItem = actvFoodItem.getText().toString();
-                Log.d("AddItemFragment", "Adding: " + foodItem);
+                String foodItem = mFoodItemAutoCompleteTextView.getText().toString();
                 Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
                 ((MainActivity) getContext()).getItem(foodItem);
                 dismiss();
@@ -81,7 +76,7 @@ public class AddItemFragment extends DialogFragment {
             }
         });
 
-        actvFoodItem.addTextChangedListener(new TextWatcher() {
+        mFoodItemAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -109,14 +104,12 @@ public class AddItemFragment extends DialogFragment {
                         for (int i = 0; i < response.length(); i++) {
                             String name = response.getJSONObject(i).getString("name");
                             autoCompleteItems.add(name);
-                            actvFoodItem.setAdapter(new ArrayAdapter<String>(getActivity(),
+                            mFoodItemAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(getActivity(),
                                     android.R.layout.simple_dropdown_item_1line, autoCompleteItems));
-                            actvFoodItem.showDropDown();
-                            Log.d("AddItemFragment", "Size of item adapter: " + addItemAdapter.getCount());
-                            Log.d("AddItemFragment", "Added " + name + " to list");
+                            mFoodItemAutoCompleteTextView.showDropDown();
                         }
                     } catch (JSONException e) {
-                        Log.d("MainActivity", e.getMessage());
+                        Log.d("MainActivity", "Error: " + e.getMessage());
                     }
                 }
 
@@ -172,7 +165,6 @@ public class AddItemFragment extends DialogFragment {
                     "    \"image\": \"applesauce.jpg\"\n" +
                     "  }\n" +
                     "]";
-            Log.d("MainActivity", "Mock API Works");
             JSONArray response = null;
             try {
                 response = new JSONArray(stringResponse);
@@ -181,11 +173,10 @@ public class AddItemFragment extends DialogFragment {
                     String name = response.getJSONObject(i).getString("name");
                     autoCompleteItems.add(name);
                     addItemAdapter.notifyDataSetChanged();
-                    Log.d("AddItemFragment", "Added " + name + " to list");
                 }
-                actvFoodItem.showDropDown();
+                mFoodItemAutoCompleteTextView.showDropDown();
             } catch (JSONException e) {
-                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
+                Log.d("MainActivity", "Error: " + e.getMessage());
             }
         }
     }
