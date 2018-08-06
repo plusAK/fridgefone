@@ -254,4 +254,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mRecipes.addAll(list);
         notifyDataSetChanged();
     }
+
+
 }
