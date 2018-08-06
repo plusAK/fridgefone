@@ -15,5 +15,6 @@
     <color name="obsedian">#211f1f</color>
     <color name="alternating_gray">#f2f5f9</color>
     <color name="opaque_grey">#32acacac</color>
+    <color name="transparent">#00acacac</color>
 
 </resources>

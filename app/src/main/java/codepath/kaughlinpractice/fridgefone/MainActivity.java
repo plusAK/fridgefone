@@ -43,10 +43,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
+    private android.support.v7.widget.Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.nav_actionbar);
+        setSupportActionBar(mToolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goToMyFridge();
             navigationView.setCheckedItem(R.id.nav_Fridge);
         }
+
     }
 
 
