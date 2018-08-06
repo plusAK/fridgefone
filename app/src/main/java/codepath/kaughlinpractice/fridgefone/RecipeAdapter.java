@@ -17,7 +17,6 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    // private final Handlers mHandler;
     private ArrayList<Recipe> mRecipes;
     private Context context;
 
@@ -32,26 +31,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
+        // Inflate the view and return the viewHolder based on the viewType
         switch(viewType) {
             case 0:
-                // create the view using the layout
                 View leftRecipeView = inflater.inflate(R.layout.left_recipe_item, parent, false);
-                // return a new ViewHolder
                 return new LeftRecipeViewHolder(leftRecipeView);
             case 1:
-                // create the view using the layout
                 View rightRecipeView = inflater.inflate(R.layout.right_recipe_item, parent, false);
-                // return a new ViewHolder
                 return new RightRecipeViewHolder(rightRecipeView);
             case 2:
-                // create the view using the layout
                 View oneRecipeView = inflater.inflate(R.layout.one_recipe_item, parent, false);
-                // return a new ViewHolder
                 return new OneRecipeViewHolder(oneRecipeView);
             case 3:
-                // create the view using the layout
                 View twoRecipeView = inflater.inflate(R.layout.two_recipe_item, parent, false);
-                // return a new ViewHolder
                 return new TwoRecipeViewHolder(twoRecipeView);
             default:
                 return null;
@@ -68,8 +60,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     .into(recipe_image);
     }
 
-    public void setRecipeListener(TextView recipe_name, ImageView recipe_image, final int position, final int recipePosition) {
-        recipe_name.setOnClickListener(new View.OnClickListener() {
+    // position = position of ViewHolder, recipePosition = position on individual recipe
+    public void setRecipeListener(TextView recipe_text, ImageView recipe_image, final int position, final int recipePosition) {
+        recipe_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // make sure the position is valid, i.e. actually exists in the view
@@ -105,42 +98,42 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             case 0:
                 LeftRecipeViewHolder leftRecipeViewHolder = (LeftRecipeViewHolder) holder;
 
-                setRecipes(position1, leftRecipeViewHolder.recipe_name1, leftRecipeViewHolder.recipe_image1);
-                setRecipes(position2, leftRecipeViewHolder.recipe_name2, leftRecipeViewHolder.recipe_image2);
-                setRecipes(position3, leftRecipeViewHolder.recipe_name3, leftRecipeViewHolder.recipe_image3);
+                setRecipes(position1, leftRecipeViewHolder.mRecipeText1, leftRecipeViewHolder.mRecipeImage1);
+                setRecipes(position2, leftRecipeViewHolder.mRecipeText2, leftRecipeViewHolder.mRecipeImage2);
+                setRecipes(position3, leftRecipeViewHolder.mRecipeText3, leftRecipeViewHolder.mRecipeImage3);
 
-                setRecipeListener(leftRecipeViewHolder.recipe_name1, leftRecipeViewHolder.recipe_image1, position, position1);
-                setRecipeListener(leftRecipeViewHolder.recipe_name2, leftRecipeViewHolder.recipe_image2, position, position2);
-                setRecipeListener(leftRecipeViewHolder.recipe_name3, leftRecipeViewHolder.recipe_image3, position, position3);
+                setRecipeListener(leftRecipeViewHolder.mRecipeText1, leftRecipeViewHolder.mRecipeImage1, position, position1);
+                setRecipeListener(leftRecipeViewHolder.mRecipeText2, leftRecipeViewHolder.mRecipeImage2, position, position2);
+                setRecipeListener(leftRecipeViewHolder.mRecipeText3, leftRecipeViewHolder.mRecipeImage3, position, position3);
                 break;
 
             case 1:
                 RightRecipeViewHolder rightRecipeViewHolder = (RightRecipeViewHolder) holder;
 
-                setRecipes(position1, rightRecipeViewHolder.recipe_name1, rightRecipeViewHolder.recipe_image1);
-                setRecipes(position2, rightRecipeViewHolder.recipe_name2, rightRecipeViewHolder.recipe_image2);
-                setRecipes(position3, rightRecipeViewHolder.recipe_name3, rightRecipeViewHolder.recipe_image3);
+                setRecipes(position1, rightRecipeViewHolder.mRecipeText1, rightRecipeViewHolder.mRecipeImage1);
+                setRecipes(position2, rightRecipeViewHolder.mRecipeText2, rightRecipeViewHolder.mRecipeImage2);
+                setRecipes(position3, rightRecipeViewHolder.mRecipeText3, rightRecipeViewHolder.mRecipeImage3);
 
-                setRecipeListener(rightRecipeViewHolder.recipe_name1, rightRecipeViewHolder.recipe_image1, position, position1);
-                setRecipeListener(rightRecipeViewHolder.recipe_name2, rightRecipeViewHolder.recipe_image2, position, position2);
-                setRecipeListener(rightRecipeViewHolder.recipe_name3, rightRecipeViewHolder.recipe_image3, position, position3);
+                setRecipeListener(rightRecipeViewHolder.mRecipeText1, rightRecipeViewHolder.mRecipeImage1, position, position1);
+                setRecipeListener(rightRecipeViewHolder.mRecipeText2, rightRecipeViewHolder.mRecipeImage2, position, position2);
+                setRecipeListener(rightRecipeViewHolder.mRecipeText3, rightRecipeViewHolder.mRecipeImage3, position, position3);
                 break;
             case 2:
                 OneRecipeViewHolder oneRecipeViewHolder = (OneRecipeViewHolder) holder;
 
-                setRecipes(position1, oneRecipeViewHolder.recipe_name1, oneRecipeViewHolder.recipe_image1);
+                setRecipes(position1, oneRecipeViewHolder.mRecipeText1, oneRecipeViewHolder.mRecipeImage1);
 
-                setRecipeListener(oneRecipeViewHolder.recipe_name1, oneRecipeViewHolder.recipe_image1, position, position1);
+                setRecipeListener(oneRecipeViewHolder.mRecipeText1, oneRecipeViewHolder.mRecipeImage1, position, position1);
 
                 break;
             case 3:
                 TwoRecipeViewHolder twoRecipeViewHolder = (TwoRecipeViewHolder) holder;
 
-                setRecipes(position1, twoRecipeViewHolder.recipe_name1, twoRecipeViewHolder.recipe_image1);
-                setRecipes(position2, twoRecipeViewHolder.recipe_name2, twoRecipeViewHolder.recipe_image2);
+                setRecipes(position1, twoRecipeViewHolder.mRecipeText1, twoRecipeViewHolder.mRecipeImage1);
+                setRecipes(position2, twoRecipeViewHolder.mRecipeText2, twoRecipeViewHolder.mRecipeImage2);
 
-                setRecipeListener(twoRecipeViewHolder.recipe_name1, twoRecipeViewHolder.recipe_image1, position, position1);
-                setRecipeListener(twoRecipeViewHolder.recipe_name2, twoRecipeViewHolder.recipe_image2, position, position2);
+                setRecipeListener(twoRecipeViewHolder.mRecipeText1, twoRecipeViewHolder.mRecipeImage1, position, position1);
+                setRecipeListener(twoRecipeViewHolder.mRecipeText2, twoRecipeViewHolder.mRecipeImage2, position, position2);
                 break;
         }
     }
@@ -162,10 +155,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         // Two Items Leftover
         } else if (((mRecipes.size() % 3) == 2) && (position == (mRecipes.size() / 3))) {
             return 3;
-        // Three Items (Left)
+        // Three Items (Left ViewHolder)
         } else if ((position % 2) == 0) {
             return 0;
-        // Three Items (Right)
+        // Three Items (Right ViewHolder)
         } else {
             return 1;
         }
@@ -173,73 +166,73 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public class LeftRecipeViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView recipe_image1;
-        public TextView recipe_name1;
-        public ImageView recipe_image2;
-        public TextView recipe_name2;
-        public ImageView recipe_image3;
-        public TextView recipe_name3;
+        public ImageView mRecipeImage1;
+        public TextView mRecipeText1;
+        public ImageView mRecipeImage2;
+        public TextView mRecipeText2;
+        public ImageView mRecipeImage3;
+        public TextView mRecipeText3;
 
         public LeftRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            recipe_image1 = (ImageView) itemView.findViewById(R.id.ivImage1);
-            recipe_name1 = (TextView) itemView.findViewById(R.id.tvName1);
-            recipe_image2 = (ImageView) itemView.findViewById(R.id.ivImage2);
-            recipe_name2 = (TextView) itemView.findViewById(R.id.tvName2);
-            recipe_image3 = (ImageView) itemView.findViewById(R.id.ivImage3);
-            recipe_name3 = (TextView) itemView.findViewById(R.id.tvName3);
+            mRecipeImage1 = (ImageView) itemView.findViewById(R.id.ivImage1);
+            mRecipeText1 = (TextView) itemView.findViewById(R.id.tvName1);
+            mRecipeImage2 = (ImageView) itemView.findViewById(R.id.ivImage2);
+            mRecipeText2 = (TextView) itemView.findViewById(R.id.tvName2);
+            mRecipeImage3 = (ImageView) itemView.findViewById(R.id.ivImage3);
+            mRecipeText3 = (TextView) itemView.findViewById(R.id.tvName3);
         }
     }
 
     public class RightRecipeViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView recipe_image1;
-        public TextView recipe_name1;
-        public ImageView recipe_image2;
-        public TextView recipe_name2;
-        public ImageView recipe_image3;
-        public TextView recipe_name3;
+        public ImageView mRecipeImage1;
+        public TextView mRecipeText1;
+        public ImageView mRecipeImage2;
+        public TextView mRecipeText2;
+        public ImageView mRecipeImage3;
+        public TextView mRecipeText3;
 
         public RightRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            recipe_image1 = (ImageView) itemView.findViewById(R.id.ivImage1);
-            recipe_name1 = (TextView) itemView.findViewById(R.id.tvName1);
-            recipe_image2 = (ImageView) itemView.findViewById(R.id.ivImage2);
-            recipe_name2 = (TextView) itemView.findViewById(R.id.tvName2);
-            recipe_image3 = (ImageView) itemView.findViewById(R.id.ivImage3);
-            recipe_name3 = (TextView) itemView.findViewById(R.id.tvName3);
+            mRecipeImage1 = (ImageView) itemView.findViewById(R.id.ivImage1);
+            mRecipeText1 = (TextView) itemView.findViewById(R.id.tvName1);
+            mRecipeImage2 = (ImageView) itemView.findViewById(R.id.ivImage2);
+            mRecipeText2 = (TextView) itemView.findViewById(R.id.tvName2);
+            mRecipeImage3 = (ImageView) itemView.findViewById(R.id.ivImage3);
+            mRecipeText3 = (TextView) itemView.findViewById(R.id.tvName3);
         }
     }
 
     public class OneRecipeViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView recipe_image1;
-        public TextView recipe_name1;
+        public ImageView mRecipeImage1;
+        public TextView mRecipeText1;
 
         public OneRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            recipe_image1 = (ImageView) itemView.findViewById(R.id.ivImage1);
-            recipe_name1 = (TextView) itemView.findViewById(R.id.tvName1);
+            mRecipeImage1 = (ImageView) itemView.findViewById(R.id.ivImage1);
+            mRecipeText1 = (TextView) itemView.findViewById(R.id.tvName1);
         }
     }
 
     public class TwoRecipeViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView recipe_image1;
-        public TextView recipe_name1;
-        public ImageView recipe_image2;
-        public TextView recipe_name2;
+        public ImageView mRecipeImage1;
+        public TextView mRecipeText1;
+        public ImageView mRecipeImage2;
+        public TextView mRecipeText2;
 
         public TwoRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            recipe_image1 = (ImageView) itemView.findViewById(R.id.ivImage1);
-            recipe_name1 = (TextView) itemView.findViewById(R.id.tvName1);
-            recipe_image2 = (ImageView) itemView.findViewById(R.id.ivImage2);
-            recipe_name2 = (TextView) itemView.findViewById(R.id.tvName2);
+            mRecipeImage1 = (ImageView) itemView.findViewById(R.id.ivImage1);
+            mRecipeText1 = (TextView) itemView.findViewById(R.id.tvName1);
+            mRecipeImage2 = (ImageView) itemView.findViewById(R.id.ivImage2);
+            mRecipeText2 = (TextView) itemView.findViewById(R.id.tvName2);
         }
     }
 
