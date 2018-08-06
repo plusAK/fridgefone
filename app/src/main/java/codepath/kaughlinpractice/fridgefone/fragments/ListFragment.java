@@ -100,9 +100,4 @@ public class ListFragment extends Fragment {
             }
         });
     }
-
-    public void setRecipes(ArrayList<Recipe> recipes) {
-        this.recipes = recipes;
-        recipeAdapter.notifyDataSetChanged();
-    }
 }

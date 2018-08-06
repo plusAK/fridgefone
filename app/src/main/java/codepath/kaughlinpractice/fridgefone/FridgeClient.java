@@ -9,7 +9,7 @@ import com.loopj.android.http.RequestParams;
 
 public class FridgeClient {
 
-    public final static Integer NUMBER_OF_RECIPES = 6;
+    public final static Integer NUMBER_OF_RECIPES = 9;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
@@ -23,7 +23,7 @@ public class FridgeClient {
 
     public static boolean mUseInstructionsAPI = false;
     public static boolean mUseAutocompleteAPI = false;
-    public static boolean mUseGenerateRecipeAPI = false;
+    public static boolean mUseGenerateRecipeAPI = true;
 
     public FridgeClient(Context context) {
         this.mContext = context;

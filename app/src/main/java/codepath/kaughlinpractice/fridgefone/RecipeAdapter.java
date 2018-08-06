@@ -99,7 +99,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         final int position1 = position * 3;
         final int position2 = position1 + 1;
-        final int position3 = position2 + 2;
+        final int position3 = position1 + 2;
 
         switch(holder.getItemViewType()) {
             case 0:
@@ -156,12 +156,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
+        // One Item Leftover
         if (((mRecipes.size() % 3) == 1) && (position == (mRecipes.size() / 3))) {
             return 2;
+        // Two Items Leftover
         } else if (((mRecipes.size() % 3) == 2) && (position == (mRecipes.size() / 3))) {
             return 3;
+        // Three Items (Left)
         } else if ((position % 2) == 0) {
             return 0;
+        // Three Items (Right)
         } else {
             return 1;
         }

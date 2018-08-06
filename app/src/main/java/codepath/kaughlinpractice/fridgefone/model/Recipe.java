@@ -30,7 +30,7 @@ import cz.msebera.android.httpclient.Header;
 @ParseClassName("Recipe")
 public class Recipe extends ParseObject{
 
-    static boolean mUseRecipeInformationAPI = false;
+    static boolean mUseRecipeInformationAPI = true;
 
     public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
 
@@ -163,7 +163,7 @@ public class Recipe extends ParseObject{
                                             // if recipe attributes fit the user's desires (ex. vegan), then add to adapter
                                             if (recipe.isValid(args)) {
                                                 rec.add(recipe);
-                                                recipeAdapter.notifyItemInserted(rec.size() - 1);
+                                                //recipeAdapter.notifyItemInserted(rec.size() - 1);
                                             }
 
                                             recipe.saveToServer();
@@ -177,7 +177,6 @@ public class Recipe extends ParseObject{
                         }
                         else {
                             // To conserve API calls, just randomly select a recipe we have
-                            // TODO -- handle for if no objects in the server
                             String stringResponse = getRandomRecipeFromServer(objects);
                             try {
                                 JSONObject response = new JSONObject(stringResponse);
@@ -201,6 +200,9 @@ public class Recipe extends ParseObject{
                             Log.d("Recipe", "We already have recipe id " + id);
                             JSONObject response = new JSONObject(stringResponse);
                             recipe.setRecipeInformation(stringResponse);
+                            recipe.name = recipe.getName();
+                            recipe.id = recipe.getId();
+                            recipe.image = recipe.getImage();
                             recipe.parseResponse(response);
 
                             if (recipe.isValid(args)) {
