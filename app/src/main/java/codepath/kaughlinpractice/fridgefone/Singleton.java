@@ -1,10 +1,13 @@
 package codepath.kaughlinpractice.fridgefone;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Singleton {
     //static variable of single_instance of type Singleton
     private static Singleton sSingleInstance = null;
+
+    public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
 
     //shared data variables
     private HashSet<String> mSelectedNamesSet;
@@ -12,6 +15,7 @@ public class Singleton {
     private boolean mAllSelected;
     private boolean mSelectItemsBoolean;
     private boolean mNoneSelected;
+    private HashMap<String, Boolean> mUserDict;
 
     // private constructor restricted to class itself
     private Singleton(){
@@ -20,6 +24,10 @@ public class Singleton {
         mAllSelected = false;
         mSelectItemsBoolean = false;
         mNoneSelected = true;
+        mUserDict = new HashMap<>();
+        for (int i = 0; i < recipe_traits.length; i++) {
+            mUserDict.put(recipe_traits[i], false);
+        }
     }
 
     // static method to create instance of singleton class
@@ -51,6 +59,10 @@ public class Singleton {
 
     public boolean ismNoneSelected() {
         return mNoneSelected;
+    }
+
+    public HashMap<String, Boolean> getmUserDict() {
+        return mUserDict;
     }
 
     // setters

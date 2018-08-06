@@ -19,6 +19,7 @@ import java.util.HashSet;
 
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
+import codepath.kaughlinpractice.fridgefone.Singleton;
 import cz.msebera.android.httpclient.Header;
 
 @Parcel
@@ -519,7 +520,7 @@ public class Recipe {
 
     public boolean isValid(Bundle args) {
         for (String trait: recipe_traits) {
-            if (args.containsKey(trait) && args.getBoolean(trait) && !this.recipe_dict.get(trait)) {
+            if (Singleton.getSingletonInstance().getmUserDict().get(trait) && !this.recipe_dict.get(trait)) {
                 return false;
             }
         }
