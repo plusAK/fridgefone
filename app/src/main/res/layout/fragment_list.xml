@@ -14,40 +14,24 @@
         tools:context=".MainActivity"
         android:background="@color/white">
 
-<<<<<<< HEAD
-=======
         <android.support.v7.widget.RecyclerView
             android:id="@+id/HorizontalListRecyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
->>>>>>> c6d930eb1f365aef5bc5c183986b482200808e91
         <ImageView
             android:id="@+id/filterImageView"
             android:layout_width="92dp"
             android:layout_height="@dimen/filter_button_height"
-            android:layout_above="@+id/bottom_sheet"
-            android:layout_centerHorizontal="true" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/idRecyclerViewHorizontalList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/rvRecipes" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvRecipes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-<<<<<<< HEAD
-            android:layout_below="@+id/idRecyclerViewHorizontalList" >
-
-        </android.support.v7.widget.RecyclerView>
-=======
             android:layout_below="@+id/HorizontalListRecyclerView" />
->>>>>>> c6d930eb1f365aef5bc5c183986b482200808e91
 
         <TextView
             android:id="@+id/currentFilters"
@@ -76,7 +60,6 @@
                 android:text="@string/back"
                 android:textColor="@color/white"
                 android:textSize="@dimen/pop_up_button_text_size" />
-
         </FrameLayout>
 
     </RelativeLayout>
