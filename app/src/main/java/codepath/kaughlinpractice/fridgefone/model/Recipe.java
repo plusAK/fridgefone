@@ -7,22 +7,29 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.parse.FindCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
+import codepath.kaughlinpractice.fridgefone.Singleton;
 import cz.msebera.android.httpclient.Header;
 
-@Parcel
-public class Recipe {
+@ParseClassName("Recipe")
+public class Recipe extends ParseObject{
 
     static boolean mUseRecipeInformationAPI = false;
 
@@ -40,406 +47,193 @@ public class Recipe {
     boolean cheap;
     boolean veryPopular;
     int servings;
-    public boolean validity;
     private HashSet<String> ingredients;
     public HashMap<String, Boolean> recipe_dict;
+    private Context mContext;
 
     static RecipeAdapter adapter;
     static AsyncHttpClient client;
     static ArrayList<Recipe> recipes;
 
     // the base URL for the API
-    public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
+    private final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
-    public final static String API_KEY_PARAM = "X-Mashape-Key";
-    public final static String KEY_ACCEPT_PARAM = "Accept";
+    private final static String API_KEY_PARAM = "X-Mashape-Key";
+    private final static String KEY_ACCEPT_PARAM = "Accept";
 
-    public static Recipe fromJSON(JSONObject jsonObject, final Context context, final Bundle args, final ArrayList<Recipe> rec, final RecipeAdapter recipeAdapter) throws JSONException {
+    private static final String KEY_NAME = "name";
+    private static final String KEY_ID = "id";
+    private static final String KEY_IMAGE = "image";
+    private static final String KEY_RESPONSE = "response";
+    private static final String KEY_INFORMATION = "recipeInformation";
+
+    public Recipe() { }
+
+    public String getName() {
+        return getString(KEY_NAME);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        put(KEY_NAME, name);
+    }
+
+    public int getId() {
+        return (int) getNumber(KEY_ID);
+    }
+
+    public void setId(int id) {
+        this.id = id;
+        put(KEY_ID, id);
+    }
+
+    public String getImage() {
+        return getString(KEY_IMAGE);
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+        put(KEY_IMAGE, image);
+    }
+
+    public String getRecipeInformation() {
+        return getString(KEY_INFORMATION);
+    }
+
+    public void setRecipeInformation(String recipeInformation) {
+        put(KEY_INFORMATION, recipeInformation);
+    }
+
+    public String getResponse() {
+        return getString(KEY_RESPONSE);
+    }
+
+    public void setResponse(String response) {
+        put(KEY_RESPONSE, response);
+    }
+
+    public static class Query extends ParseQuery<Recipe> {
+        public Query() {
+            super(Recipe.class);
+        }
+    }
+
+    public static Recipe fromJSON(final JSONObject jsonObject, final Context context, final Bundle args, final ArrayList<Recipe> rec, final RecipeAdapter recipeAdapter) throws JSONException {
 
         // initialize the client
         client = new AsyncHttpClient();
         adapter = new RecipeAdapter(recipes);
 
         final Recipe recipe = new Recipe();
-        recipe.name = jsonObject.getString("title");
-        recipe.id = jsonObject.getInt("id");
-        recipe.image = jsonObject.getString("image");
 
-        recipe.validity = false;
+        recipe.setName(jsonObject.getString("title"));
+        final int id = jsonObject.getInt("id");
+        recipe.setId(id);
+        recipe.setImage(jsonObject.getString("image"));
+        recipe.setResponse(jsonObject.toString());
+
         recipes = new ArrayList<>();
         recipe.recipe_dict = new HashMap<>();
         recipe.ingredients = new HashSet<>();
+        recipe.mContext = context;
 
-        if (mUseRecipeInformationAPI) {
-            String url = API_BASE_URL +"/recipes/" + recipe.id + "/information";
-            // set the request parameters
-            RequestParams params = new RequestParams();
-           // String x = R.string.api_key;
+        final Recipe.Query recipeQuery = new Recipe.Query();
+        recipeQuery.findInBackground(new FindCallback<Recipe>() {
+            @Override
+            public void done(List<Recipe> objects, ParseException e) {
+                if (e == null) {
+                    if (!haveRecipeInServer(objects, id)) {
+                        if (mUseRecipeInformationAPI) {
+                            Log.d("Recipe", "Using the API");
+                            String url = API_BASE_URL +"/recipes/" + recipe.id + "/information";
+                            // set the request parameters
+                            RequestParams params = new RequestParams();
+                            // String x = R.string.api_key;
 
-            client.addHeader(API_KEY_PARAM, context.getString(R.string.api_key));
-            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
-            // execute a GET request expecting a JSON object response
-            client.get(url, params,
-                    new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    String r = response.toString();
-                    try {
-                        Log.d("Recipe", "JSONObject : " + r);
-                        makeDict(context.getString(R.string.vegetarian), response, recipe);
-                        makeDict(context.getString(R.string.vegan), response, recipe);
-                        makeDict(context.getString(R.string.gluten_free), response, recipe);
-                        makeDict(context.getString(R.string.dairy_free), response, recipe);
-                        makeDict(context.getString(R.string.very_healthy), response, recipe);
-                        makeDict(context.getString(R.string.very_popular), response, recipe);
-                        makeDict(context.getString(R.string.cheap), response, recipe);
-                        recipe.readyInMinutes = response.getInt("readyInMinutes");
-                        recipe.servings = response.getInt("servings");
+                            client.addHeader(API_KEY_PARAM, context.getString(R.string.api_key));
+                            client.addHeader(KEY_ACCEPT_PARAM, "application/json");
+                            // execute a GET request expecting a JSON object response
+                            client.get(url, params,
+                                    new JsonHttpResponseHandler() {
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                            String r = response.toString();
+                                            recipe.setRecipeInformation(r);
+                                            recipe.parseResponse(response);
 
-                        JSONArray ingredientsJSON = response.getJSONArray("extendedIngredients");
-                        for (int i = 0; i < ingredientsJSON.length(); i += 1) {
-                            String ingredient = ingredientsJSON.getJSONObject(i).getString("name");
-                            if (!recipe.ingredients.contains(ingredient)) {
-                                recipe.ingredients.add(ingredient);
-                                Log.d("Recipe", ingredient);
+                                            // if recipe attributes fit the user's desires (ex. vegan), then add to adapter
+                                            if (recipe.isValid(args)) {
+                                                rec.add(recipe);
+                                                //recipeAdapter.notifyItemInserted(rec.size() - 1);
+                                            }
+
+                                            recipe.saveToServer();
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                            Log.d("Recipe", "JSON Object Error: " + throwable);
+                                        }
+                                    });
+                        }
+                        else {
+                            // To conserve API calls, just randomly select a recipe we have
+                            String stringResponse = getRandomRecipeFromServer(objects);
+                            try {
+                                JSONObject response = new JSONObject(stringResponse);
+                                recipe.setRecipeInformation(stringResponse);
+                                recipe.parseResponse(response);
+
+                                if (recipe.isValid(args)) {
+                                    rec.add(recipe);
+                                    recipeAdapter.notifyItemInserted(rec.size() - 1);
+                                }
+
+                                recipe.saveToServer();
+                            } catch (JSONException err) {
+                                err.printStackTrace();
                             }
+
                         }
+                    } else {
+                        String stringResponse = findRecipeInServer(objects, id);
+                        try {
+                            Log.d("Recipe", "We already have recipe id " + id);
+                            JSONObject response = new JSONObject(stringResponse);
+                            recipe.setRecipeInformation(stringResponse);
+                            recipe.name = recipe.getName();
+                            recipe.id = recipe.getId();
+                            recipe.image = recipe.getImage();
+                            recipe.parseResponse(response);
 
-                        if (recipe.isValid(args)) {
-                            rec.add(recipe);
-                            recipeAdapter.notifyItemInserted(rec.size() - 1);
+                            if (recipe.isValid(args)) {
+                                rec.add(recipe);
+                                recipeAdapter.notifyItemInserted(rec.size() - 1);
+                            }
+                        } catch (JSONException err) {
+                            err.printStackTrace();
                         }
-
-                    } catch (JSONException e) {
-                        Log.d("MainActivity", "Not api_call error: " + e.getMessage());
                     }
+                } else {
+                    e.printStackTrace();
                 }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.d("Recipe", "JSON Object Error: " + throwable);
-                }
-            });
-        }
-        else {
-            String stringResponse = "{\n" +
-                    "  \"vegetarian\": true,\n" +
-                    "  \"vegan\": true,\n" +
-                    "  \"glutenFree\": true,\n" +
-                    "  \"dairyFree\": true,\n" +
-                    "  \"veryHealthy\": false,\n" +
-                    "  \"cheap\": false,\n" +
-                    "  \"veryPopular\": false,\n" +
-                    "  \"sustainable\": false,\n" +
-                    "  \"weightWatcherSmartPoints\": 21,\n" +
-                    "  \"gaps\": \"no\",\n" +
-                    "  \"lowFodmap\": false,\n" +
-                    "  \"ketogenic\": false,\n" +
-                    "  \"whole30\": false,\n" +
-                    "  \"servings\": 10,\n" +
-                    "  \"sourceUrl\": \"http://www.epicurious.com/recipes/food/views/Char-Grilled-Beef-Tenderloin-with-Three-Herb-Chimichurri-235342\",\n" +
-                    "  \"spoonacularSourceUrl\": \"https://spoonacular.com/char-grilled-beef-tenderloin-with-three-herb-chimichurri-156992\",\n" +
-                    "  \"aggregateLikes\": 0,\n" +
-                    "  \"creditText\": \"Epicurious\",\n" +
-                    "  \"sourceName\": \"Epicurious\",\n" +
-                    "  \"extendedIngredients\": [\n" +
-                    "    {\n" +
-                    "      \"id\": 1022009,\n" +
-                    "      \"aisle\": \"Ethnic Foods\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/chili-powder.jpg\",\n" +
-                    "      \"name\": \"ancho chile powder\",\n" +
-                    "      \"amount\": 1.5,\n" +
-                    "      \"unit\": \"teaspoons\",\n" +
-                    "      \"unitShort\": \"t\",\n" +
-                    "      \"unitLong\": \"teaspoons\",\n" +
-                    "      \"originalString\": \"1 1/2 teaspoons chipotle chile powder or ancho chile powder\",\n" +
-                    "      \"metaInformation\": []\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 13926,\n" +
-                    "      \"aisle\": \"Meat\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/beef-tenderloin.jpg\",\n" +
-                    "      \"name\": \"beef tenderloin\",\n" +
-                    "      \"amount\": 3.5,\n" +
-                    "      \"unit\": \"pound\",\n" +
-                    "      \"unitShort\": \"lb\",\n" +
-                    "      \"unitLong\": \"pounds\",\n" +
-                    "      \"originalString\": \"1 3 1/2-pound beef tenderloin\",\n" +
-                    "      \"metaInformation\": []\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 1002030,\n" +
-                    "      \"aisle\": \"Spices and Seasonings\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/pepper.jpg\",\n" +
-                    "      \"name\": \"black pepper\",\n" +
-                    "      \"amount\": 0.5,\n" +
-                    "      \"unit\": \"teaspoon\",\n" +
-                    "      \"unitShort\": \"t\",\n" +
-                    "      \"unitLong\": \"teaspoons\",\n" +
-                    "      \"originalString\": \"1/2 teaspoon freshly ground black pepper\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"black\",\n" +
-                    "        \"freshly ground\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 1082047,\n" +
-                    "      \"aisle\": \"Spices and Seasonings\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/salt.jpg\",\n" +
-                    "      \"name\": \"coarse kosher salt\",\n" +
-                    "      \"amount\": 1,\n" +
-                    "      \"unit\": \"tablespoon\",\n" +
-                    "      \"unitShort\": \"T\",\n" +
-                    "      \"unitLong\": \"tablespoon\",\n" +
-                    "      \"originalString\": \"1 tablespoon coarse kosher salt\",\n" +
-                    "      \"metaInformation\": []\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 10019334,\n" +
-                    "      \"aisle\": \"Baking\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/brown-sugar-dark.jpg\",\n" +
-                    "      \"name\": \"dark brown sugar\",\n" +
-                    "      \"amount\": 2,\n" +
-                    "      \"unit\": \"tablespoons\",\n" +
-                    "      \"unitShort\": \"T\",\n" +
-                    "      \"unitLong\": \"tablespoons\",\n" +
-                    "      \"originalString\": \"2 tablespoons dark brown sugar\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"dark\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 11165,\n" +
-                    "      \"aisle\": \"Produce\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/cilantro.png\",\n" +
-                    "      \"name\": \"fresh cilantro\",\n" +
-                    "      \"amount\": 2,\n" +
-                    "      \"unit\": \"cups\",\n" +
-                    "      \"unitShort\": \"c\",\n" +
-                    "      \"unitLong\": \"cups\",\n" +
-                    "      \"originalString\": \"2 cups (packed) stemmed fresh cilantro\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"fresh\",\n" +
-                    "        \"packed\",\n" +
-                    "        \"stemmed\",\n" +
-                    "        \"()\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 2064,\n" +
-                    "      \"aisle\": \"Produce\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/mint.jpg\",\n" +
-                    "      \"name\": \"fresh mint\",\n" +
-                    "      \"amount\": 1,\n" +
-                    "      \"unit\": \"cup\",\n" +
-                    "      \"unitShort\": \"c\",\n" +
-                    "      \"unitLong\": \"cup\",\n" +
-                    "      \"originalString\": \"1 cup (packed) stemmed fresh mint\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"fresh\",\n" +
-                    "        \"packed\",\n" +
-                    "        \"stemmed\",\n" +
-                    "        \"()\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 11297,\n" +
-                    "      \"aisle\": \"Produce\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/parsley.jpg\",\n" +
-                    "      \"name\": \"fresh parsley\",\n" +
-                    "      \"amount\": 3,\n" +
-                    "      \"unit\": \"cups\",\n" +
-                    "      \"unitShort\": \"c\",\n" +
-                    "      \"unitLong\": \"cups\",\n" +
-                    "      \"originalString\": \"3 cups (packed) stemmed fresh parsley\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"fresh\",\n" +
-                    "        \"packed\",\n" +
-                    "        \"stemmed\",\n" +
-                    "        \"()\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 11215,\n" +
-                    "      \"aisle\": \"Produce\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/garlic.jpg\",\n" +
-                    "      \"name\": \"garlic cloves\",\n" +
-                    "      \"amount\": 3,\n" +
-                    "      \"unit\": \"\",\n" +
-                    "      \"unitShort\": \"\",\n" +
-                    "      \"unitLong\": \"\",\n" +
-                    "      \"originalString\": \"3 garlic cloves, peeled\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"peeled\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 1002030,\n" +
-                    "      \"aisle\": \"Spices and Seasonings\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/pepper.jpg\",\n" +
-                    "      \"name\": \"ground pepper\",\n" +
-                    "      \"amount\": 1,\n" +
-                    "      \"unit\": \"teaspoon\",\n" +
-                    "      \"unitShort\": \"t\",\n" +
-                    "      \"unitLong\": \"teaspoon\",\n" +
-                    "      \"originalString\": \"1 teaspoon ground black pepper\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"black\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 9152,\n" +
-                    "      \"aisle\": \"Produce\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/lemon-juice.jpg\",\n" +
-                    "      \"name\": \"lemon juice\",\n" +
-                    "      \"amount\": 3,\n" +
-                    "      \"unit\": \"tablespoons\",\n" +
-                    "      \"unitShort\": \"T\",\n" +
-                    "      \"unitLong\": \"tablespoons\",\n" +
-                    "      \"originalString\": \"3 tablespoons fresh lemon juice\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"fresh\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 4053,\n" +
-                    "      \"aisle\": \"Oil, Vinegar, Salad Dressing\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/olive-oil.jpg\",\n" +
-                    "      \"name\": \"olive oil\",\n" +
-                    "      \"amount\": 0.75,\n" +
-                    "      \"unit\": \"cup\",\n" +
-                    "      \"unitShort\": \"c\",\n" +
-                    "      \"unitLong\": \"cups\",\n" +
-                    "      \"originalString\": \"3/4 cup olive oil\",\n" +
-                    "      \"metaInformation\": []\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 4053,\n" +
-                    "      \"aisle\": \"Oil, Vinegar, Salad Dressing\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/olive-oil.jpg\",\n" +
-                    "      \"name\": \"olive oil\",\n" +
-                    "      \"amount\": 2,\n" +
-                    "      \"unit\": \"tablespoons\",\n" +
-                    "      \"unitShort\": \"T\",\n" +
-                    "      \"unitLong\": \"tablespoons\",\n" +
-                    "      \"originalString\": \"2 tablespoons olive oil\",\n" +
-                    "      \"metaInformation\": []\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 11821,\n" +
-                    "      \"aisle\": \"Produce\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/red-bell-pepper.png\",\n" +
-                    "      \"name\": \"red pepper\",\n" +
-                    "      \"amount\": 0.5,\n" +
-                    "      \"unit\": \"teaspoon\",\n" +
-                    "      \"unitShort\": \"t\",\n" +
-                    "      \"unitLong\": \"teaspoons\",\n" +
-                    "      \"originalString\": \"1/2 teaspoon dried crushed red pepper\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"dried\",\n" +
-                    "        \"red\",\n" +
-                    "        \"crushed\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 1022068,\n" +
-                    "      \"aisle\": \"Oil, Vinegar, Salad Dressing\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/red-wine-vinegar.jpg\",\n" +
-                    "      \"name\": \"red wine vinegar\",\n" +
-                    "      \"amount\": 3,\n" +
-                    "      \"unit\": \"tablespoons\",\n" +
-                    "      \"unitShort\": \"T\",\n" +
-                    "      \"unitLong\": \"tablespoons\",\n" +
-                    "      \"originalString\": \"3 tablespoons Sherry wine vinegar or red wine vinegar\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"red\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 1012047,\n" +
-                    "      \"aisle\": \"Spices and Seasonings\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/salt.jpg\",\n" +
-                    "      \"name\": \"sea salt\",\n" +
-                    "      \"amount\": 1,\n" +
-                    "      \"unit\": \"teaspoon\",\n" +
-                    "      \"unitShort\": \"t\",\n" +
-                    "      \"unitLong\": \"teaspoon\",\n" +
-                    "      \"originalString\": \"1 teaspoon fine sea salt\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"fine\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 11677,\n" +
-                    "      \"aisle\": \"Produce\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/shallots.jpg\",\n" +
-                    "      \"name\": \"shallots\",\n" +
-                    "      \"amount\": 2,\n" +
-                    "      \"unit\": \"\",\n" +
-                    "      \"unitShort\": \"\",\n" +
-                    "      \"unitLong\": \"\",\n" +
-                    "      \"originalString\": \"2 medium shallots, peeled, quartered\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"medium\",\n" +
-                    "        \"peeled\",\n" +
-                    "        \"quartered\"\n" +
-                    "      ]\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"id\": 1002028,\n" +
-                    "      \"aisle\": \"Spices and Seasonings\",\n" +
-                    "      \"image\": \"https://spoonacular.com/cdn/ingredients_100x100/paprika.jpg\",\n" +
-                    "      \"name\": \"sweet paprika\",\n" +
-                    "      \"amount\": 1,\n" +
-                    "      \"unit\": \"tablespoon\",\n" +
-                    "      \"unitShort\": \"T\",\n" +
-                    "      \"unitLong\": \"tablespoon\",\n" +
-                    "      \"originalString\": \"1 tablespoon sweet smoked paprika*\",\n" +
-                    "      \"metaInformation\": [\n" +
-                    "        \"smoked\"\n" +
-                    "      ]\n" +
-                    "    }\n" +
-                    "  ],\n" +
-                    "  \"id\": 156992,\n" +
-                    "  \"title\": \"Char-Grilled Beef Tenderloin with Three-Herb Chimichurri\",\n" +
-                    "  \"readyInMinutes\": 45,\n" +
-                    "  \"image\": \"https://spoonacular.com/recipeImages/char-grilled-beef-tenderloin-with-three-herb-chimichurri-156992.jpg\",\n" +
-                    "  \"imageType\": \"jpg\",\n" +
-                    "  \"instructions\": \"PreparationFor spice rub:                                        Combine all ingredients in small bowl.                                                                            Do ahead: Can be made 2 days ahead. Store airtight at room temperature.                                    For chimichurri sauce:                                        Combine first 8 ingredients in blender; blend until almost smooth. Add 1/4 of parsley, 1/4 of cilantro, and 1/4 of mint; blend until incorporated. Add remaining herbs in 3 more additions, pureeing until almost smooth after each addition.                                                                            Do ahead: Can be made 3 hours ahead. Cover; chill.                                    For beef tenderloin:                                        Let beef stand at room temperature 1 hour.                                                                            Prepare barbecue (high heat). Pat beef dry with paper towels; brush with oil. Sprinkle all over with spice rub, using all of mixture (coating will be thick). Place beef on grill; sear 2 minutes on each side. Reduce heat to medium-high. Grill uncovered until instant-read thermometer inserted into thickest part of beef registers 130F for medium-rare, moving beef to cooler part of grill as needed to prevent burning, and turning occasionally, about 40 minutes. Transfer to platter; cover loosely with foil and let rest 15 minutes. Thinly slice beef crosswise. Serve with chimichurri sauce.                                                                            *Available at specialty foods stores and from tienda.com.\"\n" +
-                    "}";
-
-
-            JSONObject response;
-            try {
-                response = new JSONObject(stringResponse);
-                makeDict(context.getString(R.string.vegetarian), response, recipe);
-                makeDict(context.getString(R.string.vegan), response, recipe);
-                makeDict(context.getString(R.string.gluten_free), response, recipe);
-                makeDict(context.getString(R.string.dairy_free), response, recipe);
-                makeDict(context.getString(R.string.very_healthy), response, recipe);
-                makeDict(context.getString(R.string.very_popular), response, recipe);
-                makeDict(context.getString(R.string.cheap), response, recipe);
-                recipe.readyInMinutes = response.getInt("readyInMinutes");
-                recipe.servings = response.getInt("servings");
-
-                JSONArray ingredientsJSON = response.getJSONArray("extendedIngredients");
-                for (int i = 0; i < ingredientsJSON.length(); i += 1) {
-                    String ingredient = ingredientsJSON.getJSONObject(i).getString("name");
-                    if (!recipe.ingredients.contains(ingredient)) {
-                        recipe.ingredients.add(ingredient);
-                        Log.d("Recipe", ingredient);
-                    }
-                }
-
-                if (recipe.isValid(args)) {
-                    rec.add(recipe);
-                    recipeAdapter.notifyItemInserted(rec.size() - 1);
-                }
-            } catch (JSONException e) {
-                Log.d("MainActivity", "Not api_call error: " + e.getMessage());
             }
-        }
+        });
         return recipe;
+    }
+
+    private void parseResponse(JSONObject response) {
+        // save attributes of recipe, like if vegan or chep
+        populateDictionary(response);
+        // iterate through ingredients in the response and save to ArrayList
+        saveIngredients(response);
+
+        try {
+            readyInMinutes = response.getInt("readyInMinutes");
+            servings = response.getInt("servings");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     // this is for testing purposes
@@ -449,24 +243,36 @@ public class Recipe {
         return recipe;
     }
 
-    private static void makeDict(String trait, JSONObject response, Recipe recipe) {
+    private void populateDictionary(JSONObject response) {
+        makeDict(mContext.getString(R.string.vegetarian), response);
+        makeDict(mContext.getString(R.string.vegan), response);
+        makeDict(mContext.getString(R.string.gluten_free), response);
+        makeDict(mContext.getString(R.string.dairy_free), response);
+        makeDict(mContext.getString(R.string.very_healthy), response);
+        makeDict(mContext.getString(R.string.very_popular), response);
+        makeDict(mContext.getString(R.string.cheap), response);
+    }
+
+    private void makeDict(String trait, JSONObject response) {
         try {
-            recipe.recipe_dict.put(trait, response.getBoolean(trait));
+            recipe_dict.put(trait, response.getBoolean(trait));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getImage() {
-        return image;
+    private void saveToServer() {
+        saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("Recipe", "Recipe created successfully");
+                } else {
+                    Log.d("Recipe", "Recipe failure");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public int getReadyInMinutes() {
@@ -519,10 +325,50 @@ public class Recipe {
 
     public boolean isValid(Bundle args) {
         for (String trait: recipe_traits) {
-            if (args.containsKey(trait) && args.getBoolean(trait) && !this.recipe_dict.get(trait)) {
+            if (Singleton.getSingletonInstance().getmUserDict().get(trait) && !this.recipe_dict.get(trait)) {
                 return false;
             }
         }
         return true;
     }
+
+    private static boolean haveRecipeInServer(List<Recipe> serverRecipes, int currId) {
+        for (Recipe recipe: serverRecipes) {
+            if (recipe.getId() == currId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String findRecipeInServer(List<Recipe> serverRecipes, int currId) {
+        for (Recipe recipe: serverRecipes) {
+            if (recipe.getId() == currId) {
+                return recipe.getRecipeInformation();
+            }
+        }
+        return null;
+    }
+
+    private static String getRandomRecipeFromServer (List<Recipe> serverRecipes) {
+        int randomPosition = (int) Math.random() * serverRecipes.size();
+        Recipe randomRecipe = serverRecipes.get(randomPosition);
+        return randomRecipe.getRecipeInformation();
+    }
+
+    private void saveIngredients(JSONObject response) {
+        try {
+            JSONArray ingredientsJSON = response.getJSONArray("extendedIngredients");
+            for (int i = 0; i < ingredientsJSON.length(); i += 1) {
+                String ingredient = ingredientsJSON.getJSONObject(i).getString("name");
+                if (!ingredients.contains(ingredient)) {
+                    ingredients.add(ingredient);
+                    Log.d("Recipe", ingredient);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
