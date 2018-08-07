@@ -43,15 +43,8 @@ public class FridgeFragment extends Fragment{
     private ItemAdapter mItemAdapter;
     private RecyclerView mItemRecyclerView;
 
-    private HashMap<String, Boolean> user_dict = null;
-
-
     public boolean mFirstClick = false;
-
     public Singleton mSingleInstance;
-
-    private String currentFilters = null;
-
     public MenuItem mSelectAllMenuBtn;
     public MenuItem mCancelMenuBtn;
 

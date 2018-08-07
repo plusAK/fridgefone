@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,8 +32,6 @@ public class ListFragment extends Fragment {
 
     private RecipeAdapter mRecipeAdapter;
     private RecyclerView mRecipeRecyclerView;
-    private ImageView mFilterImageView;
-    private TextView mCurrentFilters;
     private Button mButtonBack;
 
     public String[] mFilterTitles = {"Vegetarian", "Vegan", "Gluten Free", "Dairy Free", "Very Healthy", "Very Popular", "Cheap"};
@@ -70,11 +66,9 @@ public class ListFragment extends Fragment {
         mFilterRecyclerView.setLayoutManager(horizontalLayoutManager);
         mFilterRecyclerView.setAdapter(mFilterAdapter);
 
-        mCurrentFilters = (TextView) view.findViewById(R.id.currentFilters);
         // find RecyclerView
         mRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.rvRecipes);
 
-        mFilterImageView = (ImageView) view.findViewById(R.id.filterImageView);
         mButtonBack = (Button) view.findViewById(R.id.buttonBack);
 
         // construct the adapter from this data source
@@ -102,19 +96,6 @@ public class ListFragment extends Fragment {
         } catch (JSONException e) {
             Log.d("ListFragment", "Error: " + e.getMessage());
         }
-
-        String currentFilters = args.getString("currentFilters");
-        if (currentFilters != null) {
-            mCurrentFilters.setText(currentFilters);
-        }
-
-        mFilterImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FilterFragment filterFragment = new FilterFragment();
-                filterFragment.show(getFragmentManager(), "FilterFragment");
-            }
-        });
 
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override

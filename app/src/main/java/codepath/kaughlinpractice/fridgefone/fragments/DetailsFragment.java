@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import butterknife.BindView;
@@ -44,11 +43,7 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.buttonBack) public Button mButtonBack;
     @BindView(R.id.rvDetails) public RecyclerView mDetailsRecyclerView;
 
-
     public FridgeClient mClient;
-    private HashMap<String, Boolean> user_dict = null;
-
-    private String currentFilters = null;
     private boolean favorited;
 
     ArrayList<String> mInstructionsList;
