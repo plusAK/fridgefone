@@ -250,6 +250,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void add(Recipe recipe) {
         mRecipes.add(recipe);
-        notifyItemInserted(mRecipes.size() - 1);
+        this.notifyItemInserted(mRecipes.size() - 1);
     }
 }

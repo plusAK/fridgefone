@@ -43,15 +43,8 @@ public class FridgeFragment extends Fragment{
     private ItemAdapter mItemAdapter;
     private RecyclerView mItemRecyclerView;
 
-    private HashMap<String, Boolean> user_dict = null;
-
-
     public boolean mFirstClick = false;
-
     public Singleton mSingleInstance;
-
-    private String currentFilters = null;
-
     public MenuItem mSelectAllMenuBtn;
     public MenuItem mCancelMenuBtn;
 
@@ -207,9 +200,6 @@ public class FridgeFragment extends Fragment{
 
             }
         });
-//
-//        final View view = view.findViewById(R.id.imageView1);
-//
 
         mAddItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,7 +240,7 @@ public class FridgeFragment extends Fragment{
         mSingleInstance.setmSelectedItemsString(String.join(",", mSingleInstance.getmSelectedNamesSet()));
         mSingleInstance.setmAllFridgeItemsString(String.join(",", mSingleInstance.getmAllItemNamesSet()));
 
-        ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
+        ((MainActivity) mContext).generateRecipes();
     }
 
     public void loadItems() {

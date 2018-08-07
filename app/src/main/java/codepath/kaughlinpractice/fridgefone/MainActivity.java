@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
@@ -199,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast.makeText(this, getString(R.string.delete_item_toast) + " " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
-    public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
+    public void generateRecipes() {
         // create the url
         if (FridgeClient.mUseGenerateRecipeAPI) {
 
@@ -214,12 +213,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     //bundles recipe arguments
                     Bundle args = new Bundle();
-                    if (user_dict != null) {
-                        for (String trait : Recipe.recipe_traits) {
-                            args.putBoolean(trait, user_dict.get(trait));
-                        }
-                    }
-                    args.putString("currentFilters", currentFilters);
                     args.putString("responseForBundle", responseForBundle);
                     listFrag.setArguments(args);
 
@@ -241,12 +234,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             //bundles recipe arguments
             Bundle args = new Bundle();
-            if (user_dict != null) {
-                for (String trait : Recipe.recipe_traits) {
-                    args.putBoolean(trait, user_dict.get(trait));
-                }
-            }
-            args.putString("currentFilters", currentFilters);
             args.putString("responseForBundle", responseForBundle);
             listFrag.setArguments(args);
 
