@@ -207,9 +207,6 @@ public class FridgeFragment extends Fragment{
 
             }
         });
-//
-//        final View view = view.findViewById(R.id.imageView1);
-//
 
         mAddItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,7 +247,7 @@ public class FridgeFragment extends Fragment{
         mSingleInstance.setmSelectedItemsString(String.join(",", mSingleInstance.getmSelectedNamesSet()));
         mSingleInstance.setmAllFridgeItemsString(String.join(",", mSingleInstance.getmAllItemNamesSet()));
 
-        ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
+        ((MainActivity) mContext).generateRecipes();
     }
 
     public void loadItems() {

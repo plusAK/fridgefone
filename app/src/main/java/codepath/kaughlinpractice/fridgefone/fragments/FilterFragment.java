@@ -79,7 +79,7 @@ public class FilterFragment extends DialogFragment {
                 }
 
                 dismiss();
-                ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
+                ((MainActivity) mContext).generateRecipes();
             }
         });
     }

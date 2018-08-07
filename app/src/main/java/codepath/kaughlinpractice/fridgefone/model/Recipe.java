@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.FridgeClient;
-import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
 import codepath.kaughlinpractice.fridgefone.Singleton;
 import cz.msebera.android.httpclient.Header;
@@ -142,10 +141,10 @@ public class Recipe extends ParseObject{
                                             recipe.parseResponse(response);
 
                                             // if recipe attributes fit the user's desires (ex. vegan), then add to adapter
-                                            if (recipe.isValid(args)) {
+                                            if (recipe.isValid()) {
+                                                //rec.add(recipe);
                                                 recipeAdapter.add(recipe);
                                             }
-
                                             recipe.saveToServer();
                                         }
 
@@ -156,6 +155,7 @@ public class Recipe extends ParseObject{
                                     });
                         }
                         else {
+
                             // To conserve API calls, just randomly select a recipe we have
                             String stringResponse = getRandomRecipeFromServer(objects);
                             try {
@@ -163,10 +163,9 @@ public class Recipe extends ParseObject{
                                 recipe.setRecipeInformation(stringResponse);
                                 recipe.parseResponse(response);
 
-                                if (recipe.isValid(args)) {
+                                if (recipe.isValid()) {
                                     recipeAdapter.add(recipe);
                                 }
-
                                 recipe.saveToServer();
                             } catch (JSONException err) {
                                 err.printStackTrace();
@@ -183,7 +182,7 @@ public class Recipe extends ParseObject{
                             recipe.image = recipe.getImage();
                             recipe.parseResponse(response);
 
-                            if (recipe.isValid(args)) {
+                            if (recipe.isValid()) {
                                 recipeAdapter.add(recipe);
                             }
                         } catch (JSONException err) {
@@ -220,13 +219,9 @@ public class Recipe extends ParseObject{
     }
 
     private void populateDictionary(JSONObject response) {
-        makeDict(mContext.getString(R.string.vegetarian), response);
-        makeDict(mContext.getString(R.string.vegan), response);
-        makeDict(mContext.getString(R.string.gluten_free), response);
-        makeDict(mContext.getString(R.string.dairy_free), response);
-        makeDict(mContext.getString(R.string.very_healthy), response);
-        makeDict(mContext.getString(R.string.very_popular), response);
-        makeDict(mContext.getString(R.string.cheap), response);
+        for (int i = 0; i < recipe_traits.length; i++) {
+            makeDict(recipe_traits[i], response);
+        }
     }
 
     private void makeDict(String trait, JSONObject response) {
@@ -263,15 +258,15 @@ public class Recipe extends ParseObject{
     }
 
     public boolean isGlutenFree() {
-        return recipe_dict.get("gluten_free");
+        return recipe_dict.get("glutenFree");
     }
 
     public boolean isDairyFree() {
-        return recipe_dict.get("dairy_free");
+        return recipe_dict.get("dairyFree");
     }
 
     public boolean isVeryHealthy() {
-        return recipe_dict.get("very_healthy");
+        return recipe_dict.get("veryHealthy");
     }
 
     public boolean isCheap() {
@@ -279,7 +274,7 @@ public class Recipe extends ParseObject{
     }
 
     public boolean isVeryPopular() {
-        return recipe_dict.get("very_popular");
+        return recipe_dict.get("veryPopular");
     }
 
     public boolean isFast() {
@@ -298,7 +293,7 @@ public class Recipe extends ParseObject{
         return ingredients;
     }
 
-    public boolean isValid(Bundle args) {
+    public boolean isValid() {
         for (String trait: recipe_traits) {
             if (Singleton.getSingletonInstance().getmUserDict().get(trait) && !this.recipe_dict.get(trait)) {
                 return false;

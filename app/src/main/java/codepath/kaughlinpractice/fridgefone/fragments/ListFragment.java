@@ -60,7 +60,12 @@ public class ListFragment extends Fragment {
         mFilterRecyclerView = view.findViewById(R.id.HorizontalListRecyclerView);
         // add a divider after each item for more clarity
         mFilterRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.HORIZONTAL));
-        mFilterAdapter = new FilterAdapter(mFilters);
+        mFilterAdapter = new FilterAdapter(getContext(), mFilters, new FilterAdapter.FilterInterface() {
+            @Override
+            public void regenerateRecipes() {
+                ((MainActivity) getContext()).generateRecipes();
+            }
+        });
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mFilterRecyclerView.setLayoutManager(horizontalLayoutManager);
         mFilterRecyclerView.setAdapter(mFilterAdapter);

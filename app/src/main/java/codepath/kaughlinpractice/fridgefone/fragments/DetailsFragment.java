@@ -187,7 +187,7 @@ public class DetailsFragment extends Fragment {
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getContext()).generateRecipes(user_dict, currentFilters); //basically intent to go back to recipe list screen
+                ((MainActivity) getContext()).generateRecipes(); //basically intent to go back to recipe list screen
             }
         });
 
