@@ -71,22 +71,7 @@
             </RelativeLayout>
         </ScrollView>
 
-        <FrameLayout
-            android:id="@+id/bottom_sheet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:behavior_hideable="true"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
-
-            <Button
-                android:id="@+id/buttonBack"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
-                android:background="@color/design_default_color_primary"
-                android:text="@string/back"
-                android:textColor="@color/white"
-                android:textSize="@dimen/pop_up_button_text_size" />
-        </FrameLayout>
+        <include layout="@layout/button"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

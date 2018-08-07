@@ -19,30 +19,24 @@ public class ShoppingItem extends ParseObject {
 
     public ShoppingItem() { }
 
-    public String getName() {
-        return getString(KEY_NAME);
-    }
+    //getters
+    public String getName() { return getString(KEY_NAME); }
 
-    public void setName(String name) {
-        put(KEY_NAME, name);
-    }
+    public String getImageURL() { return getString(KEY_IMAGE_URL); }
 
-    public String getImageURL() {
-        return getString(KEY_IMAGE_URL);
-    }
+    // setters
+    public void setName(String name) { put(KEY_NAME, name); }
 
-    public void setImageURL(String image) {
-        put(KEY_IMAGE_URL, image);
-    }
+    public void setImageURL(String image) { put(KEY_IMAGE_URL, image); }
 
     public static class Query extends ParseQuery<ShoppingItem> {
         public Query() {
             super(ShoppingItem.class);
         }
 
-        public Query getShoppingListItems() {
-            return this;
-        }
+//        public Query getShoppingListItems() {
+//            return this;
+//        }
     }
 
     public static ShoppingItem fromJSON(JSONObject jsonObject) throws JSONException {

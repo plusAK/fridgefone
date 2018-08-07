@@ -33,7 +33,6 @@ public class ListFragment extends Fragment {
     private ArrayList<String> mFilters;
 
     private RecipeAdapter mRecipeAdapter;
-    private ArrayList<Recipe> mRecipeArrayList;
     private RecyclerView mRecipeRecyclerView;
     private ImageView mFilterImageView;
     private TextView mCurrentFilters;
@@ -69,14 +68,12 @@ public class ListFragment extends Fragment {
         mCurrentFilters = (TextView) view.findViewById(R.id.currentFilters);
         // find RecyclerView
         mRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.rvRecipes);
-        // init the array list (data source)
-        mRecipeArrayList = new ArrayList<>();
 
         mFilterImageView = (ImageView) view.findViewById(R.id.filterImageView);
         mButtonBack = (Button) view.findViewById(R.id.buttonBack);
 
         // construct the adapter from this data source
-        mRecipeAdapter = new RecipeAdapter(mRecipeArrayList);
+        mRecipeAdapter = new RecipeAdapter();
 
         // RecyclerView setup (layout manager, user adapter)
         mRecipeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -95,7 +92,7 @@ public class ListFragment extends Fragment {
         }
         try {
             for (int i = 0; i < response.length(); i += 1) {
-                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity(), args, mRecipeArrayList, mRecipeAdapter);
+                Recipe recipe = Recipe.fromJSON(response.getJSONObject(i), getActivity(), args, mRecipeAdapter);
             }
         } catch (JSONException e) {
             Log.d("ListFragment", "Error: " + e.getMessage());

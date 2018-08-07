@@ -20,8 +20,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<Recipe> mRecipes;
     private Context context;
 
-    public RecipeAdapter(ArrayList<Recipe> recipes) {
-        mRecipes = recipes;
+    public RecipeAdapter() {
+        mRecipes = new ArrayList<>();
     }
 
     // creates and inflates a new view
@@ -246,5 +246,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void addAll(List<Recipe> list) {
         mRecipes.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public void add(Recipe recipe) {
+        mRecipes.add(recipe);
+        notifyItemInserted(mRecipes.size() - 1);
     }
 }

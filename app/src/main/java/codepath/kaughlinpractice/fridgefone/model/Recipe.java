@@ -48,7 +48,6 @@ public class Recipe extends ParseObject{
     public HashMap<String, Boolean> recipe_dict;
     private Context mContext;
 
-    static RecipeAdapter adapter;
     static FridgeClient mClient;
     static ArrayList<Recipe> recipes;
 
@@ -109,11 +108,10 @@ public class Recipe extends ParseObject{
         }
     }
 
-    public static Recipe fromJSON(final JSONObject jsonObject, final Context context, final Bundle args, final ArrayList<Recipe> rec, final RecipeAdapter recipeAdapter) throws JSONException {
+    public static Recipe fromJSON(final JSONObject jsonObject, final Context context, final Bundle args, final RecipeAdapter recipeAdapter) throws JSONException {
 
         // initialize the client
         mClient = new FridgeClient(context);
-        adapter = new RecipeAdapter(recipes);
 
         final Recipe recipe = new Recipe();
 
@@ -145,8 +143,7 @@ public class Recipe extends ParseObject{
 
                                             // if recipe attributes fit the user's desires (ex. vegan), then add to adapter
                                             if (recipe.isValid(args)) {
-                                                rec.add(recipe);
-                                                //recipeAdapter.notifyItemInserted(rec.size() - 1);
+                                                recipeAdapter.add(recipe);
                                             }
 
                                             recipe.saveToServer();
@@ -167,8 +164,7 @@ public class Recipe extends ParseObject{
                                 recipe.parseResponse(response);
 
                                 if (recipe.isValid(args)) {
-                                    rec.add(recipe);
-                                    recipeAdapter.notifyItemInserted(rec.size() - 1);
+                                    recipeAdapter.add(recipe);
                                 }
 
                                 recipe.saveToServer();
@@ -188,8 +184,7 @@ public class Recipe extends ParseObject{
                             recipe.parseResponse(response);
 
                             if (recipe.isValid(args)) {
-                                rec.add(recipe);
-                                recipeAdapter.notifyItemInserted(rec.size() - 1);
+                                recipeAdapter.add(recipe);
                             }
                         } catch (JSONException err) {
                             err.printStackTrace();
