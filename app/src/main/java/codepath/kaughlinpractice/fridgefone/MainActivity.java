@@ -26,6 +26,7 @@ import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.FridgeFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.ListFragment;
+import codepath.kaughlinpractice.fridgefone.fragments.ShoppingListFragment;
 import codepath.kaughlinpractice.fridgefone.model.Item;
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
 import cz.msebera.android.httpclient.Header;
@@ -117,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if(id == R.id.nav_ShoppingList){
             Toast.makeText(this, "Welcome to Shopping List", Toast.LENGTH_LONG).show();
+            goToShoppingList();
+        }
+        else if(id == R.id.nav_DailyRecipe){
+            Toast.makeText(this, "Welcome to Recipe of the Day", Toast.LENGTH_LONG).show();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -127,6 +132,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fridgeFrag = new FridgeFragment();
         fragmentTransition(fridgeFrag);
     }
+    public void goToShoppingList() {
+        Fragment shoppingFrag = new ShoppingListFragment();
+        fragmentTransition(shoppingFrag);
+    }
+
+
 
     public void getItem(String foodItem) {
 

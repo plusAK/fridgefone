@@ -11,13 +11,13 @@ import com.parse.SaveCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@ParseClassName("Item")
-public class Item extends ParseObject {
+@ParseClassName("ShoppingList")
+public class ShoppingItem extends ParseObject {
     private static final String KEY_NAME = "name";
     private static final String KEY_IMAGE_URL = "imageURL";
     private static final String ingredient_base_URL = "https://spoonacular.com/cdn/ingredients_100x100/";
 
-    public Item() { }
+    public ShoppingItem() { }
 
     public String getName() {
         return getString(KEY_NAME);
@@ -35,34 +35,34 @@ public class Item extends ParseObject {
         put(KEY_IMAGE_URL, image);
     }
 
-    public static class Query extends ParseQuery<Item> {
+    public static class Query extends ParseQuery<ShoppingItem> {
         public Query() {
-            super(Item.class);
+            super(ShoppingItem.class);
         }
 
-        public Query getFridgeItems() {
+        public Query getShoppingListItems() {
             return this;
         }
     }
 
-    public static Item fromJSON(JSONObject jsonObject) throws JSONException {
-        final Item item = new Item();
+    public static ShoppingItem fromJSON(JSONObject jsonObject) throws JSONException {
 
-        item.setName(jsonObject.getString("name"));
+        final ShoppingItem shopitem = new ShoppingItem();
+        shopitem.setName(jsonObject.getString("name"));
         String imageName = jsonObject.getString("image");
         String url = ingredient_base_URL + imageName;
-        item.setImageURL(url);
-        item.saveInBackground(new SaveCallback() {
+        shopitem.setImageURL(url);
+        shopitem.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
                 } else {
-                    Log.d("Item", "Error");
+                    Log.d("ShoppingItem", "Error");
                     e.printStackTrace();
                 }
             }
         });
-        return item;
+        return shopitem;
     }
 
 }

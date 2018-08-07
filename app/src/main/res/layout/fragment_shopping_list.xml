@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ShoppingListFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/small_padding"
+        tools:context=".MainActivity">
+
+        <ImageView
+            android:id="@+id/ivAddItem"
+            android:layout_width="@dimen/fridge_button_size"
+            android:layout_height="@dimen/fridge_button_size"
+            android:layout_below="@+id/swipeContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-49dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:srcCompat="@drawable/cooking_pot_button" />
+
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="49dp">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvShoppingListView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:gravity="center_horizontal">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
