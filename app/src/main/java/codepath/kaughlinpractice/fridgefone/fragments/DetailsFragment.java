@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import butterknife.BindView;
@@ -44,11 +43,7 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.buttonBack) public Button mButtonBack;
     @BindView(R.id.rvDetails) public RecyclerView mDetailsRecyclerView;
 
-
     public FridgeClient mClient;
-    private HashMap<String, Boolean> user_dict = null;
-
-    private String currentFilters = null;
     private boolean favorited;
 
     ArrayList<String> mInstructionsList;
@@ -63,18 +58,6 @@ public class DetailsFragment extends Fragment {
         ButterKnife.bind(this, view);
         return view;
     }
-
-    // set Transparent background for actionbar
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//
-//        AppCompatActivity appCompatActivity = (AppCompatActivity)context;
-//        ActionBar bar= appCompatActivity.getSupportActionBar();
-//        //bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00acacac")));
-//        bar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//
-//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -187,7 +170,7 @@ public class DetailsFragment extends Fragment {
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getContext()).generateRecipes(user_dict, currentFilters); //basically intent to go back to recipe list screen
+                ((MainActivity) getContext()).generateRecipes(); //basically intent to go back to recipe list screen
             }
         });
 

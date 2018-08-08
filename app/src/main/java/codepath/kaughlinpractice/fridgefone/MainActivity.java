@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import codepath.kaughlinpractice.fridgefone.fragments.DeleteItemFragment;
 import codepath.kaughlinpractice.fridgefone.fragments.DetailsFragment;
@@ -129,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void goToMyFridge() {
+        mSingleInstance.getmSelectedNamesSet().clear();
         Fragment fridgeFrag = new FridgeFragment();
         fragmentTransition(fridgeFrag);
     }
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast.makeText(this, getString(R.string.delete_item_toast) + " " + item.getName(), Toast.LENGTH_LONG).show();
     }
 
-    public void generateRecipes(final HashMap<String, Boolean> user_dict, final String currentFilters) {
+    public void generateRecipes() {
         // create the url
         if (FridgeClient.mUseGenerateRecipeAPI) {
 
@@ -225,12 +225,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     //bundles recipe arguments
                     Bundle args = new Bundle();
-                    if (user_dict != null) {
-                        for (String trait : Recipe.recipe_traits) {
-                            args.putBoolean(trait, user_dict.get(trait));
-                        }
-                    }
-                    args.putString("currentFilters", currentFilters);
                     args.putString("responseForBundle", responseForBundle);
                     listFrag.setArguments(args);
 
@@ -242,22 +236,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     "[{\"id\":556470,\"title\":\"Veggie & Chicken Kebab\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/544976-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}," +
                             "{\"id\":556470,\"title\":\"Curried Chicken Pitas\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/421176-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
                             "{\"id\":556470,\"title\":\"Curry Chicken and Grape Salad\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/1010550-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
-                            "{\"id\":556470,\"title\":\"Curry Chicken and Grape Salad\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/1010550-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
-                            "{\"id\":556470,\"title\":\"Curry Chicken and Grape Salad\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/1010550-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
+                            "{\"id\":65597,\"title\":\"Cinnamon Streusel Muffins\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/65597-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":1,\"missedIngredientCount\":2,\"likes\":0}, " +
+                            "{\"id\":155863,\"title\":\"Israeli Falafel\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/155863-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":2,\"missedIngredientCount\":17,\"likes\":0}, " +
                             "{\"id\":556470,\"title\":\"Mango Smoothies\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/161181-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
                             "{\"id\":556470,\"title\":\"King Cake with Pecan Praline Filling\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/855114-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}, " +
-                            "{\"id\":556470,\"title\":\"Veggie & Chicken Kebab\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/544976-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":0,\"likes\":243}]";
+                            "{\"id\":173003,\"title\":\"Grilled Marinated Steak Sandwiches\",\"image\":\"https:\\/\\/spoonacular.com\\/recipeImages\\/173003-312x231.jpg\",\"imageType\":\"jpg\",\"usedIngredientCount\":3,\"missedIngredientCount\":4,\"likes\":0}]";
 
             Fragment listFrag = new ListFragment();
 
             //bundles recipe arguments
             Bundle args = new Bundle();
-            if (user_dict != null) {
-                for (String trait : Recipe.recipe_traits) {
-                    args.putBoolean(trait, user_dict.get(trait));
-                }
-            }
-            args.putString("currentFilters", currentFilters);
             args.putString("responseForBundle", responseForBundle);
             listFrag.setArguments(args);
 

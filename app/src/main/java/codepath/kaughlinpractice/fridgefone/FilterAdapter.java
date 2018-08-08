@@ -1,6 +1,6 @@
 package codepath.kaughlinpractice.fridgefone;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +16,20 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
     private ArrayList<String> mFilters;
     private HashMap<String, Boolean> mUserDict;
     public boolean isFilterSelected;
+    private FilterInterface mFilterInterface;
+    private Singleton mSingleInstance;
+    private Context mContext;
 
-    public FilterAdapter(ArrayList<String> mFilters){
+    public interface FilterInterface {
+        void regenerateRecipes();
+    }
+
+    public FilterAdapter(Context context, ArrayList<String> mFilters, FilterInterface filterInstance){
         this.mFilters = mFilters;
-        this.mUserDict = Singleton.getSingletonInstance().getmUserDict();
+        this.mSingleInstance = Singleton.getSingletonInstance();
+        this.mUserDict = mSingleInstance.getmUserDict();
+        this.mFilterInterface = filterInstance;
+        this.mContext = context;
     }
 
     @Override
@@ -34,16 +44,19 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
     public void onBindViewHolder(final FilterViewHolder holder, final int position) {
         holder.mFilterTextView.setText(mFilters.get(position));
 
+        isFilterSelected = mUserDict.get(Recipe.recipe_traits[position]);
+        if (isFilterSelected) {
+            holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.filter_gray));
+        } else {
+            holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+        }
+
         holder.mFilterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isFilterSelected = mUserDict.get(Recipe.recipe_traits[position]);
-                if (!isFilterSelected) {
-                    holder.mFilterTextView.setBackgroundColor(Color.parseColor("#DCDCDC"));
-                } else {
-                    holder.mFilterTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                }
                 mUserDict.put(Recipe.recipe_traits[position], !isFilterSelected);
+                mFilterInterface.regenerateRecipes();
             }
         });
     }

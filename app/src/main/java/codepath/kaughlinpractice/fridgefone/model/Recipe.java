@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.FridgeClient;
-import codepath.kaughlinpractice.fridgefone.R;
 import codepath.kaughlinpractice.fridgefone.RecipeAdapter;
 import codepath.kaughlinpractice.fridgefone.Singleton;
 import cz.msebera.android.httpclient.Header;
@@ -56,6 +55,9 @@ public class Recipe extends ParseObject{
     private static final String KEY_IMAGE = "image";
     private static final String KEY_RESPONSE = "response";
     private static final String KEY_INFORMATION = "recipeInformation";
+    private static final int QUERY_LIMIT = 1000;
+
+    private HashSet<Integer> serverRecipeIds;
 
     public Recipe() { }
 
@@ -126,76 +128,66 @@ public class Recipe extends ParseObject{
         recipe.ingredients = new HashSet<>();
         recipe.mContext = context;
 
-        final Recipe.Query recipeQuery = new Recipe.Query();
-        recipeQuery.findInBackground(new FindCallback<Recipe>() {
-            @Override
-            public void done(List<Recipe> objects, ParseException e) {
-                if (e == null) {
-                    if (!haveRecipeInServer(objects, id)) {
-                        if (FridgeClient.mUseRecipeInformationAPI) {
-                            // execute a GET request expecting a JSON object response
-                            mClient.getInformation(id, new JsonHttpResponseHandler() {
-                                        @Override
-                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                            String r = response.toString();
-                                            recipe.setRecipeInformation(r);
-                                            recipe.parseResponse(response);
+        String serverRecipeInfo = findRecipeInServer(id);
+        // if the serverRecipeInfo is null, then we have not encountered this recipe before
 
-                                            // if recipe attributes fit the user's desires (ex. vegan), then add to adapter
-                                            if (recipe.isValid(args)) {
-                                                recipeAdapter.add(recipe);
-                                            }
+        // delete duplicates of recipes
+        // recipe.deleteDuplicates();
 
-                                            recipe.saveToServer();
-                                        }
-
-                                        @Override
-                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                            Log.d("Recipe", "Error: " + throwable);
-                                        }
-                                    });
-                        }
-                        else {
-                            // To conserve API calls, just randomly select a recipe we have
-                            String stringResponse = getRandomRecipeFromServer(objects);
-                            try {
-                                JSONObject response = new JSONObject(stringResponse);
-                                recipe.setRecipeInformation(stringResponse);
-                                recipe.parseResponse(response);
-
-                                if (recipe.isValid(args)) {
-                                    recipeAdapter.add(recipe);
-                                }
-
-                                recipe.saveToServer();
-                            } catch (JSONException err) {
-                                err.printStackTrace();
-                            }
-
-                        }
-                    } else {
-                        String stringResponse = findRecipeInServer(objects, id);
-                        try {
-                            JSONObject response = new JSONObject(stringResponse);
-                            recipe.setRecipeInformation(stringResponse);
-                            recipe.name = recipe.getName();
-                            recipe.id = recipe.getId();
-                            recipe.image = recipe.getImage();
-                            recipe.parseResponse(response);
-
-                            if (recipe.isValid(args)) {
-                                recipeAdapter.add(recipe);
-                            }
-                        } catch (JSONException err) {
-                            err.printStackTrace();
-                        }
+        if (serverRecipeInfo == null) {
+            // execute a GET request expecting a JSON object response
+            mClient.getInformation(id, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    String r = response.toString();
+                    recipe.setRecipeInformation(r);
+                    recipe.parseResponse(response);
+                    // if recipe attributes fit the user's desires (ex. vegan), then add to adapter
+                    if (recipe.isValid()) {
+                        recipeAdapter.add(recipe);
                     }
-                } else {
-                    e.printStackTrace();
+
+                    recipe.saveToServer();
                 }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("Recipe", "Error: " + throwable);
+                }
+            });
+        } else {
+            try {
+                JSONObject response = new JSONObject(serverRecipeInfo);
+                // recipe.setRecipeInformation(stringResponse);
+                recipe.name = recipe.getName();
+                recipe.id = recipe.getId();
+                recipe.image = recipe.getImage();
+                recipe.parseResponse(response);
+
+                if (recipe.isValid()) {
+                    recipeAdapter.add(recipe);
+                }
+            } catch (JSONException err) {
+                err.printStackTrace();
             }
-        });
+        }
         return recipe;
+    }
+
+    private static String findRecipeInServer(int currId) {
+        Recipe.Query recipeQuery = new Recipe.Query();
+        recipeQuery.setLimit(QUERY_LIMIT);
+        try {
+            recipeQuery.whereEqualTo("id", currId);
+            List<Recipe> recipesWithSameId = recipeQuery.find();
+            // if this is of size 0, then we have no encountered this recipe before
+            if (recipesWithSameId.size() != 0) {
+                Recipe serverRecipe = recipesWithSameId.get(0);
+                return serverRecipe.getRecipeInformation();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void parseResponse(JSONObject response) {
@@ -212,21 +204,10 @@ public class Recipe extends ParseObject{
         }
     }
 
-    // this is for testing purposes
-    public static Recipe fromString(String name) {
-        Recipe recipe = new Recipe();
-        recipe.name = name;
-        return recipe;
-    }
-
     private void populateDictionary(JSONObject response) {
-        makeDict(mContext.getString(R.string.vegetarian), response);
-        makeDict(mContext.getString(R.string.vegan), response);
-        makeDict(mContext.getString(R.string.gluten_free), response);
-        makeDict(mContext.getString(R.string.dairy_free), response);
-        makeDict(mContext.getString(R.string.very_healthy), response);
-        makeDict(mContext.getString(R.string.very_popular), response);
-        makeDict(mContext.getString(R.string.cheap), response);
+        for (int i = 0; i < recipe_traits.length; i++) {
+            makeDict(recipe_traits[i], response);
+        }
     }
 
     private void makeDict(String trait, JSONObject response) {
@@ -263,15 +244,15 @@ public class Recipe extends ParseObject{
     }
 
     public boolean isGlutenFree() {
-        return recipe_dict.get("gluten_free");
+        return recipe_dict.get("glutenFree");
     }
 
     public boolean isDairyFree() {
-        return recipe_dict.get("dairy_free");
+        return recipe_dict.get("dairyFree");
     }
 
     public boolean isVeryHealthy() {
-        return recipe_dict.get("very_healthy");
+        return recipe_dict.get("veryHealthy");
     }
 
     public boolean isCheap() {
@@ -279,7 +260,7 @@ public class Recipe extends ParseObject{
     }
 
     public boolean isVeryPopular() {
-        return recipe_dict.get("very_popular");
+        return recipe_dict.get("veryPopular");
     }
 
     public boolean isFast() {
@@ -298,31 +279,13 @@ public class Recipe extends ParseObject{
         return ingredients;
     }
 
-    public boolean isValid(Bundle args) {
+    public boolean isValid() {
         for (String trait: recipe_traits) {
             if (Singleton.getSingletonInstance().getmUserDict().get(trait) && !this.recipe_dict.get(trait)) {
                 return false;
             }
         }
         return true;
-    }
-
-    private static boolean haveRecipeInServer(List<Recipe> serverRecipes, int currId) {
-        for (Recipe recipe: serverRecipes) {
-            if (recipe.getId() == currId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static String findRecipeInServer(List<Recipe> serverRecipes, int currId) {
-        for (Recipe recipe: serverRecipes) {
-            if (recipe.getId() == currId) {
-                return recipe.getRecipeInformation();
-            }
-        }
-        return null;
     }
 
     private static String getRandomRecipeFromServer (List<Recipe> serverRecipes) {
@@ -345,4 +308,23 @@ public class Recipe extends ParseObject{
         }
     }
 
+
+    private void deleteDuplicates() {
+        serverRecipeIds = new HashSet<>();
+        Recipe.Query recipeQuery = new Recipe.Query();
+        recipeQuery.setLimit(QUERY_LIMIT);
+        recipeQuery.findInBackground(new FindCallback<Recipe>() {
+            @Override
+            public void done(List<Recipe> objects, ParseException e) {
+                for (Recipe serverRecipe: objects) {
+                    int serverId = serverRecipe.getId();
+                    if (serverRecipeIds.contains(serverId)) {
+                        serverRecipe.deleteInBackground();
+                    } else {
+                        serverRecipeIds.add(serverId);
+                    }
+                }
+            }
+        });
+    }
 }

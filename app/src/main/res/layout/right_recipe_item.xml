@@ -43,7 +43,7 @@
                     android:paddingRight="@dimen/very_small_padding"
                     android:text="@string/dish_title"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/recipe_title_text" />
 
             </FrameLayout>
 
@@ -73,7 +73,7 @@
                     android:paddingRight="@dimen/very_small_padding"
                     android:text="@string/dish_title"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/recipe_title_text" />
 
             </FrameLayout>
         </LinearLayout>
@@ -103,7 +103,7 @@
                 android:paddingRight="@dimen/very_small_padding"
                 android:text="@string/dish_title"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="@dimen/recipe_title_text" />
 
         </FrameLayout>
     </LinearLayout>

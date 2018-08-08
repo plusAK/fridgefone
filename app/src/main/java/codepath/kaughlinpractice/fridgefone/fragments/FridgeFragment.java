@@ -23,7 +23,6 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.ItemAdapter;
@@ -43,15 +42,8 @@ public class FridgeFragment extends Fragment{
     private ItemAdapter mItemAdapter;
     private RecyclerView mItemRecyclerView;
 
-    private HashMap<String, Boolean> user_dict = null;
-
-
     public boolean mFirstClick = false;
-
     public Singleton mSingleInstance;
-
-    private String currentFilters = null;
-
     public MenuItem mSelectAllMenuBtn;
     public MenuItem mCancelMenuBtn;
 
@@ -245,7 +237,7 @@ public class FridgeFragment extends Fragment{
         mSingleInstance.setmSelectedItemsString(String.join(",", mSingleInstance.getmSelectedNamesSet()));
         mSingleInstance.setmAllFridgeItemsString(String.join(",", mSingleInstance.getmAllItemNamesSet()));
 
-        ((MainActivity) mContext).generateRecipes(user_dict, currentFilters);
+        ((MainActivity) mContext).generateRecipes();
     }
 
     public void loadItems() {
