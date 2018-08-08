@@ -231,50 +231,6 @@ public class Recipe extends ParseObject{
         });
     }
 
-    public int getReadyInMinutes() {
-        return readyInMinutes;
-    }
-
-    public boolean isVegetarian() {
-        return recipe_dict.get("vegetarian");
-    }
-
-    public boolean isVegan() {
-        return recipe_dict.get("vegan");
-    }
-
-    public boolean isGlutenFree() {
-        return recipe_dict.get("glutenFree");
-    }
-
-    public boolean isDairyFree() {
-        return recipe_dict.get("dairyFree");
-    }
-
-    public boolean isVeryHealthy() {
-        return recipe_dict.get("veryHealthy");
-    }
-
-    public boolean isCheap() {
-        return recipe_dict.get("cheap");
-    }
-
-    public boolean isVeryPopular() {
-        return recipe_dict.get("veryPopular");
-    }
-
-    public boolean isFast() {
-        if (getReadyInMinutes() < 30) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public int getServings() {
-        return servings;
-    }
-
     public HashSet<String> getIngredients() {
         return ingredients;
     }
