@@ -90,6 +90,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 // if you have the ingredient in your fridge, change icon to green check box
                 if (mAllItemNamesSet.contains(ingredient)) {
                     ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.green_checked);
+                    ingredientViewHolder.containsIngredient = true;
                 }
 
                 if (position % 2 == 1) {
