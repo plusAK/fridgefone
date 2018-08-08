@@ -207,9 +207,6 @@ public class FridgeFragment extends Fragment{
 
             }
         });
-//
-//        final View view = view.findViewById(R.id.imageView1);
-//
 
         mAddItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,8 +230,6 @@ public class FridgeFragment extends Fragment{
 
                     }
                 });
-
-
             }
         });
     }

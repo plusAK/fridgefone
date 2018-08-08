@@ -33,9 +33,34 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ShoppingAdapter.ViewHolder viewHolder, final int position) {
+        final ViewHolder shoppingItemsViewHolder = (ViewHolder) viewHolder;
 
 //        viewHolder.mShopFoodNameTextView.setText(mShoppingItems.get(position).getName());
         viewHolder.mShopFoodNameTextView.setText(mShoppingItems.get(position).getName());
+
+//        //change color depending on the row
+        if (position % 2 == 1) {
+            shoppingItemsViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.alternating_gray));
+        }
+        else{
+            shoppingItemsViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
+        }
+
+//        shoppingItemsViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                // make sure the position is valid, i.e. actually exists in the view
+//                if (position != RecyclerView.NO_POSITION) {
+//                    // get the recipe at the position, this won't work if the class is static
+//                    Item item = mItems.get(position);
+//                    // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
+//                    item.deleteInBackground();
+//
+//                }
+//                return true;
+//            }
+//        });
+
 
 //        GlideApp.with(mContext)
 //                .load(mShoppingItems.get(position).getImageURL())

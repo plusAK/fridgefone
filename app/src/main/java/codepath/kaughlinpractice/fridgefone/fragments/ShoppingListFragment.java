@@ -1,6 +1,10 @@
 package codepath.kaughlinpractice.fridgefone.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,10 +12,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -26,11 +34,12 @@ import codepath.kaughlinpractice.fridgefone.model.ShoppingItem;
 
 public class ShoppingListFragment extends Fragment {
     private Context mContext;
-    private ImageView mAddItemImageView;
     private ArrayList<ShoppingItem> mShoppingItemList;
     private SwipeRefreshLayout mSwipeContainer;
     private ShoppingAdapter mShoppingAdapter;
     private RecyclerView mShoppingItemRecyclerView;
+    private ImageView mAddItemImageView;
+    private EditText mNewItemEditText;
 
 
 
@@ -56,16 +65,25 @@ public class ShoppingListFragment extends Fragment {
         mShoppingAdapter =  new ShoppingAdapter(mShoppingItemList, getActivity());
 
 
-
         mShoppingItemRecyclerView = (RecyclerView) view.findViewById(R.id.rvShoppingListView);
 
         //construct adapter from data source
         mShoppingItemRecyclerView.setAdapter(mShoppingAdapter);
         mShoppingItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mNewItemEditText = (EditText) view.findViewById(R.id.etNewItem);
 
+
+        mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddShopItem);
+        mAddItemImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addShoppingItem();
+            }
+        });
 
         //load items
         loadItems();
+        swipeToDelete();
 
         mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -84,7 +102,99 @@ public class ShoppingListFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+
     }
+    private void swipeToDelete(){
+        //.left means swiping towards the left
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT ) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+            public static final float AlPHA_FULL = 1.0f;
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                //if action state is in swipe mode
+                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
+
+                    //initialize itemview
+                    View itemView = viewHolder.itemView;
+
+                    Paint paint = new Paint();
+                    Bitmap icon;
+
+//                    //if swiping from right to left
+//                    if(dX > 0){
+//
+//                        Log.d("ShoppingListFragment", "onChildDraw: swiping dx > 0");
+//                        //Color left side swiping towards right
+//                        paint.setARGB(255,255,255,255);
+//                        c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(),dX, (float) itemView.getBottom(), paint);
+//
+//                        //icon left side swiping towards right
+//
+//                        icon = BitmapFactory.decodeResource(getResources(),R.mipmap.trash);
+//
+//                        c.drawBitmap(icon,
+//                                (float) itemView.getLeft() + convertDpToPx(16),
+//                                (float) itemView.getTop() + (float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()/2,paint);
+//
+//                    }
+//                    else{
+
+                    //Color left side swiping towards right
+                    paint.setARGB(255,255,255,255);
+                    c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
+                            (float) itemView.getRight(), (float) itemView.getBottom(), paint);
+
+                    //icon left side swiping towards right
+                    icon = BitmapFactory.decodeResource(getResources(),R.mipmap.trash);
+
+                    c.drawBitmap(icon,
+                            (float) itemView.getRight() - icon.getWidth(),
+                            (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight())/2,paint);
+                    Log.d("ShoppingListFragment", "onChildDraw: swiping right to left");
+//                    }
+
+
+                    //Fade out the view when it is swiped out of the parent
+                    final float alpha = AlPHA_FULL - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
+                    viewHolder.itemView.setAlpha(alpha);
+                    viewHolder.itemView.setTranslationX(dX);
+
+                } else{
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                }
+            }
+
+//            private int convertDpToPx(int dp){
+//                return Math.round(dp * (getResources().getDisplayMetrics().xdpi)/ DisplayMetrics.DENSITY_DEFAULT);
+//            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();// swiped position
+
+                if(direction == ItemTouchHelper.LEFT ){ // swipe right to left
+                    //get the recipe at the position, this won't work if the class is static
+                    ShoppingItem shoppingItem = mShoppingItemList.get(position);
+                    // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
+                    shoppingItem.deleteInBackground();
+                    mShoppingItemList.remove(position);
+                    mShoppingAdapter.notifyItemRemoved(position);
+
+                    Toast.makeText(mContext, "swiped left", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(mShoppingItemRecyclerView);
+
+
+    }
+
     public void loadItems() {
 
         final ShoppingItem.Query shoppingItemQuery = new ShoppingItem.Query();
@@ -103,6 +213,20 @@ public class ShoppingListFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void addShoppingItem(){
+        ShoppingItem shopItem = new ShoppingItem();
+        // grab the EditText's content as a String
+        String itemText = mNewItemEditText.getText().toString();
+        //set text for shopping item
+        shopItem.setName(itemText);
+        // add the item to the parseServer
+        shopItem.saveInBackground();
+        // clear the EditText by setting it to an empty String
+        mNewItemEditText.setText("");
+        // display a notification to the user
+        Toast.makeText(getActivity(), "Item:" + itemText +" added to list", Toast.LENGTH_SHORT).show();
     }
 
     public void fetchTimelineAsync(int page) {
