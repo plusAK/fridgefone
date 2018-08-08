@@ -59,18 +59,6 @@ public class DetailsFragment extends Fragment {
         return view;
     }
 
-    // set Transparent background for actionbar
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//
-//        AppCompatActivity appCompatActivity = (AppCompatActivity)context;
-//        ActionBar bar= appCompatActivity.getSupportActionBar();
-//        //bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00acacac")));
-//        bar.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//
-//    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -55,7 +55,7 @@ public class Recipe extends ParseObject{
     private static final String KEY_IMAGE = "image";
     private static final String KEY_RESPONSE = "response";
     private static final String KEY_INFORMATION = "recipeInformation";
-    private static final int QUERY_LIMIT = 500;
+    private static final int QUERY_LIMIT = 1000;
 
     private HashSet<Integer> serverRecipeIds;
 
@@ -142,7 +142,6 @@ public class Recipe extends ParseObject{
                     String r = response.toString();
                     recipe.setRecipeInformation(r);
                     recipe.parseResponse(response);
-
                     // if recipe attributes fit the user's desires (ex. vegan), then add to adapter
                     if (recipe.isValid()) {
                         recipeAdapter.add(recipe);
@@ -150,13 +149,11 @@ public class Recipe extends ParseObject{
 
                     recipe.saveToServer();
                 }
-
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     Log.d("Recipe", "Error: " + throwable);
                 }
             });
-
         } else {
             try {
                 JSONObject response = new JSONObject(serverRecipeInfo);
@@ -205,13 +202,6 @@ public class Recipe extends ParseObject{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    // this is for testing purposes
-    public static Recipe fromString(String name) {
-        Recipe recipe = new Recipe();
-        recipe.name = name;
-        return recipe;
     }
 
     private void populateDictionary(JSONObject response) {
@@ -321,7 +311,6 @@ public class Recipe extends ParseObject{
 
     private void deleteDuplicates() {
         serverRecipeIds = new HashSet<>();
-
         Recipe.Query recipeQuery = new Recipe.Query();
         recipeQuery.setLimit(QUERY_LIMIT);
         recipeQuery.findInBackground(new FindCallback<Recipe>() {
