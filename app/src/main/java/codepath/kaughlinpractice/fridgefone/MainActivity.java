@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
-
                         Item item = Item.fromJSON(response.getJSONObject(0));
+                        goToMyFridge();
                     } catch (JSONException e) {
                         Log.d("MainActivity", "Error: " + e.getMessage());
                     }
@@ -180,11 +180,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Creating items to send to parse server
                 response = new JSONArray(stringResponse);
                 Item item = Item.fromJSON(response.getJSONObject(0));
+                goToMyFridge();
             } catch (JSONException e) {
                 Log.d("MainActivity", "Error: " + e.getMessage());
             }
         }
-        goToMyFridge();
+        //goToMyFridge();
     }
 
     public void askToDeleteItem(Item item) {

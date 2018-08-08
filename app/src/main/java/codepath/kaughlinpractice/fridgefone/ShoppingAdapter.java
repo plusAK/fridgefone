@@ -46,45 +46,12 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.ViewHo
             shoppingItemsViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
         }
 
-//        shoppingItemsViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                // make sure the position is valid, i.e. actually exists in the view
-//                if (position != RecyclerView.NO_POSITION) {
-//                    // get the recipe at the position, this won't work if the class is static
-//                    Item item = mItems.get(position);
-//                    // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
-//                    item.deleteInBackground();
-//
-//                }
-//                return true;
-//            }
-//        });
 
-
+//      TODO-- if you want to use image for item
 //        GlideApp.with(mContext)
 //                .load(mShoppingItems.get(position).getImageURL())
 //                .into(viewHolder.mShopFoodImageView);
 
-
-
-//        //long click to delete an item
-//        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//
-//                // make sure the position is valid, i.e. actually exists in the view
-//                if (position != RecyclerView.NO_POSITION) {
-//                    // get the recipe at the position, this won't work if the class is static
-//                    ShoppingItem shoppingItem = mShoppingItems.get(position);
-//                    // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
-//
-//                    //TODO -- delete item
-//                    //((MainActivity) mContext).askToDeleteItem(ShoppingItem);
-//                }
-//                return true;
-//            }
-//        });
     }
 
     @Override
@@ -99,6 +66,7 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mShopFoodNameTextView = (TextView) itemView.findViewById(R.id.tvShop_Food_Name);
+            //      TODO-- if you want to use image for item
             //mShopFoodImageView = (ImageView) itemView.findViewById(R.id.ivShop_Food_Image);
         }
     }

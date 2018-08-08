@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -77,6 +79,11 @@ public class ShoppingListFragment extends Fragment {
         mAddItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // initialize animation
+                final Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.anim_scaledown);
+                // start animation
+                view.startAnimation(anim);
+                //add item to shopping list
                 addShoppingItem();
             }
         });
@@ -125,26 +132,7 @@ public class ShoppingListFragment extends Fragment {
                     Paint paint = new Paint();
                     Bitmap icon;
 
-//                    //if swiping from right to left
-//                    if(dX > 0){
-//
-//                        Log.d("ShoppingListFragment", "onChildDraw: swiping dx > 0");
-//                        //Color left side swiping towards right
-//                        paint.setARGB(255,255,255,255);
-//                        c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(),dX, (float) itemView.getBottom(), paint);
-//
-//                        //icon left side swiping towards right
-//
-//                        icon = BitmapFactory.decodeResource(getResources(),R.mipmap.trash);
-//
-//                        c.drawBitmap(icon,
-//                                (float) itemView.getLeft() + convertDpToPx(16),
-//                                (float) itemView.getTop() + (float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()/2,paint);
-//
-//                    }
-//                    else{
-
-                    //Color left side swiping towards right
+                    //Color pull from right side swiping towards left
                     paint.setARGB(255,255,255,255);
                     c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(),
                             (float) itemView.getRight(), (float) itemView.getBottom(), paint);
@@ -156,7 +144,6 @@ public class ShoppingListFragment extends Fragment {
                             (float) itemView.getRight() - icon.getWidth(),
                             (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight())/2,paint);
                     Log.d("ShoppingListFragment", "onChildDraw: swiping right to left");
-//                    }
 
 
                     //Fade out the view when it is swiped out of the parent
@@ -169,10 +156,6 @@ public class ShoppingListFragment extends Fragment {
                 }
             }
 
-//            private int convertDpToPx(int dp){
-//                return Math.round(dp * (getResources().getDisplayMetrics().xdpi)/ DisplayMetrics.DENSITY_DEFAULT);
-//            }
-
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();// swiped position
@@ -180,9 +163,11 @@ public class ShoppingListFragment extends Fragment {
                 if(direction == ItemTouchHelper.LEFT ){ // swipe right to left
                     //get the recipe at the position, this won't work if the class is static
                     ShoppingItem shoppingItem = mShoppingItemList.get(position);
-                    // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
+                    // delete item from parse server
                     shoppingItem.deleteInBackground();
+                    // remove position
                     mShoppingItemList.remove(position);
+                    // notify adapter item was removed
                     mShoppingAdapter.notifyItemRemoved(position);
 
                     Toast.makeText(mContext, "swiped left", Toast.LENGTH_SHORT).show();
@@ -227,6 +212,8 @@ public class ShoppingListFragment extends Fragment {
         mNewItemEditText.setText("");
         // display a notification to the user
         Toast.makeText(getActivity(), "Item:" + itemText +" added to list", Toast.LENGTH_SHORT).show();
+        //reload items to screen
+        fetchTimelineAsync(0);
     }
 
     public void fetchTimelineAsync(int page) {
