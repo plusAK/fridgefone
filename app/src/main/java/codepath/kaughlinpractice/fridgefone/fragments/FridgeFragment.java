@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,6 +51,7 @@ public class FridgeFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("FridgeFragment", "onCreateView: creating fridge frag");
         return inflater.inflate(R.layout.fragment_fridge, container, false);
     }
 
@@ -58,6 +60,7 @@ public class FridgeFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        Log.d("FridgeFragment", "onActivitycreated: on act creTED");
     }
 
     // inflates specific action bar
@@ -71,6 +74,7 @@ public class FridgeFragment extends Fragment{
         //set initial visibility of menu items
         mSelectAllMenuBtn.setVisible(false);
         mCancelMenuBtn.setVisible(false);
+        Log.d("FridgeFragment", "onCreateOptionsMenu: on create options menu");
     }
 
     @Override
@@ -112,6 +116,7 @@ public class FridgeFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Log.d("FridgeFragment", "onViewCreated: on view created");
         mContext = getContext();
         mItemList = new ArrayList<>();
 
@@ -127,7 +132,7 @@ public class FridgeFragment extends Fragment{
 
         mItemRecyclerView = (RecyclerView) view.findViewById(R.id.rvFridgeHomeView);
 
-        // intialize itemadapter with interface for on select
+        // initialize itemadapter with interface for on select
         mItemAdapter =  new ItemAdapter(mItemList, getActivity(), new ItemAdapter.OnSelectInterface() {
             @Override
             public void onFirstSelect() {
@@ -276,5 +281,13 @@ public class FridgeFragment extends Fragment{
         mItemAdapter.clear();
         loadItems();
         mSwipeContainer.setRefreshing(false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // resetFridge after fragment is destroyed
+        mSingleInstance.resetFridge();
+        mFirstClick = false;
     }
 }

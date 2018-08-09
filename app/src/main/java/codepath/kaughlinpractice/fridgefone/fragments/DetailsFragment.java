@@ -10,9 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -29,7 +29,6 @@ import butterknife.ButterKnife;
 import codepath.kaughlinpractice.fridgefone.DetailsAdapter;
 import codepath.kaughlinpractice.fridgefone.FridgeClient;
 import codepath.kaughlinpractice.fridgefone.GlideApp;
-import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
 import cz.msebera.android.httpclient.Header;
 
@@ -40,7 +39,6 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.ivRecipeImage) public ImageView mRecipeImageView;
     @BindView(R.id.ivFavoriteStar) public ImageView mFavoriteStarImageView;
     @BindView(R.id.tvDishTitle) public TextView mDishTitleTextView;
-    @BindView(R.id.buttonBack) public Button mButtonBack;
     @BindView(R.id.rvDetails) public RecyclerView mDetailsRecyclerView;
 
     public FridgeClient mClient;
@@ -88,6 +86,7 @@ public class DetailsFragment extends Fragment {
                 mIsFavorited = !mIsFavorited;
                 if (mIsFavorited) {
                     mFavoriteStarImageView.setImageResource(R.drawable.white_star_filled);
+                    Toast.makeText(getActivity(),mDishTitleTextView.getText().toString() + " added to recipe favorites.", Toast.LENGTH_SHORT).show();
                 } else {
                     mFavoriteStarImageView.setImageResource(R.drawable.white_star_outline);
                 }
@@ -167,13 +166,6 @@ public class DetailsFragment extends Fragment {
             }
         }
 
-        mButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) getContext()).generateRecipes(); //basically intent to go back to recipe list screen
-            }
-        });
-
     }
 
     public void parseInstructions(JSONObject partOfInstructions) {
@@ -188,4 +180,6 @@ public class DetailsFragment extends Fragment {
             Log.d("DetailFragment", "Error " + e.getMessage());
         }
     }
+
+
 }
