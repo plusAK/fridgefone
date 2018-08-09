@@ -18,7 +18,13 @@
 
     <style name="MyTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/fascinate</item>
+        <item name="android:fontFamily">@font/pacifico</item>
+    </style>
+
+    <style name="MyToolbar" parent="Widget.AppCompat.ActionBar">
+        <item name="android:textColor">@color/theme_honey</item>
+        <item name="android:fontFamily">@font/pacifico</item>
+        <item name="android:textSize">@dimen/toolbar_title_text</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
