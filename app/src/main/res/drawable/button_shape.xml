@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners
+        android:topLeftRadius="@dimen/button_radius"
+        android:topRightRadius="@dimen/button_radius"
+        android:bottomRightRadius="@dimen/button_radius"
+        android:bottomLeftRadius="@dimen/button_radius">
+    </corners>
+    <solid
+        android:color="@color/theme_black">
+    </solid>
+    <padding
+        android:left="@dimen/very_small_padding"
+        android:top="@dimen/very_small_padding"
+        android:right="@dimen/very_small_padding"
+        android:bottom="@dimen/very_small_padding" />
+</shape>
