@@ -18,14 +18,11 @@
     <color name="transparent">#00acacac</color>
     <color name="filter_gray">#DCDCDC</color>
 
-    <color name="Wheat">#5dff40</color>
-    <color name="back">#c10f97</color>
-    <color name="Wheat2">#ffcc40</color>
-    <color name="back2">#075056</color>
-
     <color name="theme_black">#191c15</color>
     <color name="theme_white">#f9fafc</color>
     <color name="theme_brown">#773322</color>
     <color name="theme_peach">#d69666</color>
     <color name="theme_honey">#f28c0c</color>
+
+    <color name="opaque_theme_black">#0f191c15</color>
 </resources>
