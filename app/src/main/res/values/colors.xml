@@ -26,6 +26,6 @@
     <color name="theme_honey">#f28c0c</color>
 
     <color name="opaque_theme_black">#0f191c15</color>
-    <color name="opaque_theme_honey">#aff28c0c</color>
+    <color name="opaque_theme_honey">#0cf28c0c</color>
     <color name="loading_page_color">#FEB81E</color>
 </resources>
