@@ -50,4 +50,5 @@
     <dimen name="card_view_radius">10dp</dimen>
 
     <dimen name="recipe_title_text">19sp</dimen>
+    <dimen name="toolbar_title_text">25sp</dimen>
 </resources>
