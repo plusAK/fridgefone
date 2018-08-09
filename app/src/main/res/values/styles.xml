@@ -30,7 +30,6 @@
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/black</item>
     </style>
-
     <style name="RecipeTitleTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -61,11 +60,4 @@
         <item name="cardBackgroundColor">@color/white</item>
         <item name="cardCornerRadius">@dimen/card_view_radius</item>
     </style>
-
-    <style name="PopUpTheme">
-        <item name="android:id">@id/imageView2</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowCloseOnTouchOutside">true</item>
-    </style>
-
 </resources>

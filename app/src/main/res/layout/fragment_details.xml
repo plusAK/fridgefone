@@ -71,8 +71,6 @@
             </RelativeLayout>
         </ScrollView>
 
-        <include layout="@layout/button"/>
-
     </android.support.design.widget.CoordinatorLayout>
 
 </FrameLayout>

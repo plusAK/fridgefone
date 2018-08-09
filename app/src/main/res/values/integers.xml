@@ -2,4 +2,5 @@
 <resources>
     <integer name="on_click_filter">60</integer>
     <integer name="no_click_filter">255</integer>
+    <integer name="medium_animation_time">300</integer>
 </resources>

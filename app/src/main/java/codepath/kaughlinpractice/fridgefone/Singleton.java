@@ -93,4 +93,11 @@ public class Singleton {
     public void setmAllFridgeItemsString(String mAllFridgeItemsString) {
         this.mAllFridgeItemsString = mAllFridgeItemsString;
     }
+
+    public void resetFridge(){
+        mSelectedNamesSet.clear();
+        mAllSelected = false;
+        mSelectItemsBoolean = false;
+        mNoneSelected = true;
+    }
 }
