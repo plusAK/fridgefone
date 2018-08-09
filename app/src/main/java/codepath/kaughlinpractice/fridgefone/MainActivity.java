@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
-
                         Item item = Item.fromJSON(response.getJSONObject(0));
                     } catch (JSONException e) {
                         Log.d("MainActivity", "Error: " + e.getMessage());

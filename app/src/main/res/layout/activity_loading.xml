@@ -5,24 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoadingActivity">
+    l
+
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="259dp"
+        android:id="@+id/newBackground"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/closedfridge" />
+        android:background="@color/theme_peach">
 
-    <TextView
-        android:id="@+id/tvfridgeTitle"
-        android:layout_width="wrap_content"
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="198dp"
-        android:fontFamily="serif"
-        android:text="fridge fone"
-        android:textColor="@color/colorPrimary"
-        android:textSize="36sp" />
+        android:layout_marginTop="97dp"
+        app:srcCompat="@drawable/hot_dish" />
+
+    <TextView
+        android:id="@+id/logoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="159dp"
+        android:focusable="false"
+        android:fontFamily="@font/pacifico"
+        android:text="FridgeFone"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/hiddenLogoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="159dp"
+        android:fontFamily="@font/pacifico"
+        android:text="FridgeFone"
+        android:textSize="50sp" />
+
 </RelativeLayout>
