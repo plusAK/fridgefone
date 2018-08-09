@@ -96,7 +96,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
 
                 if (position % 2 == 1) {
-                    ingredientViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.alternating_gray));
+                    ingredientViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.opaque_theme_honey));
                 }
 
                 ingredientViewHolder.ivIngredientIcon.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +144,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
 
                 if (position % 2 == 1) {
-                    instructionViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.alternating_gray));
+                    instructionViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.opaque_theme_honey));
                     break;
 
                 }

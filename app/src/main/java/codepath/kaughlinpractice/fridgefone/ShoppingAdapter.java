@@ -40,7 +40,7 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.ViewHo
 
 //        //change color depending on the row
         if (position % 2 == 1) {
-            shoppingItemsViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.alternating_gray));
+            shoppingItemsViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.opaque_theme_honey));
         }
         else{
             shoppingItemsViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
