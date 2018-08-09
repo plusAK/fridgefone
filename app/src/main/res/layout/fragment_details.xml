@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/ivRecipeImage"
                     android:layout_alignParentEnd="true"
-                    android:background="@color/opaque_black"
+                    android:background="@drawable/gradient_box"
                     android:fontFamily="@font/roboto_light"
                     android:paddingBottom="@dimen/medium_padding"
                     android:paddingLeft="@dimen/small_padding"

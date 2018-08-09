@@ -12,28 +12,35 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/theme_white"
         android:padding="@dimen/small_padding"
         tools:context=".MainActivity">
 
-        <ImageView
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/ivAddItem"
-            android:layout_width="@dimen/fridge_button_size"
-            android:layout_height="@dimen/fridge_button_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignTop="@+id/ivGenerateRecipeList"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/circle_with_corner"
             android:clickable="true"
+            android:elevation="@dimen/big_padding"
             android:focusable="true"
-            app:srcCompat="@drawable/black_outline_add" />
+            android:text="Add"
+            app:backgroundTint="@color/theme_black"
+            app:srcCompat="@drawable/plus" />
 
-        <ImageView
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/ivGenerateRecipeList"
-            android:layout_width="@dimen/fridge_button_size"
-            android:layout_height="@dimen/fridge_button_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/medium_padding"
             android:clickable="true"
             android:focusable="true"
-            app:srcCompat="@drawable/cooking_pot_button" />
+            app:backgroundTint="@color/theme_black"
+            app:srcCompat="@drawable/white_cooking_pot_button" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeContainer"
@@ -42,14 +49,15 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:background="@color/theme_white"
-            android:layout_marginBottom="49dp">
+            android:layout_marginBottom="0dp">
 
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvFridgeHomeView"
-                android:gravity="center_horizontal"
+                android:scrollbars="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal">
 
             </android.support.v7.widget.RecyclerView>
 

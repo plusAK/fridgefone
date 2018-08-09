@@ -3,7 +3,6 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/coda</item>
         <item>@font/fascinate</item>
-        <item>@font/pacifico</item>
         <item>@font/ultra</item>
         <item>@font/wallpoet</item>
     </array>
