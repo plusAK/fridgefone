@@ -46,6 +46,7 @@
         <item name="android:shadowDx">6</item>
         <item name="android:shadowDy">6</item>
         <item name="android:shadowRadius">6</item>
+        <item name="android:background">@drawable/gradient_box</item>
     </style>
 
     <style name="RecipeImageView">
@@ -59,5 +60,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="cardBackgroundColor">@color/white</item>
         <item name="cardCornerRadius">@dimen/card_view_radius</item>
+    </style>
+
+    <style name="OpaqueImageView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/opaque_theme_black</item>
     </style>
 </resources>
