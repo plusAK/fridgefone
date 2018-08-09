@@ -130,11 +130,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void goToMyFridge() {
         mSingleInstance.getmSelectedNamesSet().clear();
         Fragment fridgeFrag = new FridgeFragment();
-        fragmentTransition(fridgeFrag, R.anim.slide_in_left,R.anim.slide_out_right);
+        fragmentTransition(fridgeFrag, R.anim.slide_in_up,R.anim.slide_out_right);
     }
     public void goToShoppingList() {
         Fragment shoppingFrag = new ShoppingListFragment();
-        fragmentTransition(shoppingFrag,R.anim.slide_in_left,R.anim.slide_out_right);
+        fragmentTransition(shoppingFrag, R.anim.slide_in_up,R.anim.slide_out_right);
     }
 
 
@@ -248,15 +248,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Bundle args = new Bundle();
             args.putString("responseForBundle", responseForBundle);
             listFrag.setArguments(args);
-
             fragmentTransition(listFrag, R.anim.slide_in_right,R.anim.slide_out_left);
         }
     }
 
-    public void fragmentTransition(Fragment nextFrag, int enterTransition, int exitTransition ) {
+    public void fragmentTransition(Fragment nextFrag, int enterTransition, int exitTransition) {
+        int backenterTransition = R.anim.slide_in_left;
+        int backexitTransition = R.anim.slide_out_right;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(enterTransition,exitTransition);
+        fragmentTransaction.setCustomAnimations(enterTransition,exitTransition, backenterTransition , backexitTransition );
         fragmentTransaction.replace(R.id.my_fragment, nextFrag);
         fragmentTransaction.addToBackStack("my_fragment").commit();
 

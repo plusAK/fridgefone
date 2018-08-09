@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +31,6 @@ public class ListFragment extends Fragment {
 
     private RecipeAdapter mRecipeAdapter;
     private RecyclerView mRecipeRecyclerView;
-    private Button mButtonBack;
 
     public String[] mFilterTitles = {"Vegetarian", "Vegan", "Gluten Free", "Dairy Free", "Very Healthy", "Very Popular", "Cheap"};
 
@@ -69,8 +67,6 @@ public class ListFragment extends Fragment {
         // find RecyclerView
         mRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.rvRecipes);
 
-        mButtonBack = (Button) view.findViewById(R.id.buttonBack);
-
         // construct the adapter from this data source
         mRecipeAdapter = new RecipeAdapter();
 
@@ -96,12 +92,5 @@ public class ListFragment extends Fragment {
         } catch (JSONException e) {
             Log.d("ListFragment", "Error: " + e.getMessage());
         }
-
-        mButtonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) getContext()).goToMyFridge();
-            }
-        });
     }
 }
