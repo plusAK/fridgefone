@@ -5,22 +5,27 @@
     <item android:id="@+id/nav_Fridge"
         android:title="My Fridge"
         android:icon="@drawable/fridge"
+        app:rippleColor="@color/black"
         />
     <item android:id="@+id/nav_Favorites"
         android:title="Favorites"
         android:icon="@drawable/baseline_favorite_black_18dp"
+        app:rippleColor="@color/black"
         />
     <item android:id="@+id/nav_GroceryStores"
         android:title="Grocery Stores"
         android:icon="@drawable/baseline_store_black_18dp"
+        app:rippleColor="@color/black"
         />
     <item android:id="@+id/nav_ShoppingList"
         android:title="Shopping List"
         android:icon="@drawable/baseline_shopping_cart_black_18dp"
+        app:rippleColor="@color/black"
         />
     <item android:id="@+id/nav_DailyRecipe"
         android:title="@string/daily_recipe"
         android:icon="@drawable/recipes"
+        app:rippleColor="@color/black"
         />
 
 </menu>

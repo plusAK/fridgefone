@@ -24,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/circle_with_corner"
             android:clickable="true"
-            android:elevation="@dimen/big_padding"
+            android:elevation="@dimen/large_padding"
             android:focusable="true"
             android:text="Add"
             app:backgroundTint="@color/theme_black"
