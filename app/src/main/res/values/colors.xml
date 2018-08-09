@@ -22,7 +22,10 @@
     <color name="theme_white">#f9fafc</color>
     <color name="theme_brown">#773322</color>
     <color name="theme_peach">#d69666</color>
+    <color name="theme_gold">#FEB81E</color>
     <color name="theme_honey">#f28c0c</color>
 
     <color name="opaque_theme_black">#0f191c15</color>
+    <color name="opaque_theme_honey">#aff28c0c</color>
+    <color name="loading_page_color">#FEB81E</color>
 </resources>

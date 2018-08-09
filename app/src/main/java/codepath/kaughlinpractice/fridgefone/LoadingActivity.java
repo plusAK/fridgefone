@@ -21,7 +21,7 @@ public class LoadingActivity extends AwesomeSplash {
         /* you don't have to override every property */
 
         //Customize Circular Reveal
-        configSplash.setBackgroundColor(R.color.theme_peach); //any color you want form colors.xml
+        configSplash.setBackgroundColor(R.color.loading_page_color); //any color you want form colors.xml
         configSplash.setAnimCircularRevealDuration(2000); //int ms
         configSplash.setRevealFlagX(Flags.REVEAL_RIGHT);  //or Flags.REVEAL_LEFT
         configSplash.setRevealFlagY(Flags.REVEAL_BOTTOM); //or Flags.REVEAL_TOP
@@ -29,7 +29,7 @@ public class LoadingActivity extends AwesomeSplash {
         //Choose LOGO OR PATH; if you don't provide String value for path it's logo by default
 
         //Customize Logo
-        configSplash.setLogoSplash(R.drawable.cooking_hat); //or any other drawable
+        configSplash.setLogoSplash(R.drawable.salt_bae); //or any other drawable
         configSplash.setAnimLogoSplashDuration(2000); //int ms
         configSplash.setAnimLogoSplashTechnique(Techniques.Shake); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
 
@@ -42,7 +42,7 @@ public class LoadingActivity extends AwesomeSplash {
         configSplash.setPathSplashStrokeSize(3); //I advise value be <5
         configSplash.setPathSplashStrokeColor(R.color.theme_white); //any color you want form colors.xml
         configSplash.setAnimPathFillingDuration(3000);
-        configSplash.setPathSplashFillColor(R.color.theme_peach); //path object filling color
+        configSplash.setPathSplashFillColor(R.color.theme_honey); //path object filling color
 
 
         //Customize Title
