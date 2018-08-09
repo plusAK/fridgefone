@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/LinearLayout01"
@@ -24,27 +25,25 @@
                 android:layout_weight="1"
                 android:padding="@dimen/list_fragment_padding">
 
-                <ImageView
-                    android:id="@+id/ivImage1"
-                    android:layout_width="match_parent"
-                    android:layout_height="143dp"
-                    android:layout_weight="1"
-                    android:scaleType="centerCrop"/>
+                <android.support.v7.widget.CardView
+                    style="@style/RecipeCardView">
 
-                <TextView
-                    android:id="@+id/tvName1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|bottom"
-                    android:background="@color/opaque_black"
-                    android:fontFamily="@font/roboto_light"
-                    android:padding="@dimen/very_small_padding"
-                    android:paddingLeft="@dimen/very_small_padding"
-                    android:paddingRight="@dimen/very_small_padding"
-                    android:text="@string/dish_title"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/recipe_title_text" />
+                    <ImageView
+                        android:id="@+id/ivImage1"
+                        android:layout_height="143dp"
+                        style="@style/RecipeImageView"/>
 
+                    <ImageView
+                        android:id="@+id/opaque1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#1a000000" />
+
+                    <TextView
+                        android:id="@+id/tvName1"
+                        style="@style/RecipeTitleTextView"/>
+
+                </android.support.v7.widget.CardView>
             </FrameLayout>
 
             <FrameLayout
@@ -54,27 +53,25 @@
                 android:paddingTop="4dp"
                 android:padding="@dimen/list_fragment_padding">
 
-                <ImageView
-                    android:id="@+id/ivImage2"
-                    android:layout_width="match_parent"
-                    android:layout_height="143dp"
-                    android:layout_weight="1"
-                    android:scaleType="centerCrop"/>
+                <android.support.v7.widget.CardView
+                    style="@style/RecipeCardView">
 
-                <TextView
-                    android:id="@+id/tvName2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|bottom"
-                    android:background="@color/opaque_black"
-                    android:fontFamily="@font/roboto_light"
-                    android:padding="@dimen/very_small_padding"
-                    android:paddingLeft="@dimen/very_small_padding"
-                    android:paddingRight="@dimen/very_small_padding"
-                    android:text="@string/dish_title"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/recipe_title_text" />
+                    <ImageView
+                        android:id="@+id/ivImage2"
+                        android:layout_height="143dp"
+                        style="@style/RecipeImageView"/>
 
+                    <ImageView
+                        android:id="@+id/opaque2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#1a000000" />
+
+                    <TextView
+                        android:id="@+id/tvName2"
+                        style="@style/RecipeTitleTextView"/>
+
+                </android.support.v7.widget.CardView>
             </FrameLayout>
         </LinearLayout>
 
@@ -84,27 +81,25 @@
             android:layout_weight="1"
             android:padding="@dimen/list_fragment_padding">
 
-            <ImageView
-                android:id="@+id/ivImage3"
-                android:layout_width="match_parent"
-                android:layout_height="290dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop" />
+            <android.support.v7.widget.CardView
+                style="@style/RecipeCardView">
 
-            <TextView
-                android:id="@+id/tvName3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|bottom"
-                android:background="@color/opaque_black"
-                android:fontFamily="@font/roboto_light"
-                android:padding="@dimen/very_small_padding"
-                android:paddingLeft="@dimen/very_small_padding"
-                android:paddingRight="@dimen/very_small_padding"
-                android:text="@string/dish_title"
-                android:textColor="@color/white"
-                android:textSize="@dimen/recipe_title_text" />
+                <ImageView
+                    android:id="@+id/ivImage3"
+                    android:layout_height="290dp"
+                    style="@style/RecipeImageView"/>
 
+                <ImageView
+                    android:id="@+id/opaque3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#1a000000" />
+
+                <TextView
+                    android:id="@+id/tvName3"
+                    style="@style/RecipeTitleTextView" />
+
+            </android.support.v7.widget.CardView>
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>
