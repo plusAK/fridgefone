@@ -13,11 +13,12 @@
     <dimen name="pop_up_text_size">16sp</dimen>
     <dimen name="fridge_item_text_size">15sp</dimen>
     <dimen name="list_dish_text_size">25sp</dimen>
-    <dimen name="details_dish_text_size">25sp</dimen>
+    <dimen name="details_dish_text_size">23sp</dimen>
     <dimen name="details_heading_text_size">20sp</dimen>
     <dimen name="menu_heading_text_size">30sp</dimen>
     <dimen name="details_paragraph_text_size">17sp</dimen>
-
+    <dimen name="recipe_title_text">19sp</dimen>
+    <dimen name="toolbar_title_text">25sp</dimen>
 
     <dimen name="shop_item_height">50dp</dimen>
     <dimen name="nav_header_height">140dp</dimen>
@@ -51,6 +52,5 @@
     <dimen name="card_view_radius">10dp</dimen>
     <dimen name="button_radius">100dp</dimen>
 
-    <dimen name="recipe_title_text">19sp</dimen>
-    <dimen name="toolbar_title_text">25sp</dimen>
+    <dimen name="shadow">6</dimen>
 </resources>
