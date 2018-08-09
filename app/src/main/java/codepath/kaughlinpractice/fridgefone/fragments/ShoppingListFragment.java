@@ -13,7 +13,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,7 +142,6 @@ public class ShoppingListFragment extends Fragment {
                     c.drawBitmap(icon,
                             (float) itemView.getRight() - icon.getWidth(),
                             (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight())/2,paint);
-                    Log.d("ShoppingListFragment", "onChildDraw: swiping right to left");
 
 
                     //Fade out the view when it is swiped out of the parent
@@ -169,8 +167,7 @@ public class ShoppingListFragment extends Fragment {
                     mShoppingItemList.remove(position);
                     // notify adapter item was removed
                     mShoppingAdapter.notifyItemRemoved(position);
-
-                    Toast.makeText(mContext, "swiped left", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Item deleted", Toast.LENGTH_SHORT).show();
                 }
             }
         };

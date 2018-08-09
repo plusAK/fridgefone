@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         args.putStringArrayList("ingredients", ingredients);
 
         detailsFrag.setArguments(args);
-        fragmentTransition(detailsFrag);
+        fragmentTransition(detailsFrag, R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     @Override
@@ -130,11 +130,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void goToMyFridge() {
         mSingleInstance.getmSelectedNamesSet().clear();
         Fragment fridgeFrag = new FridgeFragment();
-        fragmentTransition(fridgeFrag);
+        fragmentTransition(fridgeFrag, R.anim.slide_in_left,R.anim.slide_out_right);
     }
     public void goToShoppingList() {
         Fragment shoppingFrag = new ShoppingListFragment();
-        fragmentTransition(shoppingFrag);
+        fragmentTransition(shoppingFrag,R.anim.slide_in_left,R.anim.slide_out_right);
     }
 
 
@@ -227,8 +227,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Bundle args = new Bundle();
                     args.putString("responseForBundle", responseForBundle);
                     listFrag.setArguments(args);
+                    fragmentTransition(listFrag, R.anim.slide_in_right,R.anim.slide_out_left);
 
-                    fragmentTransition(listFrag);
                 }
             });
         } else {
@@ -249,15 +249,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             args.putString("responseForBundle", responseForBundle);
             listFrag.setArguments(args);
 
-            fragmentTransition(listFrag);
+            fragmentTransition(listFrag, R.anim.slide_in_right,R.anim.slide_out_left);
         }
     }
 
-    public void fragmentTransition(Fragment nextFrag) {
+    public void fragmentTransition(Fragment nextFrag, int enterTransition, int exitTransition ) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.my_fragment, nextFrag).commit();
+        fragmentTransaction.setCustomAnimations(enterTransition,exitTransition);
+        fragmentTransaction.replace(R.id.my_fragment, nextFrag);
+        fragmentTransaction.addToBackStack("my_fragment").commit();
+
     }
+//
+//    @Override
+//    public void onBackPressed() {
+//        if (getFragmentManager().getBackStackEntryCount() > 0) {
+//            getFragmentManager().popBackStack();
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {
         mItemAdapter = setter;

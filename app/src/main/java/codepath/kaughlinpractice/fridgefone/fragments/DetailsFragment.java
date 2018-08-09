@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -88,6 +89,7 @@ public class DetailsFragment extends Fragment {
                 favorited = !favorited;
                 if (favorited) {
                     mFavoriteStarImageView.setImageResource(R.drawable.white_star_filled);
+                    Toast.makeText(getActivity(),mDishTitleTextView.getText().toString() + " added to recipe favorites.", Toast.LENGTH_SHORT).show();
                 } else {
                     mFavoriteStarImageView.setImageResource(R.drawable.white_star_outline);
                 }
@@ -188,4 +190,6 @@ public class DetailsFragment extends Fragment {
             Log.d("DetailFragment", "Error " + e.getMessage());
         }
     }
+
+
 }

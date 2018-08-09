@@ -136,7 +136,6 @@ public class FridgeFragment extends Fragment{
                     mGenerateRecipeListImageView.setVisibility(View.VISIBLE);
                     mSelectAllMenuBtn.setVisible(true);
                     mCancelMenuBtn.setVisible(true);
-                    Toast.makeText(getActivity(), "Select your items", Toast.LENGTH_SHORT).show();
                     mFirstClick = true;
                 }
             }
