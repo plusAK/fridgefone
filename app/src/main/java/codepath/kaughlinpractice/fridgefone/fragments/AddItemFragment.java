@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,22 +19,19 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
+import codepath.kaughlinpractice.fridgefone.AddItemAdapter;
 import codepath.kaughlinpractice.fridgefone.FridgeClient;
 import codepath.kaughlinpractice.fridgefone.MainActivity;
 import codepath.kaughlinpractice.fridgefone.R;
+import codepath.kaughlinpractice.fridgefone.model.Item;
 import cz.msebera.android.httpclient.Header;
 
 public class AddItemFragment extends DialogFragment {
 
-
-
     private Button mAddButton;
     private AutoCompleteTextView mFoodItemAutoCompleteTextView;
     public FridgeClient mClient;
-    public ArrayList<String> autoCompleteItems = new ArrayList<String>();
-    public ArrayAdapter<String> addItemAdapter;
+    public AddItemAdapter mAddItemAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,15 +45,13 @@ public class AddItemFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         //intialize client
         mClient = new FridgeClient(getActivity());
-        addItemAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_dropdown_item_1line, autoCompleteItems);
+        mAddItemAdapter = new AddItemAdapter(getActivity(), R.layout.drowdown_pic);
 
         mAddButton = (Button) view.findViewById(R.id.btnAdd);
         Button cancelButton = (Button) view.findViewById(R.id.btnCancel);
         mFoodItemAutoCompleteTextView = (AutoCompleteTextView) view.findViewById(R.id.actvFoodItem);
-        mFoodItemAutoCompleteTextView.setAdapter(addItemAdapter);
+        mFoodItemAutoCompleteTextView.setAdapter(mAddItemAdapter);
         mFoodItemAutoCompleteTextView.setThreshold(1);
-        //mFoodItemAutoCompleteTextView.setDropDownHeight(3);
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,12 +95,10 @@ public class AddItemFragment extends DialogFragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
+                        mAddItemAdapter.clear();
                         for (int i = 0; i < response.length(); i++) {
-                            String name = response.getJSONObject(i).getString("name");
-                            autoCompleteItems.add(name);
-                            mFoodItemAutoCompleteTextView.setAdapter(new ArrayAdapter<String>(getActivity(),
-                                    android.R.layout.simple_dropdown_item_1line, autoCompleteItems));
-                            mFoodItemAutoCompleteTextView.showDropDown();
+                            Item item = Item.autoFromJSON(response.getJSONObject(i), mAddItemAdapter);
+                            mAddItemAdapter.notifyDataSetChanged();
                         }
                     } catch (JSONException e) {
                         Log.d("MainActivity", "Error: " + e.getMessage());
@@ -168,13 +160,12 @@ public class AddItemFragment extends DialogFragment {
             JSONArray response = null;
             try {
                 response = new JSONArray(stringResponse);
+                mAddItemAdapter.clear();
                 // Sending to the Auto Complete List
                 for (int i = 0; i < response.length(); i++) {
-                    String name = response.getJSONObject(i).getString("name");
-                    autoCompleteItems.add(name);
-                    addItemAdapter.notifyDataSetChanged();
+                    Item item = Item.autoFromJSON(response.getJSONObject(i), mAddItemAdapter);
+                    mAddItemAdapter.notifyDataSetChanged();
                 }
-                mFoodItemAutoCompleteTextView.showDropDown();
             } catch (JSONException e) {
                 Log.d("MainActivity", "Error: " + e.getMessage());
             }
