@@ -23,7 +23,6 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.ItemAdapter;
@@ -137,7 +136,6 @@ public class FridgeFragment extends Fragment{
                     mGenerateRecipeListImageView.setVisibility(View.VISIBLE);
                     mSelectAllMenuBtn.setVisible(true);
                     mCancelMenuBtn.setVisible(true);
-                    Toast.makeText(getActivity(), "Select your items", Toast.LENGTH_SHORT).show();
                     mFirstClick = true;
                 }
             }
@@ -223,8 +221,6 @@ public class FridgeFragment extends Fragment{
 
                     }
                 });
-
-
             }
         });
     }

@@ -11,6 +11,7 @@
     <dimen name="details_paragraph_text_size">17sp</dimen>
 
 
+    <dimen name="shop_item_height">50dp</dimen>
     <dimen name="nav_header_height">140dp</dimen>
     <dimen name="fridge_title_text_size">30dp</dimen>
     <dimen name="no_margin">0dp</dimen>
@@ -45,5 +46,8 @@
     <dimen name="cardview_width">120dp</dimen>
     <dimen name="cardview_height">150dp</dimen>
     <dimen name="cardview_rounded_corners">4dp</dimen>
-    <dimen name="list_fragment_padding">1dp</dimen>
+    <dimen name="list_fragment_padding">3dp</dimen>
+    <dimen name="card_view_radius">10dp</dimen>
+
+    <dimen name="recipe_title_text">19sp</dimen>
 </resources>

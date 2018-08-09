@@ -13,6 +13,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import codepath.kaughlinpractice.fridgefone.model.ShoppingItem;
+
 public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // list of strings on details page
@@ -106,8 +108,18 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             ingredientViewHolder.addedToShoppingList = !ingredientViewHolder.addedToShoppingList;
                             if (ingredientViewHolder.addedToShoppingList) {
                                 ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.grayed_plus);
+                                //create shopping list object
+                                ShoppingItem shopItem = new ShoppingItem();
+                                // grab the EditText's content as a String
+                                String itemText = ingredient;
+                                //set text for shopping item
+                                shopItem.setName(itemText);
+                                // add the item to the parseServer
+                                shopItem.saveInBackground();
+                                // display a notification to the user
                                 String add_shopping_list = mContext.getString(R.string.add_shopping_list_toast);
                                 Toast.makeText(mContext,ingredient + " " + add_shopping_list , Toast.LENGTH_SHORT).show();
+
                             } else {
                                 ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.white_plus);
                                 String remove_shopping_list = mContext.getString(R.string.remove_shopping_list_toast);

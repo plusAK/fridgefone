@@ -23,13 +23,11 @@ public class FridgeClient {
     public static boolean mUseInstructionsAPI = false;
     public static boolean mUseAutocompleteAPI = false;
     public static boolean mUseGenerateRecipeAPI = false;
-    public static boolean mUseRecipeInformationAPI = false;
 
     public FridgeClient(Context context) {
         this.mContext = context;
         mClient = new AsyncHttpClient();
     }
-
 
     /* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
      * 	  i.e getApiUrl("statuses/home_timeline.json");

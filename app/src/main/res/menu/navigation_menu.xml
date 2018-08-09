@@ -18,5 +18,9 @@
         android:title="Shopping List"
         android:icon="@drawable/baseline_shopping_cart_black_18dp"
         />
+    <item android:id="@+id/nav_DailyRecipe"
+        android:title="@string/daily_recipe"
+        android:icon="@drawable/recipes"
+        />
 
 </menu>

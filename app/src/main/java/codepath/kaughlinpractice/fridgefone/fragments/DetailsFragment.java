@@ -44,7 +44,7 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.rvDetails) public RecyclerView mDetailsRecyclerView;
 
     public FridgeClient mClient;
-    private boolean favorited;
+    private boolean mIsFavorited;
 
     ArrayList<String> mInstructionsList;
     Collection<String> mIngredientsSet;
@@ -68,7 +68,7 @@ public class DetailsFragment extends Fragment {
 
         mInstructionsList = new ArrayList<>();
         mIngredientsSet = new HashSet<>();
-        favorited = false;
+        mIsFavorited = false;
 
         Bundle args = getArguments();
         String name = args.getString("name");
@@ -85,8 +85,8 @@ public class DetailsFragment extends Fragment {
         mFavoriteStarImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                favorited = !favorited;
-                if (favorited) {
+                mIsFavorited = !mIsFavorited;
+                if (mIsFavorited) {
                     mFavoriteStarImageView.setImageResource(R.drawable.white_star_filled);
                 } else {
                     mFavoriteStarImageView.setImageResource(R.drawable.white_star_outline);

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import codepath.kaughlinpractice.fridgefone.model.Recipe;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
@@ -55,8 +54,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             recipe_name.setText(recipe.getName());
             GlideApp.with(context)
                     .load(recipe.getImage())
-                    .fitCenter()
-                    .transform(new RoundedCornersTransformation(50, 0))
                     .into(recipe_image);
     }
 

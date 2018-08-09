@@ -31,21 +31,11 @@ public class Recipe extends ParseObject{
 
     public final static String[] recipe_traits = {"vegetarian", "vegan", "glutenFree", "dairyFree", "veryHealthy", "veryPopular", "cheap"};
 
-    String name;
-    int id;
-    String image;
-    int readyInMinutes;
-    boolean vegetarian;
-    boolean vegan;
-    boolean glutenFree;
-    boolean dairyFree;
-    boolean veryHealthy;
-    boolean cheap;
-    boolean veryPopular;
-    int servings;
+    private String name;
+    private int id;
+    private String image;
     private HashSet<String> ingredients;
     public HashMap<String, Boolean> recipe_dict;
-    private Context mContext;
 
     static FridgeClient mClient;
     static ArrayList<Recipe> recipes;
@@ -96,10 +86,6 @@ public class Recipe extends ParseObject{
         put(KEY_INFORMATION, recipeInformation);
     }
 
-    public String getResponse() {
-        return getString(KEY_RESPONSE);
-    }
-
     public void setResponse(String response) {
         put(KEY_RESPONSE, response);
     }
@@ -126,7 +112,6 @@ public class Recipe extends ParseObject{
         recipes = new ArrayList<>();
         recipe.recipe_dict = new HashMap<>();
         recipe.ingredients = new HashSet<>();
-        recipe.mContext = context;
 
         String serverRecipeInfo = findRecipeInServer(id);
         // if the serverRecipeInfo is null, then we have not encountered this recipe before
@@ -195,13 +180,6 @@ public class Recipe extends ParseObject{
         populateDictionary(response);
         // iterate through ingredients in the response and save to ArrayList
         saveIngredients(response);
-
-        try {
-            readyInMinutes = response.getInt("readyInMinutes");
-            servings = response.getInt("servings");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void populateDictionary(JSONObject response) {
@@ -229,50 +207,6 @@ public class Recipe extends ParseObject{
                 }
             }
         });
-    }
-
-    public int getReadyInMinutes() {
-        return readyInMinutes;
-    }
-
-    public boolean isVegetarian() {
-        return recipe_dict.get("vegetarian");
-    }
-
-    public boolean isVegan() {
-        return recipe_dict.get("vegan");
-    }
-
-    public boolean isGlutenFree() {
-        return recipe_dict.get("glutenFree");
-    }
-
-    public boolean isDairyFree() {
-        return recipe_dict.get("dairyFree");
-    }
-
-    public boolean isVeryHealthy() {
-        return recipe_dict.get("veryHealthy");
-    }
-
-    public boolean isCheap() {
-        return recipe_dict.get("cheap");
-    }
-
-    public boolean isVeryPopular() {
-        return recipe_dict.get("veryPopular");
-    }
-
-    public boolean isFast() {
-        if (getReadyInMinutes() < 30) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public int getServings() {
-        return servings;
     }
 
     public HashSet<String> getIngredients() {
