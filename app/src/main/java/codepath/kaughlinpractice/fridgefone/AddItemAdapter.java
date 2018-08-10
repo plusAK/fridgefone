@@ -32,7 +32,7 @@ public class AddItemAdapter extends ArrayAdapter<Item> {
                     .inflate(R.layout.drowdown_pic, parent, false);
         }
 
-        Item item = getItem(position);
+        Item item = mAddItems.get(position);
         TextView mAddItemTextView = (TextView) view.findViewById(R.id.addItemTextView);
         ImageView mAddItemImageView = (ImageView) view.findViewById(R.id.addItemImageView);
 

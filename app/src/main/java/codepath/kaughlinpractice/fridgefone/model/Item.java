@@ -82,4 +82,9 @@ public class Item extends ParseObject {
         addItemAdapter.notifyDataSetChanged();
         return item;
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
