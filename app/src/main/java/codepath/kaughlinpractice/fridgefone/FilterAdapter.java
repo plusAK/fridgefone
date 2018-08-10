@@ -49,18 +49,11 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
         if (isFilterSelected) {
             holder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.clicked_filter_border));
             holder.mFilterTextView.setTextColor(mContext.getResources().getColor(R.color.theme_honey));
-
             holder.mFilterCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
-            // holder.mFilterCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
-            // holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
-           // holder.mFilterTextView.setTextColor(mContext.getResources().getColor(R.color.theme_honey));
         } else {
             holder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.unclicked_filter_border));
             holder.mFilterTextView.setTextColor(mContext.getResources().getColor(R.color.theme_white));
             holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_honey));
-           // holder.mFilterCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.theme_honey));
-           // holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_honey));
-           // holder.mFilterTextView.setTextColor(mContext.getResources().getColor(R.color.theme_white));
         }
 
         holder.mFilterTextView.setOnClickListener(new View.OnClickListener() {
