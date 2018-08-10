@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -56,17 +58,50 @@ public class AddItemFragment extends DialogFragment {
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String foodItem = mFoodItemAutoCompleteTextView.getText().toString();
-                Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
-                ((MainActivity) getContext()).getItem(foodItem);
-                dismiss();
+                final Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_scaledown);
+                view.startAnimation(anim);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        String foodItem = mFoodItemAutoCompleteTextView.getText().toString();
+                        Toast.makeText(getActivity(), "Adding: " + foodItem, Toast.LENGTH_LONG).show();
+                        ((MainActivity) getContext()).getItem(foodItem);
+                        dismiss();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
+                final Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_scaledown);
+                view.startAnimation(anim);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        dismiss();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
             }
         });
 
