@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/cook_prep"
-    android:padding="@dimen/small_padding"
-    >
+    android:alpha="100"
+    android:background="@drawable/theme_image2"
+    android:padding="@dimen/small_padding">
 
     <TextView
         android:id="@+id/textView"
@@ -12,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="19dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
         android:text="@string/menu"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="@dimen/menu_heading_text_size" />
 </RelativeLayout>

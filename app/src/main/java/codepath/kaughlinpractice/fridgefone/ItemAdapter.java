@@ -71,11 +71,28 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
                 // make sure the position is valid, i.e. actually exists in the view
                 if (position != RecyclerView.NO_POSITION) {
-                    // get the recipe at the position, this won't work if the class is static
-                    Item item = mItems.get(position);
-                    // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
+                    final Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.anim_scaledownlong);
+                    view.startAnimation(anim);
+                    anim.setAnimationListener(new Animation.AnimationListener() {
 
-                    ((MainActivity) mContext).askToDeleteItem(item);
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            // get the recipe at the position, this won't work if the class is static
+                            Item item = mItems.get(position);
+                            // open up a pop up and send in food_name to ask if they specifically want to delete THIS item
+
+                            ((MainActivity) mContext).askToDeleteItem(item);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
                 }
                 return true;
             }

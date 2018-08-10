@@ -7,6 +7,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -41,15 +43,48 @@ public class DeleteItemFragment extends DialogFragment {
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
+                final Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_scaledown);
+                view.startAnimation(anim);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        dismiss();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
             }
         });
 
         mDeleteItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getContext()).deleteItemFromFridge(mItem);
-                dismiss();
+
+                final Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_scaledown);
+                view.startAnimation(anim);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        dismiss();
+                        ((MainActivity) getContext()).deleteItemFromFridge(mItem);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
             }
         });
     }
