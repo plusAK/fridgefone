@@ -11,6 +11,8 @@ import com.parse.SaveCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import codepath.kaughlinpractice.fridgefone.AddItemAdapter;
+
 @ParseClassName("Item")
 public class Item extends ParseObject {
     private static final String KEY_NAME = "name";
@@ -45,6 +47,7 @@ public class Item extends ParseObject {
         }
     }
 
+    // For Adding Items
     public static Item fromJSON(JSONObject jsonObject) throws JSONException {
         final Item item = new Item();
 
@@ -65,4 +68,23 @@ public class Item extends ParseObject {
         return item;
     }
 
+    // For AutoComplete
+    public static Item autoFromJSON(JSONObject jsonObject, AddItemAdapter addItemAdapter) throws JSONException {
+        final Item item = new Item();
+
+        item.setName(jsonObject.getString("name"));
+        String imageName = jsonObject.getString("image");
+        String url = ingredient_base_URL + imageName;
+        item.setImageURL(url);
+
+        // Update the adapter
+        addItemAdapter.add(item);
+        addItemAdapter.notifyDataSetChanged();
+        return item;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

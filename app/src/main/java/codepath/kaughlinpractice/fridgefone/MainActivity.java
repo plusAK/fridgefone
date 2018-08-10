@@ -263,15 +263,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.addToBackStack("my_fragment").commit();
 
     }
-//
-//    @Override
-//    public void onBackPressed() {
-//        if (getFragmentManager().getBackStackEntryCount() > 0) {
-//            getFragmentManager().popBackStack();
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
 
     public void setItemsAccess(ItemAdapter setter, ArrayList<Item> itemArrayList) {
         mItemAdapter = setter;
