@@ -7,7 +7,7 @@
     <dimen name="small_padding">10dp</dimen>
     <dimen name="less_medium_padding">13dp</dimen>
     <dimen name="medium_padding">15dp</dimen>
-    <dimen name="big_padding">30dp</dimen>
+    <dimen name="large_padding">30dp</dimen>
 
     <dimen name="pop_up_button_text_size">14sp</dimen>
     <dimen name="pop_up_text_size">16sp</dimen>
@@ -48,7 +48,7 @@
     <dimen name="favorite_icon_size"></dimen>
     <dimen name="cardview_width">120dp</dimen>
     <dimen name="cardview_height">150dp</dimen>
-    <dimen name="cardview_rounded_corners">4dp</dimen>
+    <dimen name="cardview_rounded_corners">10dp</dimen>
     <dimen name="list_fragment_padding">3dp</dimen>
     <dimen name="card_view_radius">10dp</dimen>
     <dimen name="button_radius">100dp</dimen>

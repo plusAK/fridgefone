@@ -2,6 +2,7 @@ package codepath.kaughlinpractice.fridgefone;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -46,7 +48,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull final ItemAdapter.ViewHolder viewHolder, final int position) {
 
         viewHolder.mFoodNameTextView.setText(mItems.get(position).getName());
-//        viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
+
 
         GlideApp.with(mContext)
                 .load(mItems.get(position).getImageURL())
@@ -54,12 +56,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
         // check if all are selected
         if (mSingleInstance.ismAllSelected()) {
-            viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
-            viewHolder.itemView.setAlpha(.65f); // changes opacity of image once clicked
+            viewHolder.mCardLinearLayout.setBackgroundResource(R.drawable.cardview_border);
+            //viewHolder.itemView.setAlpha(.65f); // changes opacity of image once clicked
         }
         else if(!mSingleInstance.ismAllSelected()) {
-            viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
-            viewHolder.itemView.setAlpha(1f); // changes opacity of image no clicked
+            viewHolder.mCardLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         }
 
 
@@ -100,18 +101,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
                     String item_name = viewHolder.mFoodNameTextView.getText().toString();
 
                     // check if the hash set contains this item if so change the opacity back to regular
-                    //if image is not clicked
                     if (mSingleInstance.getmSelectedNamesSet().contains(item_name)) {
+                        //if image is not clicked
                         mSingleInstance.getmSelectedNamesSet().remove(item_name);
-                        viewHolder.mSelectCheckImageView.setVisibility(View.INVISIBLE);
                         view.setAlpha(1f); // changes opacity of image no click //TODO  change to dimen later
-                        //view.setAlpha(R.dimen.not_selected);
+                        viewHolder.mCardLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
                     } else {
                         // if image is clicked
                         mSingleInstance.getmSelectedNamesSet().add(item_name);
-                        viewHolder.mSelectCheckImageView.setVisibility(View.VISIBLE);
                         view.setAlpha(.65f); // changes opacity of image once clicked //TODO  change to dimen later
                         //view.setAlpha(R.dimen.selected_view); // changes opacity of image once clicked
+                        viewHolder.mCardLinearLayout.setBackgroundResource(R.drawable.cardview_border);
+
                     }
                 }
             }
@@ -127,18 +128,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
         public TextView mFoodNameTextView;
         public ImageView mFoodCircleImageView;
-        public ImageView mSelectCheckImageView;
+        public LinearLayout mCardLinearLayout;
+        public CardView mCardViewLayout;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mFoodNameTextView = (TextView) itemView.findViewById(R.id.tvFood_Name);
             mFoodCircleImageView = (ImageView) itemView.findViewById(R.id.ivFood_Image);
-            mSelectCheckImageView = (ImageView) itemView.findViewById(R.id.ivSelectCheck);
+            mCardLinearLayout = (LinearLayout) itemView.findViewById(R.id.cardLinearLayout);
+            mCardViewLayout = (CardView) itemView.findViewById(R.id.cardview_id);
 
         }
     }
-    // Clean all elements of the recycler
+    // Clear all elements of the recycler
     public void clear() {
         mItems.clear();
         notifyDataSetChanged();

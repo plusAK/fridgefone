@@ -7,11 +7,15 @@
         android:id="@+id/CancelMenubtn"
         android:title="@string/cancel"
         android:tooltipText="@string/cancel"
-        app:showAsAction="always" />
+        android:fontFamily="@font/flaco_medium"
+        app:showAsAction="always"
+        app:rippleColor="@color/black"/>
     <item
         android:id="@+id/SelectAllMenubtn"
         android:title="@string/selectall"
         android:tooltipText="@string/selectall"
-        app:showAsAction="always" />
+        android:fontFamily="@font/flaco_medium"
+        app:showAsAction="always"
+        app:rippleColor="@color/black"/>
 
 </menu>

@@ -24,10 +24,10 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="@dimen/medium_padding"
-                android:layout_marginRight="@dimen/big_padding"
+                android:layout_marginRight="@dimen/large_padding"
                 android:background="@drawable/button_outline"
                 android:clickable="true"
-                android:elevation="@dimen/big_padding"
+                android:elevation="@dimen/large_padding"
                 android:focusable="true"
                 app:backgroundTint="@color/theme_honey"
                 app:srcCompat="@drawable/plus" />
