@@ -62,6 +62,19 @@
         <item name="cardCornerRadius">@dimen/card_view_radius</item>
     </style>
 
+    <style name="UnclickedFilterCardView" parent="CardView.Light">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cardBackgroundColor">@color/theme_honey</item>
+    </style>
+
+    <style name="ClickedFilterCardView" parent="CardView.Light">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cardBackgroundColor">@color/theme_white</item>
+        <item name="cardCornerRadius">@dimen/card_view_radius</item>
+    </style>
+
     <style name="OpaqueImageView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>

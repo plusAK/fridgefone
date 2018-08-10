@@ -3,16 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/small_padding">
 
-    <Button
-        android:id="@+id/FilterTextView"
-        android:layout_width="170dp"
-        android:layout_height="40dp"
-        android:background="@drawable/button"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Filter"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        android:textAllCaps="false"/>
+    <android.support.v7.widget.CardView
+        style="@style/UnclickedFilterCardView"
+        android:padding="@dimen/no_margin"
+        android:background="@drawable/outlined_rectangle">
+
+        <Button
+            android:id="@+id/FilterTextView"
+            android:layout_width="@dimen/width_of_filters"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/theme_honey"
+            android:fontFamily="@font/flaco_medium"
+            android:text="Filter"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="@dimen/filters_text_size" />
+
+    </android.support.v7.widget.CardView>
 </LinearLayout>
