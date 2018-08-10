@@ -17,7 +17,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/HorizontalListRecyclerView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/three_padding"
+            android:background="@color/theme_honey"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvRecipes"

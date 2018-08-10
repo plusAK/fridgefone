@@ -1,6 +1,7 @@
 package codepath.kaughlinpractice.fridgefone;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,9 +47,20 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
 
         isFilterSelected = mUserDict.get(Recipe.recipe_traits[position]);
         if (isFilterSelected) {
-            holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.filter_gray));
+            holder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.clicked_filter_border));
+            holder.mFilterTextView.setTextColor(mContext.getResources().getColor(R.color.theme_honey));
+
+            holder.mFilterCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
+            // holder.mFilterCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
+            // holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_white));
+           // holder.mFilterTextView.setTextColor(mContext.getResources().getColor(R.color.theme_honey));
         } else {
-            holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            holder.itemView.setBackground(mContext.getResources().getDrawable(R.drawable.unclicked_filter_border));
+            holder.mFilterTextView.setTextColor(mContext.getResources().getColor(R.color.theme_white));
+            holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_honey));
+           // holder.mFilterCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.theme_honey));
+           // holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_honey));
+           // holder.mFilterTextView.setTextColor(mContext.getResources().getColor(R.color.theme_white));
         }
 
         holder.mFilterTextView.setOnClickListener(new View.OnClickListener() {
@@ -69,10 +81,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
     public class FilterViewHolder extends RecyclerView.ViewHolder {
 
         TextView mFilterTextView;
+        CardView mFilterCardView;
 
         public FilterViewHolder(View view) {
             super(view);
-            mFilterTextView = view.findViewById(R.id.FilterTextView);
+            mFilterTextView = (TextView) view.findViewById(R.id.filterTextView);
+            mFilterCardView = (CardView) view.findViewById(R.id.filterCardView);
         }
     }
 }

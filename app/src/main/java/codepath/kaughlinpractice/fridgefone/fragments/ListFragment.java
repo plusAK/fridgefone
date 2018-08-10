@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -53,7 +52,7 @@ public class ListFragment extends Fragment {
 
         mFilterRecyclerView = view.findViewById(R.id.HorizontalListRecyclerView);
         // add a divider after each item for more clarity
-        mFilterRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.HORIZONTAL));
+//        mFilterRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.HORIZONTAL));
         mFilterAdapter = new FilterAdapter(getContext(), mFilters, new FilterAdapter.FilterInterface() {
             @Override
             public void regenerateRecipes() {

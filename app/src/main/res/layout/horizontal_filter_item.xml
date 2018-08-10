@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="@dimen/small_padding">
+    android:layout_margin="@dimen/small_padding"
+    android:background="@drawable/unclicked_filter_border"
+    android:elevation="@dimen/three_padding"
+    android:padding="@dimen/very_small_padding">
+
 
     <android.support.v7.widget.CardView
-        style="@style/UnclickedFilterCardView"
-        android:padding="@dimen/no_margin"
-        android:background="@drawable/outlined_rectangle">
+        android:id="@+id/filterCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/FilterTextView"
-            android:layout_width="@dimen/width_of_filters"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/theme_honey"
-            android:fontFamily="@font/flaco_medium"
+        <TextView
+            android:id="@+id/filterTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/galano_classic_medium"
+            android:textColor="@color/theme_white"
             android:text="Filter"
-            android:textAlignment="center"
             android:textAllCaps="false"
             android:textSize="@dimen/filters_text_size" />
 
     </android.support.v7.widget.CardView>
-</LinearLayout>
+
+</RelativeLayout>
