@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,30 +104,48 @@ public class DetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ingredientViewHolder.ivIngredientIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // add to shopping list if user clicks on plus
-                        // take out from shopping list if user clicks again
-                        if(!ingredientViewHolder.containsIngredient) {
-                            ingredientViewHolder.addedToShoppingList = !ingredientViewHolder.addedToShoppingList;
-                            if (ingredientViewHolder.addedToShoppingList) {
-                                ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.grayed_plus);
-                                //create shopping list object
-                                ShoppingItem shopItem = new ShoppingItem();
-                                // grab the EditText's content as a String
-                                String itemText = ingredient;
-                                //set text for shopping item
-                                shopItem.setName(itemText);
-                                // add the item to the parseServer
-                                shopItem.saveInBackground();
-                                // display a notification to the user
-                                String add_shopping_list = mContext.getString(R.string.add_shopping_list_toast);
-                                Toast.makeText(mContext,ingredient + " " + add_shopping_list , Toast.LENGTH_SHORT).show();
+                        final Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.anim_scaledown);
+                        view.startAnimation(anim);
+                        anim.setAnimationListener(new Animation.AnimationListener() {
 
-                            } else {
-                                ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.white_plus);
-                                String remove_shopping_list = mContext.getString(R.string.remove_shopping_list_toast);
-                                Toast.makeText(mContext, ingredient + " " + remove_shopping_list, Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onAnimationStart(Animation animation) {
                             }
-                        }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                // add to shopping list if user clicks on plus
+                                // take out from shopping list if user clicks again
+                                if(!ingredientViewHolder.containsIngredient) {
+                                    ingredientViewHolder.addedToShoppingList = !ingredientViewHolder.addedToShoppingList;
+                                    if (ingredientViewHolder.addedToShoppingList) {
+                                        ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.grayed_plus);
+                                        //create shopping list object
+                                        ShoppingItem shopItem = new ShoppingItem();
+                                        // grab the EditText's content as a String
+                                        String itemText = ingredient;
+                                        //set text for shopping item
+                                        shopItem.setName(itemText);
+                                        // add the item to the parseServer
+                                        shopItem.saveInBackground();
+                                        // display a notification to the user
+                                        String add_shopping_list = mContext.getString(R.string.add_shopping_list_toast);
+                                        Toast.makeText(mContext,ingredient + " " + add_shopping_list , Toast.LENGTH_SHORT).show();
+
+                                    } else {
+                                        ingredientViewHolder.ivIngredientIcon.setImageResource(R.drawable.white_plus);
+                                        String remove_shopping_list = mContext.getString(R.string.remove_shopping_list_toast);
+                                        Toast.makeText(mContext, ingredient + " " + remove_shopping_list, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+
                     }
                 });
 

@@ -51,7 +51,7 @@ public class FridgeClient {
         if (mSingleInstance.ismAllSelected() == false && mSingleInstance.ismNoneSelected() == false) {
             params.put("ingredients", mSingleInstance.getmSelectedItemsString());
         } else {
-            params.put("ingredients", mSingleInstance.getmSelectedItemsString());
+            params.put("ingredients", mSingleInstance.getmAllFridgeItemsString());
         }
 
         mClient.get(apiUrl, params, handler);

@@ -29,7 +29,7 @@ public class AddItemAdapter extends ArrayAdapter<Item> {
 
         if (view == null) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.drowdown_pic, parent, false);
+                    .inflate(R.layout.add_item, parent, false);
         }
 
         Item item = mAddItems.get(position);

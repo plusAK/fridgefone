@@ -72,7 +72,9 @@ public class Item extends ParseObject {
     public static Item autoFromJSON(JSONObject jsonObject, AddItemAdapter addItemAdapter) throws JSONException {
         final Item item = new Item();
 
-        item.setName(jsonObject.getString("name"));
+        String capitalName = capitalizeString(jsonObject.getString("name"));
+        item.setName(capitalName);
+
         String imageName = jsonObject.getString("image");
         String url = ingredient_base_URL + imageName;
         item.setImageURL(url);
@@ -81,6 +83,18 @@ public class Item extends ParseObject {
         addItemAdapter.add(item);
         addItemAdapter.notifyDataSetChanged();
         return item;
+    }
+
+    public static String capitalizeString(String recipeName) {
+        String capitalName = "";
+        String[] strArray = recipeName.split(" ");
+        for (String s : strArray) {
+            String word = s.substring(0, 1).toUpperCase() + s.substring(1);
+             capitalName += word + " ";
+        }
+        // Take off the extra space
+        capitalName = capitalName.substring(0,capitalName.length()-1);
+        return capitalName;
     }
 
     @Override

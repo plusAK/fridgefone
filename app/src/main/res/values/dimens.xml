@@ -42,8 +42,8 @@
     <dimen name="framelayout_padding">8dp</dimen>
     <dimen name="corner_radius">20dp</dimen>
     <dimen name="extremely_small_height">2dp</dimen>
-    <dimen name="details_icon_width">20dp</dimen>
-    <dimen name="details_icon_height">20dp</dimen>
+    <dimen name="details_icon_width">25dp</dimen>
+    <dimen name="details_icon_height">25dp</dimen>
     <dimen name="detail_paragraph_padding">62dp</dimen>
     <dimen name="favorite_icon_size"></dimen>
     <dimen name="cardview_width">120dp</dimen>
