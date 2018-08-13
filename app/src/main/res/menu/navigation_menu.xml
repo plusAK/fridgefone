@@ -29,9 +29,14 @@
         />
     <item android:id="@+id/nav_DailyRecipe"
         android:title="@string/daily_recipe"
+        android:icon="@drawable/cooking_hat"
+        android:fontFamily="@font/flaco_medium"
+        android:checked="false"
+        />
+    <item android:id="@+id/nav_SmartFridge"
+        android:title="@string/smart_fridge"
         android:icon="@drawable/recipes"
         android:fontFamily="@font/flaco_medium"
         android:checked="false"
         />
-
 </menu>
