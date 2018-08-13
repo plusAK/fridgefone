@@ -47,9 +47,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull final ItemAdapter.ViewHolder viewHolder, final int position) {
 
-        viewHolder.mFoodNameTextView.setText(mItems.get(position).getName());
-
-
+        String itemName = mItems.get(position).getName();
+        if (itemName != null) {
+            itemName = Item.capitalizeString(itemName);
+        }
+        viewHolder.mFoodNameTextView.setText(itemName);
+        
         GlideApp.with(mContext)
                 .load(mItems.get(position).getImageURL())
                 .into(viewHolder.mFoodCircleImageView);

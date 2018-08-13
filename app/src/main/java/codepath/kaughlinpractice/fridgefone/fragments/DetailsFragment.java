@@ -21,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 
 import butterknife.BindView;
@@ -30,6 +29,7 @@ import codepath.kaughlinpractice.fridgefone.DetailsAdapter;
 import codepath.kaughlinpractice.fridgefone.FridgeClient;
 import codepath.kaughlinpractice.fridgefone.GlideApp;
 import codepath.kaughlinpractice.fridgefone.R;
+import codepath.kaughlinpractice.fridgefone.model.Recipe;
 import cz.msebera.android.httpclient.Header;
 
 
@@ -45,8 +45,8 @@ public class DetailsFragment extends Fragment {
     private boolean mIsFavorited;
 
     ArrayList<String> mInstructionsList;
-    Collection<String> mIngredientsSet;
     DetailsAdapter mDetailsAdapter;
+    HashSet<String> uniqueIngredients;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,14 +65,14 @@ public class DetailsFragment extends Fragment {
         mClient = new FridgeClient(getActivity());
 
         mInstructionsList = new ArrayList<>();
-        mIngredientsSet = new HashSet<>();
         mIsFavorited = false;
 
         Bundle args = getArguments();
         String name = args.getString("name");
         int id = args.getInt("id");
         String image = args.getString("image");
-        final ArrayList<String> ingredients = args.getStringArrayList("ingredients");
+        uniqueIngredients = new HashSet<>(args.getStringArrayList("ingredients"));
+
         mDishTitleTextView.setText(name);
 
         GlideApp.with(getActivity())
@@ -93,37 +93,19 @@ public class DetailsFragment extends Fragment {
             }
         });
 
+        final Recipe serverRecipe = Recipe.findRecipeInServer(id);
 
-        if (FridgeClient.mUseInstructionsAPI) {
-
+        if (serverRecipe == null || serverRecipe.getInstructions() == null) {
             // execute a GET request expecting a JSON object response
             mClient.getInstructions(id, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    try {
-                        for (int i = 0; i < response.length(); i += 1) {
-                            JSONObject partOfInstructions = response.getJSONObject(i);
-                            parseInstructions(partOfInstructions);
-                        }
-
-                        ArrayList<String> details = new ArrayList<>();
-                        details.add(getString(R.string.ingredients));
-                        for (String ingredient: ingredients) {
-                            details.add(ingredient);
-                        }
-                        details.add(getString(R.string.instructions));
-
-                        for(String step: mInstructionsList) {
-                            details.add(step);
-                        }
-
-                        mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
-                        // RecyclerView setup (layout manager, use adapter)
-                        mDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        mDetailsRecyclerView.setAdapter(mDetailsAdapter);
-                    } catch (JSONException e) {
-                        Log.d("DetailFragment", "Error: " + e.getMessage());
+                    if (serverRecipe != null) {
+                        serverRecipe.setInstructions(response.toString());
+                        serverRecipe.saveToServer();
                     }
+
+                    parseInstructionResponse(response);
                 }
 
                 @Override
@@ -131,55 +113,77 @@ public class DetailsFragment extends Fragment {
                     Log.d("DetailFragment", "Error: " + throwable);
                 }
             });
-        }
-        else {
-            // with step breakdown
-            String responseString = "[{\"name\":\"\",\"steps\":[{\"number\":1,\"step\":\"Beat the egg in a bowl, add a pinch of salt and the flour and pour in the extra virgin olive oil and the beer: if needed, add a tablespoon of water to make a smooth but not too liquid batter. It is supposed to cover the apples, not to slide off!Peel the apples, core them paying attention not to break them and cut the apples into horizontal slices, 1 cm thick.\",\"ingredients\":[{\"id\":1034053,\"name\":\"extra virgin olive oil\",\"image\":\"olive-oil.jpg\"},{\"id\":9003,\"name\":\"apple\",\"image\":\"apple.jpg\"},{\"id\":20081,\"name\":\"all purpose flour\",\"image\":\"flour.png\"},{\"id\":14003,\"name\":\"beer\",\"image\":\"beer.jpg\"},{\"id\":2047,\"name\":\"salt\",\"image\":\"salt.jpg\"},{\"id\":1123,\"name\":\"egg\",\"image\":\"egg.jpg\"}],\"equipment\":[{\"id\":404783,\"name\":\"bowl\",\"image\":\"bowl.jpg\"}]},{\"number\":2,\"step\":\"Heat the olive oil in a large frying pan. The right moment to fry the apples is when the oil starts to smoke, as grandma says. Dip the apple slices into the batter and deep fry them until cooked through and golden on both sides.\",\"ingredients\":[{\"id\":4053,\"name\":\"olive oil\",\"image\":\"olive-oil.jpg\"},{\"id\":9003,\"name\":\"apple\",\"image\":\"apple.jpg\"}],\"equipment\":[{\"id\":404645,\"name\":\"frying pan\",\"image\":\"pan.png\"}]},{\"number\":3,\"step\":\"Transfer the apples into a plate lined with a paper towel. Sprinkle the fritters with icing sugar and serve them warm.\",\"ingredients\":[{\"id\":9003,\"name\":\"apple\",\"image\":\"apple.jpg\"}],\"equipment\":[{\"id\":405895,\"name\":\"paper towels\",\"image\":\"paper-towels.jpg\"}]}]}]";
-            JSONArray response = null;
+        } else {
             try {
-                response = new JSONArray(responseString);
+                JSONArray response = new JSONArray(serverRecipe.getInstructions());
+                parseInstructionResponse(response);
             } catch (JSONException e) {
-                Log.d("DetailFragment", "Error: " + e.getMessage());
-            }
-            try {
-                for (int i = 0; i < response.length(); i += 1) {
-                    JSONObject partOfInstructions = response.getJSONObject(i);
-                    parseInstructions(partOfInstructions);
-                }
-                ArrayList<String> details = new ArrayList<>();
-                details.add(getString(R.string.ingredients));
-
-                for (String ingredient: ingredients) {
-                    details.add(ingredient);
-                }
-                details.add(getString(R.string.instructions));
-                for(String step: mInstructionsList) {
-                    details.add(step);
-                }
-
-                mDetailsAdapter = new DetailsAdapter(details, ingredients.size());
-                // RecyclerView setup (layout manager, use adapter)
-                mDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mDetailsRecyclerView.setAdapter(mDetailsAdapter);
-            } catch (JSONException e) {
-                Log.d("DetailFragment", "Error " + e.getMessage());
+                e.printStackTrace();
             }
         }
-
     }
 
-    public void parseInstructions(JSONObject partOfInstructions) {
+    private void parseInstructionResponse(JSONArray instructionResponse) {
+        // iterate through every step in the instruction response
+        for (int i = 0; i < instructionResponse.length(); i += 1) {
+            JSONObject instructionSteps = null;
+            try {
+                instructionSteps = instructionResponse.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            parseInstructionSteps(instructionSteps);
+        }
+
+        ArrayList<String> details = new ArrayList<>();
+        details.add(getString(R.string.ingredients));
+
+        ArrayList<String> allIngredients = new ArrayList<>(uniqueIngredients);
+        for (String ingredient: allIngredients) {
+            details.add(ingredient);
+        }
+        details.add(getString(R.string.instructions));
+
+        for(String step: mInstructionsList) {
+            details.add(step);
+        }
+
+        mDetailsAdapter = new DetailsAdapter(details, allIngredients.size());
+        // RecyclerView setup (layout manager, use adapter)
+        mDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mDetailsRecyclerView.setAdapter(mDetailsAdapter);
+    }
+
+
+
+    private void parseInstructionSteps(JSONObject instructionSteps) {
         try {
-            JSONArray steps = partOfInstructions.getJSONArray("steps");
+            JSONArray steps = instructionSteps.getJSONArray("steps");
             for (int i = 0; i < steps.length(); i += 1) {
                 JSONObject step = steps.getJSONObject(i);
                 String stepDetails = step.getString("step");
                 mInstructionsList.add(stepDetails);
+                addToIngredientsList(step.getJSONArray("ingredients"));
             }
         } catch (JSONException e) {
             Log.d("DetailFragment", "Error " + e.getMessage());
         }
     }
 
+    public void addToIngredientsList(JSONArray newIngredients) {
+        // check to see if it exists
+        // if it does not, then add item
+        try {
+            for (int i = 0; i < newIngredients.length(); i += 1) {
+                JSONObject ingredientItem = newIngredients.getJSONObject(i);
+                String ingredientName = ingredientItem.getString("name");
+                if (!uniqueIngredients.contains(ingredientName)) {
+                    uniqueIngredients.add(ingredientName);
+                }
+            }
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+    }
 
 }
