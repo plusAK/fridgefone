@@ -1,6 +1,7 @@
 package codepath.kaughlinpractice.fridgefone;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -8,7 +9,7 @@ import com.loopj.android.http.RequestParams;
 
 public class FridgeClient {
 
-    public final static Integer NUMBER_OF_RECIPES = 6;
+    public final static Integer NUMBER_OF_RECIPES = 12;
     // the base URL for the API
     public final static String API_BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
     // the parameter name for the API key
@@ -51,7 +52,7 @@ public class FridgeClient {
         if (mSingleInstance.ismAllSelected() == false && mSingleInstance.ismNoneSelected() == false) {
             params.put("ingredients", mSingleInstance.getmSelectedItemsString());
         } else {
-            params.put("ingredients", mSingleInstance.getmSelectedItemsString());
+            params.put("ingredients", mSingleInstance.getmAllFridgeItemsString());
         }
 
         mClient.get(apiUrl, params, handler);
