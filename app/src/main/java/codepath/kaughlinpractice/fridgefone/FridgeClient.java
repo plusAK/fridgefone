@@ -1,7 +1,6 @@
 package codepath.kaughlinpractice.fridgefone;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -22,7 +21,7 @@ public class FridgeClient {
     public Context mContext;
 
     public static boolean mUseInstructionsAPI = true;
-    public static boolean mUseAutocompleteAPI = false;
+    public static boolean mUseAutocompleteAPI = true;
     public static boolean mUseGenerateRecipeAPI = true;
 
     public FridgeClient(Context context) {

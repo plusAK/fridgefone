@@ -35,7 +35,7 @@
     <string name="title">Title</string>
     <string name="add_shopping_list_toast">added to shopping list</string>
     <string name="remove_shopping_list_toast">removed from shopping list</string>
-    <string name="delete_item_toast">deleted</string>
+    <string name="delete_item_toast">Deleted</string>
     <string name="daily_recipe">Recipe of the day</string>
     <string name="smart_fridge">Connect to Smart Refrigerator</string>
 

@@ -47,7 +47,7 @@ public class AddItemFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         //intialize client
         mClient = new FridgeClient(getActivity());
-        mAddItemAdapter = new AddItemAdapter(getActivity(), R.layout.drowdown_pic);
+        mAddItemAdapter = new AddItemAdapter(getActivity(), R.layout.add_item);
 
         mAddButton = (Button) view.findViewById(R.id.btnAdd);
         Button cancelButton = (Button) view.findViewById(R.id.btnCancel);
