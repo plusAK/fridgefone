@@ -129,7 +129,7 @@ public class Recipe extends ParseObject{
         // delete duplicates of recipes
         // recipe.deleteDuplicates();
 
-        if (serverRecipe.getRecipeInformation() == null) {
+        if (serverRecipe == null || serverRecipe.getRecipeInformation() == null) {
             // execute a GET request expecting a JSON object response
             mClient.getInformation(id, new JsonHttpResponseHandler() {
                 @Override
