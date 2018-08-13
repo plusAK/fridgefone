@@ -20,9 +20,9 @@ public class FridgeClient {
     public AsyncHttpClient mClient;
     public Context mContext;
 
-    public static boolean mUseInstructionsAPI = false;
+    public static boolean mUseInstructionsAPI = true;
     public static boolean mUseAutocompleteAPI = false;
-    public static boolean mUseGenerateRecipeAPI = false;
+    public static boolean mUseGenerateRecipeAPI = true;
 
     public FridgeClient(Context context) {
         this.mContext = context;

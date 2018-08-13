@@ -45,6 +45,7 @@ public class Recipe extends ParseObject{
     private static final String KEY_IMAGE = "image";
     private static final String KEY_RESPONSE = "response";
     private static final String KEY_INFORMATION = "recipeInformation";
+    private static final String KEY_INSTRUCTION = "instructions";
     private static final int QUERY_LIMIT = 1000;
 
     private HashSet<Integer> serverRecipeIds;
@@ -86,6 +87,15 @@ public class Recipe extends ParseObject{
         put(KEY_INFORMATION, recipeInformation);
     }
 
+    public String getInstructions() {
+        return getString(KEY_INSTRUCTION);
+    }
+
+    public void setInstructions(String recipeInstruction) {
+        put(KEY_INSTRUCTION, recipeInstruction);
+    }
+
+
     public void setResponse(String response) {
         put(KEY_RESPONSE, response);
     }
@@ -113,13 +123,13 @@ public class Recipe extends ParseObject{
         recipe.recipe_dict = new HashMap<>();
         recipe.ingredients = new HashSet<>();
 
-        String serverRecipeInfo = findRecipeInServer(id);
+        Recipe serverRecipe = findRecipeInServer(id);
         // if the serverRecipeInfo is null, then we have not encountered this recipe before
 
         // delete duplicates of recipes
         // recipe.deleteDuplicates();
 
-        if (serverRecipeInfo == null) {
+        if (serverRecipe.getRecipeInformation() == null) {
             // execute a GET request expecting a JSON object response
             mClient.getInformation(id, new JsonHttpResponseHandler() {
                 @Override
@@ -141,7 +151,7 @@ public class Recipe extends ParseObject{
             });
         } else {
             try {
-                JSONObject response = new JSONObject(serverRecipeInfo);
+                JSONObject response = new JSONObject(serverRecipe.getRecipeInformation());
                 // recipe.setRecipeInformation(stringResponse);
                 recipe.name = recipe.getName();
                 recipe.id = recipe.getId();
@@ -158,7 +168,7 @@ public class Recipe extends ParseObject{
         return recipe;
     }
 
-    private static String findRecipeInServer(int currId) {
+    public static Recipe findRecipeInServer(int currId) {
         Recipe.Query recipeQuery = new Recipe.Query();
         recipeQuery.setLimit(QUERY_LIMIT);
         try {
@@ -167,7 +177,7 @@ public class Recipe extends ParseObject{
             // if this is of size 0, then we have no encountered this recipe before
             if (recipesWithSameId.size() != 0) {
                 Recipe serverRecipe = recipesWithSameId.get(0);
-                return serverRecipe.getRecipeInformation();
+                return serverRecipe;
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -196,7 +206,7 @@ public class Recipe extends ParseObject{
         }
     }
 
-    private void saveToServer() {
+    public void saveToServer() {
         saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
