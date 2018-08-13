@@ -21,7 +21,7 @@ public class FridgeClient {
     public Context mContext;
 
     public static boolean mUseInstructionsAPI = true;
-    public static boolean mUseAutocompleteAPI = true;
+    public static boolean mUseAutocompleteAPI = false;
     public static boolean mUseGenerateRecipeAPI = true;
 
     public FridgeClient(Context context) {
