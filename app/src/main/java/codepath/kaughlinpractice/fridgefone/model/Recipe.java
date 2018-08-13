@@ -114,9 +114,9 @@ public class Recipe extends ParseObject{
         final Recipe recipe = new Recipe();
 
         recipe.setName(jsonObject.getString("title"));
+        recipe.setImage(jsonObject.getString("image"));
         final int id = jsonObject.getInt("id");
         recipe.setId(id);
-        recipe.setImage(jsonObject.getString("image"));
         recipe.setResponse(jsonObject.toString());
 
         recipes = new ArrayList<>();
@@ -131,6 +131,7 @@ public class Recipe extends ParseObject{
 
         if (serverRecipe == null || serverRecipe.getRecipeInformation() == null) {
             // execute a GET request expecting a JSON object response
+
             mClient.getInformation(id, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -153,9 +154,9 @@ public class Recipe extends ParseObject{
             try {
                 JSONObject response = new JSONObject(serverRecipe.getRecipeInformation());
                 // recipe.setRecipeInformation(stringResponse);
-                recipe.name = recipe.getName();
-                recipe.id = recipe.getId();
-                recipe.image = recipe.getImage();
+                recipe.setName(serverRecipe.getName());
+                recipe.setId(serverRecipe.getId());
+                recipe.setImage(serverRecipe.getImage());
                 recipe.parseResponse(response);
 
                 if (recipe.isValid()) {
@@ -232,12 +233,6 @@ public class Recipe extends ParseObject{
         return true;
     }
 
-    private static String getRandomRecipeFromServer (List<Recipe> serverRecipes) {
-        int randomPosition = (int) Math.random() * serverRecipes.size();
-        Recipe randomRecipe = serverRecipes.get(randomPosition);
-        return randomRecipe.getRecipeInformation();
-    }
-
     private void saveIngredients(JSONObject response) {
         try {
             JSONArray ingredientsJSON = response.getJSONArray("extendedIngredients");
@@ -252,6 +247,11 @@ public class Recipe extends ParseObject{
         }
     }
 
+    private static String getRandomRecipeFromServer (List<Recipe> serverRecipes) {
+        int randomPosition = (int) Math.random() * serverRecipes.size();
+        Recipe randomRecipe = serverRecipes.get(randomPosition);
+        return randomRecipe.getRecipeInformation();
+    }
 
     private void deleteDuplicates() {
         serverRecipeIds = new HashSet<>();
