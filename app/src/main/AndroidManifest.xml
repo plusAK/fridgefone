@@ -10,7 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:name=".ParseApp"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/peach_salt_bae"
+        android:roundIcon="@mipmap/ic_launcher_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

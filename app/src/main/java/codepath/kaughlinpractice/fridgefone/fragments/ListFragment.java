@@ -52,7 +52,6 @@ public class ListFragment extends Fragment {
 
         mFilterRecyclerView = view.findViewById(R.id.HorizontalListRecyclerView);
         // add a divider after each item for more clarity
-//        mFilterRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.HORIZONTAL));
         mFilterAdapter = new FilterAdapter(getContext(), mFilters, new FilterAdapter.FilterInterface() {
             @Override
             public void regenerateRecipes() {
