@@ -33,6 +33,7 @@
     <dimen name="fridge_item_text_width">80dp</dimen>
     <dimen name="shelf_height">20dp</dimen>
     <dimen name="margin_above_button">40dp</dimen>
+    <dimen name="shop_image_height">150dp</dimen>
     <dimen name="details_image_height">200dp</dimen>
     <dimen name="fridge_bottom_padding">68dp</dimen>
     <dimen name="fridge_button_size">45dp</dimen>
