@@ -18,26 +18,13 @@
             tools:context=".MainActivity">
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/ivAddItem"
+                android:id="@+id/ivGenerateRecipeList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="@dimen/medium_padding"
                 android:layout_marginRight="@dimen/large_padding"
-                android:background="@drawable/button_outline"
-                android:clickable="true"
-                android:elevation="@dimen/large_padding"
-                android:focusable="true"
-                app:backgroundTint="@color/theme_honey"
-                app:srcCompat="@drawable/plus" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/ivGenerateRecipeList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/ivAddItem"
-                android:layout_alignTop="@+id/ivAddItem"
                 android:background="@drawable/button_outline"
                 android:clickable="true"
                 android:focusable="true"
