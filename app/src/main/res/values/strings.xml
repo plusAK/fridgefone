@@ -38,6 +38,7 @@
     <string name="delete_item_toast">Deleted</string>
     <string name="daily_recipe">Recipe of the day</string>
     <string name="smart_fridge">Connect to Smart Refrigerator</string>
+    <string name="shopping_list">Shopping List</string>
 
     <string name="menu">Menu</string>
 

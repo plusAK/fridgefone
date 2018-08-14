@@ -42,7 +42,7 @@ public class ShoppingItem extends ParseObject {
     public static ShoppingItem fromJSON(JSONObject jsonObject) throws JSONException {
 
         final ShoppingItem shopitem = new ShoppingItem();
-        shopitem.setName(jsonObject.getString("name"));
+        shopitem.setName(Item.capitalizeString(jsonObject.getString("name")));
         String imageName = jsonObject.getString("image");
         String url = ingredient_base_URL + imageName;
         shopitem.setImageURL(url);

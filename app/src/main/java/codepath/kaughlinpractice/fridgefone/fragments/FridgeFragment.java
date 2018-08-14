@@ -37,7 +37,6 @@ public class FridgeFragment extends Fragment{
     private final static int mNumVisibleShelves = 12;
     private Context mContext;
     private ImageView mGenerateRecipeListImageView;
-    private ImageView mAddItemImageView;
     private ArrayList<Item> mItemList;
     private SwipeRefreshLayout mSwipeContainer;
     private ItemAdapter mItemAdapter;
@@ -47,6 +46,7 @@ public class FridgeFragment extends Fragment{
     public Singleton mSingleInstance;
     public MenuItem mSelectAllMenuBtn;
     public MenuItem mCancelMenuBtn;
+    public MenuItem mAddItemMenuBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +60,7 @@ public class FridgeFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d("FridgeFragment", "onActivitycreated: on act creTED");
+        Log.d("FridgeFragment", "onActivitycreated: on act created");
     }
 
     // inflates specific action bar
@@ -71,9 +71,11 @@ public class FridgeFragment extends Fragment{
 
         mSelectAllMenuBtn = menu.findItem(R.id.SelectAllMenubtn);
         mCancelMenuBtn = menu.findItem(R.id.CancelMenubtn);
+        mAddItemMenuBtn = menu.findItem(R.id.AddItemMenubtn);
         //set initial visibility of menu items
         mSelectAllMenuBtn.setVisible(false);
         mCancelMenuBtn.setVisible(false);
+        mAddItemMenuBtn.setVisible(true);
         Log.d("FridgeFragment", "onCreateOptionsMenu: on create options menu");
     }
 
@@ -93,6 +95,7 @@ public class FridgeFragment extends Fragment{
                 //set visibility of menu items to false
                 mSelectAllMenuBtn.setVisible(false);
                 mCancelMenuBtn.setVisible(false);
+                mAddItemMenuBtn.setVisible(true);
 
                 mSingleInstance.setmSelectItemsBoolean(false);
                 mSingleInstance.setmAllSelected(false); // set All selected boolean to false
@@ -100,12 +103,17 @@ public class FridgeFragment extends Fragment{
 
                 mItemAdapter.notifyItemRangeChanged(0, mItemAdapter.getItemCount()); // notify the adapter if select all is changed
 
-                mAddItemImageView.setVisibility(View.VISIBLE);
                 mGenerateRecipeListImageView.setVisibility(View.INVISIBLE);
 
                 // clear hashset after cancel button  is clicked
                 mSingleInstance.getmSelectedNamesSet().clear();
                 mFirstClick = false;
+                return true;
+
+            case R.id.AddItemMenubtn:
+
+                AddItemFragment addItemFragment = new AddItemFragment();
+                addItemFragment.show(getFragmentManager(), "AddItemFragment");
                 return true;
 
         }
@@ -128,7 +136,6 @@ public class FridgeFragment extends Fragment{
 
         mGenerateRecipeListImageView = (ImageView) view.findViewById(R.id.ivGenerateRecipeList);
         mGenerateRecipeListImageView.setVisibility(View.INVISIBLE);
-        mAddItemImageView = (ImageView) view.findViewById(R.id.ivAddItem);
 
         mItemRecyclerView = (RecyclerView) view.findViewById(R.id.rvFridgeHomeView);
 
@@ -137,7 +144,8 @@ public class FridgeFragment extends Fragment{
             @Override
             public void onFirstSelect() {
                 if(!mFirstClick) {
-                    mAddItemImageView.setVisibility(View.INVISIBLE);
+                    mAddItemMenuBtn.setVisible(false);
+                    //mAddItemImageView.setVisibility(View.INVISIBLE);
                     mGenerateRecipeListImageView.setVisibility(View.VISIBLE);
                     mSelectAllMenuBtn.setVisible(true);
                     mCancelMenuBtn.setVisible(true);
@@ -201,31 +209,6 @@ public class FridgeFragment extends Fragment{
                     }
                 });
 
-            }
-        });
-
-        mAddItemImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.anim_scaledown);
-                view.startAnimation(anim);
-                anim.setAnimationListener(new Animation.AnimationListener() {
-
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        AddItemFragment addItemFragment = new AddItemFragment();
-                        addItemFragment.show(getFragmentManager(), "AddItemFragment");
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
             }
         });
     }

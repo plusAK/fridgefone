@@ -17,5 +17,12 @@
         android:fontFamily="@font/flaco_medium"
         app:showAsAction="always"
         app:rippleColor="@color/black"/>
+    <item
+        android:id="@+id/AddItemMenubtn"
+        android:fontFamily="@font/flaco_medium"
+        android:title="@string/add_item"
+        android:icon="@drawable/black_plus"
+        app:rippleColor="@color/black"
+        app:showAsAction="always" />
 
 </menu>
