@@ -21,8 +21,8 @@ public class FridgeClient {
     public Context mContext;
 
     public static boolean mUseInstructionsAPI = false;
-    public static boolean mUseAutocompleteAPI = false;
-    public static boolean mUseGenerateRecipeAPI = false;
+    public static boolean mUseAutocompleteAPI = true;
+    public static boolean mUseGenerateRecipeAPI = true;
 
     public FridgeClient(Context context) {
         this.mContext = context;
@@ -87,6 +87,6 @@ public class FridgeClient {
 
 
     private String getApiUrl(String path) {
-        return this.API_BASE_URL + "/" + path;
+            return this.API_BASE_URL + "/" + path;
     }
 }
