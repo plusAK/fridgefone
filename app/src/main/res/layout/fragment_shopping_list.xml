@@ -6,77 +6,93 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ShoppingListFragment">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/small_padding"
-        tools:context=".MainActivity">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivShopImage"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/shop_image_height"
-            android:scaleType="centerCrop"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/theme_image"
-            android:padding="@dimen/three_padding"/>
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/tvDishTitle"
-            style="@style/RecipeTitleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/ivShopImage"
-            android:layout_alignParentStart="true"
-            android:paddingBottom="@dimen/medium_padding"
-            android:paddingLeft="@dimen/small_padding"
-            android:paddingRight="@dimen/small_padding"
-            android:paddingTop="@dimen/medium_padding"
-            android:requiresFadingEdge="vertical"
-            android:text="@string/shopping_list"
-            android:textSize="@dimen/details_dish_text_size" />
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/ivShopImage"
-            android:layout_marginBottom="49dp">
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvShoppingListView"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:gravity="center_horizontal">
+                android:layout_height="match_parent"
+                android:padding="@dimen/small_padding"
+                tools:context=".MainActivity">
 
-            </android.support.v7.widget.RecyclerView>
+                <ImageView
+                    android:id="@+id/ivShopImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/shop_image_height"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="@dimen/three_padding"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/theme_image" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+                <TextView
+                    android:id="@+id/tvDishTitle"
+                    style="@style/RecipeTitleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/ivShopImage"
+                    android:layout_alignParentStart="true"
+                    android:paddingBottom="@dimen/medium_padding"
+                    android:paddingLeft="@dimen/small_padding"
+                    android:paddingRight="@dimen/small_padding"
+                    android:paddingTop="@dimen/medium_padding"
+                    android:requiresFadingEdge="vertical"
+                    android:text="@string/shopping_list"
+                    android:textSize="@dimen/details_dish_text_size" />
 
-        <ImageView
-            android:id="@+id/ivAddShopItem"
-            android:layout_width="54dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/white_plus" />
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/ivShopImage"
+                    android:layout_marginBottom="@dimen/shop_item_height">
 
-        <EditText
-            android:id="@+id/etNewItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:hint="Add to list"
-            android:inputType="textPersonName" />
 
-    </RelativeLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvShoppingListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/shop_item_height"
+                        android:gravity="center_horizontal">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </android.support.v4.widget.SwipeRefreshLayout>
+
+                <ImageView
+                    android:id="@+id/ivAddShopItem"
+                    android:layout_width="@dimen/add_shop_item_width"
+                    android:layout_height="@dimen/add_shop_item_height"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="@dimen/medium_padding"
+                    android:layout_marginEnd="@dimen/medium_padding"
+                    android:src="@drawable/black_plus" />
+
+                <EditText
+                    android:id="@+id/etNewItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:ems="10"
+                    android:hint="Add to list"
+                    android:inputType="textPersonName" />
+
+
+            </RelativeLayout>
+        </ScrollView>
+    </android.support.design.widget.CoordinatorLayout>
 
 </FrameLayout>
