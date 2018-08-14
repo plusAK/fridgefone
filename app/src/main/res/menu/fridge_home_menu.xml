@@ -21,7 +21,7 @@
         android:id="@+id/AddItemMenubtn"
         android:fontFamily="@font/flaco_medium"
         android:title="@string/add_item"
-        android:icon="@drawable/honey_plus"
+        android:icon="@drawable/mini_honey_plus"
         app:rippleColor="@color/black"
         app:showAsAction="always" />
 
