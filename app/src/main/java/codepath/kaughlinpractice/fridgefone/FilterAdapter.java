@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -56,9 +58,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
             holder.mFilterTextView.setBackgroundColor(mContext.getResources().getColor(R.color.theme_honey));
         }
 
-        holder.mFilterTextView.setOnClickListener(new View.OnClickListener() {
+        holder.mFilterCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.anim_scaledown);
+                view.startAnimation(anim);
+
                 isFilterSelected = mUserDict.get(Recipe.recipe_traits[position]);
                 mUserDict.put(Recipe.recipe_traits[position], !isFilterSelected);
                 mFilterInterface.regenerateRecipes();
