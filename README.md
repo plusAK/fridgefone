@@ -11,7 +11,7 @@ The following **required** functionality is completed:
 * [X] Input Ingredients
 * [X] Generate Recipes from list of current ingredients
 * [X] Favorite Recipes Secition
-* [X] allow select for specific ingredients to generate recipes
+* [X] Allow select for specific ingredients to generate recipes
 
 
 The following **optional** features are implemented:
