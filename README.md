@@ -37,7 +37,7 @@ The following **Stretch** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='VIDEO GOES HERE' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+[](IMG_9189.GIF)
 
 GIF created with [Recordit](http://recordit.co/).
 
