@@ -37,7 +37,7 @@ The following **Stretch** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-![](fridgefone/IMG_9189.GIF)
+![](IMG_9189.GIF)
 
 GIF created with [Recordit](http://recordit.co/).
 
